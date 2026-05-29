@@ -12,9 +12,9 @@ Each problem from the [README](README.md) is addressed by a specific artifact or
 |---|---|---|
 | Vibe coding produces inconsistent and messy code | Templates and agent roles | Templates make output shape explicit; agent roles keep concerns from blurring. The same request, asked twice, returns the same artifact shape because the contract is in the template, not the prompt. |
 | Any code written requires a line-by-line review | Review and QA gates | The auditor reviews the changed surface for reliability, security, and contract risk before QA. QA verifies each acceptance criterion against executable evidence. Review remains essential, but it is reviewing claims tied to evidence rather than unaccompanied output. |
-| Getting a satisfactory result can require more effort than writing the code | Story specs | The story spec captures linked ADRs, binding constraints, file touchpoints, acceptance criteria, and a test plan *before* implementation begins. The model is not asked to figure out the project from a chat window; it is given the context the implementer needs. |
+| Getting a satisfactory result can require more effort than writing the code | Story specs | The story spec captures linked architecture decision records, binding constraints, file touchpoints, acceptance criteria, and a test plan *before* implementation begins. The model is not asked to figure out the project from a chat window; it is given the context the implementer needs. |
 | Where is the productivity gain? | Artifact reuse | The expensive work — refining requirements, recording binding decisions, designing the system — is captured once and reused across every story that touches it. The model's speed compounds because it does not relitigate the same context. |
-| The purpose is to build applications, not write code | Artifact-driven workflow | Requirements, design, ADRs, and story specs sit upstream of code. Code is one output among several: tests, review artifacts, QA matrices, documentation diffs, and completion metadata are equally first-class. |
+| The purpose is to build applications, not write code | Artifact-driven workflow | Requirements, design, architecture decision records, and story specs sit upstream of code. Code is one output among several: tests, review artifacts, QA matrices, documentation diffs, and completion metadata are equally first-class. |
 | Aim higher: build applications with AI | The full lifecycle | Refinement, design, planning, implementation, review, QA, documentation, and validation are each a distinct step with a distinct artifact. The methodology operates at the level of an application, not a function. |
 
 ---
@@ -33,7 +33,7 @@ Agents manage the concern dimension. Commands manage the control dimension — i
 
 ### Single source of truth per concern.
 
-Requirements live in one file. ADRs live in one file each. Design lives in one section of the README. Story scope lives in the story document. Documentation lives in the surfaces it describes. The workflow refuses to silently reconcile conflicts between sources; it surfaces them.
+Requirements live in one file. architecture decision records live in one file each. Design lives in one section of the README. Story scope lives in the story document. Documentation lives in the surfaces it describes. The workflow refuses to silently reconcile conflicts between sources; it surfaces them.
 
 ### Evidence is what makes "done" mean something.
 
@@ -41,7 +41,7 @@ Tests, changed files, the QA matrix, the review summary, the documentation diff 
 
 ### Humans own the decisions that bind work.
 
-The agents do the work. The human approves the refined requirements, the design and ADRs, the backlog, the story spec, the QA evidence, and the documentation. Six gates is more than zero gates. It is also fewer than the number of places where ad-hoc AI-assisted work usually requires backtracking.
+The agents do the work. The human approves the refined requirements, the design and architecture decision records, the backlog, the story spec, the QA evidence, and the documentation. Six gates is more than zero gates. It is also fewer than the number of places where ad-hoc AI-assisted work usually requires backtracking.
 
 ---
 
@@ -62,7 +62,7 @@ It is worth being explicit about the limits.
 A team using this methodology well should be able to answer, for any shipped story:
 
 - Where is the requirement that caused it?
-- Which ADRs constrained how it was built?
+- Which architecture decision records constrained how it was built?
 - What were the acceptance criteria?
 - What evidence proves each criterion was met?
 - Which review and QA gates passed, with what summary?

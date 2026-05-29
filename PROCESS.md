@@ -15,7 +15,7 @@ flowchart TD
     subgraph Human [Human]
         rawIdea["Raw idea or notes"]
         approveReqs{"Approve refined requirements"}
-        approveDesign{"Approve design and ADRs"}
+        approveDesign{"Approve design and architecture decision records"}
         approveBacklog{"Approve backlog"}
         approveStory{"Approve story spec"}
         acceptQa{"Accept QA evidence"}
@@ -29,8 +29,8 @@ flowchart TD
         planProj["/plan-project"]
         planStory["/plan-story"]
         validateReady["/validate-story ready"]
-        reqsDoc[/"REQ-NNN requirements"/]
-        designDoc[/"Design and ADRs"/]
+        reqsDoc[/"requirements"/]
+        designDoc[/"Design and architecture decision records"/]
         backlog[/"Backlog epics and stories"/]
         storyDoc[/"Implementation-ready story spec"/]
     end
@@ -82,9 +82,9 @@ The agents do the work. The human makes the decisions that bind it.
 | Gate | What is being decided | What the human is looking for |
 |---|---|---|
 | 1. Approve refined requirements | Is this the right problem, stated clearly enough to design against? | Goals, non-goals, personas, constraints, and Gherkin scenarios that match real intent. Open questions resolved or explicitly deferred. |
-| 2. Approve design and ADRs | Is this the right shape, with the binding decisions captured? | Architecture, stack, API contract, environment, and any ADRs needed for persistence, transport, auth, named dependencies, or integration model. |
+| 2. Approve design and architecture decision records | Is this the right shape, with the binding decisions captured? | Architecture, stack, API contract, environment, and any architecture decision records needed for persistence, transport, auth, named dependencies, or integration model. |
 | 3. Approve backlog | Are the epics and stories the right slices, in the right order? | Epics that map to the design, stories sized for one implementer pass, and no orphaned or duplicated work. |
-| 4. Approve story spec | Is this story implementation-ready? | Linked requirements and ADRs, file touchpoints, acceptance criteria, test plan rows, implementation order, binding constraints. |
+| 4. Approve story spec | Is this story implementation-ready? | Linked requirements and architecture decision records, file touchpoints, acceptance criteria, test plan rows, implementation order, binding constraints. |
 | 5. Accept QA evidence | Did the implementation actually satisfy the story? | Every acceptance criterion marked PASS in the QA matrix with executable evidence. Any FAIL or BLOCKED resolved. |
 | 6. Approve documentation | Do the project's documentation surfaces match what was shipped? | README, API docs, OpenAPI specs, runbooks, setup, and environment docs updated for any surface the story changed. |
 
@@ -118,11 +118,11 @@ Skip this stage when working in an existing project that already has a README an
 
 - **Inputs.** Approved refined requirements.
 - **Agent.** Architect.
-- **Artifact.** Updated project `README` design section (architecture, stack, API contract, environment variables, setup, UI structure) plus any ADRs needed for binding technical decisions.
-- **Human gate.** **Gate 2: Approve design and ADRs.**
+- **Artifact.** Updated project `README` design section (architecture, stack, API contract, environment variables, setup, UI structure) plus any architecture decision records needed for binding technical decisions.
+- **Human gate.** **Gate 2: Approve design and architecture decision records.**
 - **Exit.** An approved design that backlog planning can slice into stories.
 
-If the design would silently commit to a persistence choice, transport, auth model, embedding stack, or named dependency, the architect writes an ADR before later steps depend on it.
+If the design would silently commit to a persistence choice, transport, auth model, embedding stack, or named dependency, the architect writes an architecture decision record before later steps depend on it.
 
 ### 3. `/plan-project`
 
@@ -134,9 +134,9 @@ If the design would silently commit to a persistence choice, transport, auth mod
 
 ### 4. `/plan-story`
 
-- **Inputs.** Approved backlog, refined requirements, design, ADRs.
+- **Inputs.** Approved backlog, refined requirements, design, architecture decision records.
 - **Agent.** Architect.
-- **Artifact.** `docs/features/{STORY-ID}-*.md` — the implementer's spec. Includes linked ADRs, binding constraints, ports and adapters, API and frontend flow notes, file touchpoints, acceptance criteria, test plan rows, implementation order, completion metadata, and a post-complete follow-up ledger.
+- **Artifact.** `docs/features/{STORY-ID}-*.md` — the implementer's spec. Includes linked architecture decision records, binding constraints, ports and adapters, API and frontend flow notes, file touchpoints, acceptance criteria, test plan rows, implementation order, completion metadata, and a post-complete follow-up ledger.
 - **Validation.** `/validate-story ready` confirms the story spec is complete enough to implement.
 - **Human gate.** **Gate 4: Approve story spec.**
 - **Exit.** An approved, validated story document.
@@ -145,7 +145,7 @@ When a story touches an integration boundary, it must plan both a contract test 
 
 ### 5. `/implement-story`
 
-- **Inputs.** Approved story spec and linked ADRs.
+- **Inputs.** Approved story spec and linked architecture decision records.
 - **Agent.** Implementer.
 - **Artifact.** Code changes, tests, and an updated story document with criteria checked off as they pass. Status moves `Open` → `In Progress` → `Complete`.
 - **Human gate.** None at this step. The next gate is QA evidence; the auditor and QA agents run before the human is asked to accept anything.
@@ -192,11 +192,11 @@ Documentation updates are driven by the story source of truth. The documenter do
 |---|---|---|---|
 | `/init-project` | Empty repo | Scaffolded README and `docs/` layout | — |
 | `/refine-feature` | Raw notes | `docs/requirements/REQ-NNN-*.md` | Gate 1 |
-| `/design-application` | Refined requirements | Design section and ADRs | Gate 2 |
+| `/design-application` | Refined requirements | Design section and architecture decision records | Gate 2 |
 | `/plan-project` | Design and requirements | Backlog epics and story rows | Gate 3 |
-| `/plan-story` | Requirements, design, ADRs, backlog | `docs/features/{STORY-ID}-*.md` | Gate 4 |
+| `/plan-story` | Requirements, design, architecture decision records, backlog | `docs/features/{STORY-ID}-*.md` | Gate 4 |
 | `/validate-story ready` | Story document | Readiness validation | (supports Gate 4) |
-| `/implement-story` | Story spec and ADRs | Code, tests, updated story status | — |
+| `/implement-story` | Story spec and architecture decision records | Code, tests, updated story status | — |
 | `/review-story` | Story and changed surface | Review artifact (`Pass`/`Block`) | — |
 | `/qa-story` | Story criteria and evidence | Criterion evidence matrix | Gate 5 |
 | `/fix-from-qa` | Failed or blocked criteria | Targeted fix | — |
@@ -209,5 +209,5 @@ Documentation updates are driven by the story source of truth. The documenter do
 
 - [BUILDING-BLOCKS.md](BUILDING-BLOCKS.md) — what agents, commands, templates, artifacts, evidence, and gates each do, and how they compose.
 - [ROLES.md](ROLES.md) — what each agent owns and how work hands off between them.
-- [TRACEABILITY.md](TRACEABILITY.md) — how requirements, ADRs, and design flow through the story spec into evidence.
+- [TRACEABILITY.md](TRACEABILITY.md) — how requirements, architecture decision records, and design flow through the story spec into evidence.
 - [POST-STORY.md](POST-STORY.md) — small follow-ups, hotfixes, audits, drift reconciliation, escalation.

@@ -28,7 +28,7 @@ An agent is a durable role definition. It says what the model is allowed to thin
 - **Inputs.** A persona, responsibilities, and behavioral rules (for example, "do not invent requirements," "do not silently substitute named dependencies").
 - **Output.** A reusable role that any command can invoke.
 - **Examples.**
-  - **Architect** — turns ambiguity into requirements, design, ADRs, and story specs.
+  - **Architect** — turns ambiguity into requirements, design, architecture decision records, and story specs.
   - **Implementer** — writes code and tests against an approved story spec.
   - **Auditor** — provides review gates for stories, diffs, and full-repo audits.
   - **QA** — verifies acceptance criteria against executable evidence.
@@ -65,8 +65,8 @@ A template is a contract for what an artifact must contain.
 - **Examples.**
   - **README / design hub template** — architecture, stack, key decisions, API contract, environment, setup, backlog.
   - **Requirements template** — goals, non-goals, personas, constraints, resolved and open questions, Gherkin scenarios.
-  - **ADR template** — context, decision, alternatives considered, consequences.
-  - **User story template** — linked ADRs, binding constraints, ports and adapters, file touchpoints, acceptance criteria, test plan, implementation order, completion metadata, follow-up ledger.
+  - **architecture decision record template** — context, decision, alternatives considered, consequences.
+  - **User story template** — linked architecture decision records, binding constraints, ports and adapters, file touchpoints, acceptance criteria, test plan, implementation order, completion metadata, follow-up ledger.
   - **Story-review template** — required actions, severity, machine-readable `REVIEW SUMMARY:` line.
   - **Audit template** — findings by category with evidence citations.
 
@@ -88,7 +88,7 @@ An artifact is a durable, reviewable output of the workflow. It is defined by **
 |---|---|---|
 | Refined requirements | Clarified intent, goals, non-goals, constraints, Gherkin scenarios | `/refine-feature` |
 | Application design | Architecture, stack, API contract, environment, setup, UI structure | `/design-application` |
-| ADR | One binding technical decision, recorded durably | `/design-application` when a decision needs to be durable |
+| architecture decision record | One binding technical decision, recorded durably | `/design-application` when a decision needs to be durable |
 | Backlog | Epics and stories that organize delivery | `/plan-project`; status synced by `/document-story` |
 | Story spec | Implementation-ready instructions: linked context, acceptance criteria, test plan, file touchpoints, implementation order | `/plan-story` |
 | Code and tests | Production behavior and the tests that prove each acceptance criterion | `/implement-story`, `/fix-from-qa`, `/patch-story` |
@@ -112,7 +112,7 @@ Three examples of bundling:
 
 This bundling is a convenience. The artifacts are still distinct: each has one producer, one purpose, and one place in the trace. A project that wanted to keep them in separate files could; this methodology happens to keep them together because related context is easier to follow when it is co-located.
 
-Templates in this methodology — README, ADR, requirements, user story, story review, audit — define the shape of those files, including which artifacts each file is expected to carry. The templates are an implementation choice. The artifacts are the design.
+Templates in this methodology — README, architecture decision record, requirements, user story, story review, audit — define the shape of those files, including which artifacts each file is expected to carry. The templates are an implementation choice. The artifacts are the design.
 
 ### Project documentation surfaces
 
@@ -140,7 +140,7 @@ A gate is where work stops until someone — human or agent — decides whether 
 - **Purpose.** Make completion explicit instead of implicit.
 - **Examples.**
   - **Agent gates.** Review `Pass` or `Block`. QA `PASS`, `FAIL`, or `BLOCKED` per criterion. `validate-story ready` and `validate-story complete`.
-  - **Human gates.** The six approvals in the [README](README.md) swimlane: refined requirements, design and ADRs, backlog, story spec, QA evidence, documentation.
+  - **Human gates.** The six approvals in the [README](README.md) swimlane: refined requirements, design and architecture decision records, backlog, story spec, QA evidence, documentation.
 
 Gates exist because skipping them has been observed to cost more later. A gate that becomes a formality has stopped doing its job.
 
@@ -154,7 +154,7 @@ The composition matrix shows which command produces or updates which artifact, w
 |---|---|---|---|
 | `/init-project` | Architect or human | Project scaffold | `README.md`, `docs/` layout |
 | `/refine-feature` | Architect | Refined requirements | `docs/requirements/REQ-NNN-*.md` |
-| `/design-application` | Architect | Application design; ADRs (as needed) | Project README design sections; `docs/decisions/ADR-NNN-*.md` |
+| `/design-application` | Architect | Application design; architecture decision records (as needed) | Project README design sections; `docs/decisions/ADR-NNN-*.md` |
 | `/plan-project` | Architect | Backlog | Project README backlog section |
 | `/plan-story` | Architect | Story spec | `docs/features/{STORY-ID}-*.md` |
 | `/validate-story ready` | Architect | Readiness validation | Assertion against the story spec; corrects readiness defects only |

@@ -30,7 +30,7 @@ Context is managed through a small set of building blocks that stay independent 
 - **Commands** define what workflow step is being performed and the control applied — the instructions the agent follows and the constraints it must respect.
 - **Templates** define what an acceptable output looks like.
 
-Together, these produce **artifacts** — requirements, design notes, ADRs, story specs, review reports, QA evidence matrices, documentation updates, completion metadata. Artifacts are durable. They become the input to the next step and the trace for everything that followed.
+Together, these produce **artifacts** — requirements, design notes, architecture decision records, story specs, review reports, QA evidence matrices, documentation updates, completion metadata. Artifacts are durable. They become the input to the next step and the trace for everything that followed.
 
 Prompts are ephemeral. They explain what someone wanted in the moment. A prompt may be preserved as part of the documentation to provide history, but it is the **artifact** that proves intent was captured, decisions were made, and the result was verified. Artifacts close the loop between intent and delivery.
 
@@ -44,7 +44,7 @@ Four ideas run through every part of the methodology.
 
 ### Context
 
-Context is everything the model needs to produce the right output: requirements, ADRs, design notes, prior artifacts, backlog state, and the rules of the current step. Managing context is the central engineering problem in AI-assisted development.
+Context is everything the model needs to produce the right output: requirements, architecture decision records, design notes, prior artifacts, backlog state, and the rules of the current step. Managing context is the central engineering problem in AI-assisted development.
 
 The methodology manages context through **modularity**. Agents, commands, and templates are kept separate because each one manages context along a different dimension — concern, control, and output shape. Keeping the dimensions independent lets the same agent be reused across many commands, and the same command be expressed through different templates, without one dimension polluting another.
 
@@ -56,7 +56,7 @@ Control turns "ask the model nicely" into a repeatable contract.
 
 ### Artifacts
 
-Artifacts are the durable outputs of the workflow. A refined requirement, an ADR, a story spec, a review report, a QA matrix, a documentation update — each is a file a human can read, challenge, and reuse. Artifacts are how intent survives between sessions, between people, and between tools.
+Artifacts are the durable outputs of the workflow. A refined requirement, an architecture decision record, a story spec, a review report, a QA matrix, a documentation update — each is a file a human can read, challenge, and reuse. Artifacts are how intent survives between sessions, between people, and between tools.
 
 ### Evidence
 
@@ -70,8 +70,8 @@ Evidence is the proof that an artifact was satisfied: the tests that ran, the fi
 |---|---|---|---|
 | Agent | Concern | Defines role, responsibilities, and judgment | architect, implementer, auditor, QA, documenter |
 | Command | Control | Invokes one workflow step with specific instructions and constraints | `/refine-feature`, `/plan-story`, `/implement-story`, `/qa-story` |
-| Template | Output shape | Defines what an acceptable artifact must contain | requirements, ADR, user-story, story-review, audit |
-| Artifact | — | Durable output used by later steps | REQ-NNN document, ADR, story spec, review report |
+| Template | Output shape | Defines what an acceptable artifact must contain | requirements, architecture decision record, user-story, story-review, audit |
+| Artifact | — | Durable output used by later steps | requirements document, architecture decision record, story spec, review report |
 | Evidence | — | Proof a criterion was satisfied | tests, changed files, QA matrix, review summary |
 | Gate | — | Decision point: continue, return for repair, or escalate | review Pass/Block, QA PASS/FAIL/BLOCKED, human approvals |
 
@@ -88,7 +88,7 @@ flowchart TD
     subgraph Human [Human]
         rawIdea["Raw idea or notes"]
         approveReqs{"Approve refined requirements"}
-        approveDesign{"Approve design and ADRs"}
+        approveDesign{"Approve design and architecture decision records"}
         approveBacklog{"Approve backlog"}
         approveStory{"Approve story spec"}
         acceptQa{"Accept QA evidence"}
@@ -101,8 +101,8 @@ flowchart TD
         design["/design-application"]
         planProj["/plan-project"]
         planStory["/plan-story"]
-        reqsDoc[/"REQ-NNN requirements"/]
-        designDoc[/"Design and ADRs"/]
+        reqsDoc[/"requirements"/]
+        designDoc[/"Design and architecture decision records"/]
         backlog[/"Backlog epics and stories"/]
         storyDoc[/"Implementation-ready story spec"/]
     end
@@ -143,7 +143,7 @@ flowchart TD
 The human intervenes at six gates:
 
 1. Approve refined requirements before any design work begins.
-2. Approve the application design and any new ADRs before backlog planning.
+2. Approve the application design and any new architecture decision records before backlog planning.
 3. Approve the backlog before story specs are written.
 4. Approve the story spec before implementation begins.
 5. Accept the QA evidence matrix before documentation runs.
@@ -160,7 +160,7 @@ See [PROCESS.md](PROCESS.md) for the stage-by-stage walkthrough, and [POST-STORY
 The methodology rests on a few principles. Every file in this repository points back to one of these.
 
 - **Requirements define intent.** Until intent is written down, the model is guessing.
-- **ADRs preserve binding technical decisions.** They prevent silent substitution of important choices.
+- **architecture decision records preserve binding technical decisions.** They prevent silent substitution of important choices.
 - **Design notes describe architecture and operating context.** They give the model the project's shape, not just its features.
 - **Epics and stories organize delivery.** They turn a design into a sequence of shippable work.
 - **Story specs turn intent into implementation-ready instructions.** They are the central handoff artifact.

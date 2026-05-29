@@ -10,14 +10,14 @@ This document describes what each agent does, what it does *not* do, and how wor
 
 The architect operates before implementation begins. Its job is to turn ambiguity into something an implementer can act on without guessing.
 
-- **Owns.** Refined requirements, application design, ADRs, backlog, and story specs.
-- **Primary inputs.** Raw notes, tickets, transcripts, prior requirements, prior ADRs, the project's existing design.
-- **Primary outputs.** `REQ-NNN` requirements, design sections in the README, new ADRs, backlog rows, and `docs/features/{STORY-ID}-*.md` story specs.
+- **Owns.** Refined requirements, application design, architecture decision records, backlog, and story specs.
+- **Primary inputs.** Raw notes, tickets, transcripts, prior requirements, prior architecture decision records, the project's existing design.
+- **Primary outputs.** requirements, design sections in the README, new architecture decision records, backlog rows, and `docs/features/{STORY-ID}-*.md` story specs.
 - **Commands.** `/refine-feature`, `/design-application`, `/plan-project`, `/plan-story`, `/validate-story ready`.
-- **Does not.** Implement code. Make a binding technical decision without writing it down as an ADR. Re-open completed stories to retrofit new scope.
+- **Does not.** Implement code. Make a binding technical decision without writing it down as an architecture decision record. Re-open completed stories to retrofit new scope.
 - **Hands off to.** Implementer, once a story spec is approved and validated as ready.
 
-When the architect uncovers a decision that will bind future work — persistence, transport, auth, embedding stack, named dependencies, integration model — it captures that decision in an ADR before any downstream step can depend on it.
+When the architect uncovers a decision that will bind future work — persistence, transport, auth, embedding stack, named dependencies, integration model — it captures that decision in an architecture decision record before any downstream step can depend on it.
 
 ---
 
@@ -26,7 +26,7 @@ When the architect uncovers a decision that will bind future work — persistenc
 The implementer operates against an approved story spec. Its job is to turn that spec into working, tested code without renegotiating the spec.
 
 - **Owns.** Code changes, tests, and the story document's status and criteria checkboxes.
-- **Primary inputs.** The approved story spec and its linked ADRs, plus the existing code.
+- **Primary inputs.** The approved story spec and its linked architecture decision records, plus the existing code.
 - **Primary outputs.** Production code, tests, and an updated story document. Status moves `Open` → `In Progress` → `Complete`; acceptance criteria boxes move `[ ]` → `[x]` as each one passes.
 - **Commands.** `/implement-story`, `/fix-from-qa`, `/patch-story`.
 - **Does not.** Reinterpret requirements. Substitute named dependencies, persistence choices, or transport. Silently change the design. Mark the story complete with unchecked criteria.
@@ -91,7 +91,7 @@ Ownership is recorded per **artifact** (the conceptual output), not per file. A 
 |---|---|
 | Refined requirements | Architect |
 | Application design | Architect (Documenter syncs when stories change it) |
-| ADR | Architect |
+| architecture decision record | Architect |
 | Backlog | Architect (created); Documenter (status derived from story specs) |
 | Story spec | Architect |
 | Code and tests | Implementer |

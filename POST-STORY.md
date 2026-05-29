@@ -100,7 +100,7 @@ Audits do not run as part of normal story completion. They run on a cadence the 
 
 A follow-up must escalate back to the full story lifecycle when it would:
 
-- Touch a binding constraint named by an ADR.
+- Touch a binding constraint named by an architecture decision record.
 - Change a port or adapter contract.
 - Modify an API contract that is consumed elsewhere.
 - Change auth, persistence location, transport, embedding stack, or a named dependency.

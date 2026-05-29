@@ -10,8 +10,8 @@ This methodology achieves traceability by chaining artifacts. Each artifact has 
 
 ```mermaid
 flowchart LR
-    requirements["Requirements<br/>REQ-NNN<br/>Scenarios S1, S2, S3"]
-    adr["ADRs<br/>Binding decisions"]
+    requirements["Requirements<br/>requirements<br/>Scenarios S1, S2, S3"]
+    architecture decision record["architecture decision records<br/>Binding decisions"]
     design["Design notes<br/>Architecture and<br/>operating context"]
     backlog["Backlog<br/>Epics and stories"]
     story["Story Spec<br/>Acceptance criteria<br/>Test plan<br/>File touchpoints"]
@@ -23,7 +23,7 @@ flowchart LR
     metadata["Completion Metadata<br/>+ Follow-up Ledger"]
 
     requirements --> story
-    adr --> story
+    architecture decision record --> story
     design --> story
     backlog --> story
     story --> tests
@@ -46,12 +46,12 @@ Each box in the diagram is a distinct artifact — defined by what it carries, n
 
 ## The story spec as traceability hub
 
-The story spec is the central artifact for a reason: it is the only place where requirements, ADRs, design, acceptance criteria, tests, file touchpoints, and completion evidence all meet.
+The story spec is the central artifact for a reason: it is the only place where requirements, architecture decision records, design, acceptance criteria, tests, file touchpoints, and completion evidence all meet.
 
 A well-formed story should make every one of these questions answerable without leaving the story document:
 
-- **Which requirement or scenario caused this work?** Linked `REQ-NNN` and the specific scenario IDs (`S1`, `S2`...).
-- **Which ADRs or design constraints bind the implementation?** Linked ADRs and named binding constraints.
+- **Which requirement or scenario caused this work?** Linked requirements (`REQ-NNN-*.md`) and the specific scenario IDs (`S1`, `S2`...).
+- **Which architecture decision records or design constraints bind the implementation?** Linked architecture decision records and named binding constraints.
 - **Which acceptance criteria define completion?** The criteria list, each with a stable ID (`A1`, `A2`...).
 - **Which tests or checks prove each criterion?** The test plan rows mapping criteria to test paths.
 - **Which files changed?** The file touchpoints (planned) and the changed files (actual).
@@ -68,8 +68,8 @@ The README's closing principles are not slogans. Each one names a specific artif
 
 | Principle | Enforced by |
 |---|---|
-| Requirements define intent | `REQ-NNN` refined requirements document, with Gherkin scenarios that become trace points downstream |
-| ADRs preserve binding technical decisions | ADRs in `docs/decisions/`, linked from the story spec, that prevent silent substitution of persistence, transport, auth, or named dependencies |
+| Requirements define intent | refined requirements in `docs/requirements/REQ-NNN-*.md`, with Gherkin scenarios that become trace points downstream |
+| architecture decision records preserve binding technical decisions | architecture decision records in `docs/decisions/`, linked from the story spec, that prevent silent substitution of persistence, transport, auth, or named dependencies |
 | Design notes describe architecture and operating context | The design section of the project `README`, updated by `/design-application` |
 | Epics and stories organize delivery | The backlog rows in the project `README`, maintained by `/plan-project` |
 | Story specs turn intent into implementation-ready instructions | `docs/features/{STORY-ID}-*.md`, produced by `/plan-story` |
@@ -85,11 +85,11 @@ Three rules keep the trace from quietly breaking.
 
 ### Single source of truth per concern
 
-Each concern has exactly one canonical file. Requirements live in `docs/requirements/`. Decisions live in ADRs. Design lives in the `README` design section. Story scope lives in the story document. Documentation lives in the surfaces it describes. If two files appear to disagree, work stops and a conflict is surfaced — the workflow does not pick the easier path.
+Each concern has exactly one canonical file. Requirements live in `docs/requirements/`. Decisions live in architecture decision records. Design lives in the `README` design section. Story scope lives in the story document. Documentation lives in the surfaces it describes. If two files appear to disagree, work stops and a conflict is surfaced — the workflow does not pick the easier path.
 
 ### No silent substitution
 
-An agent may not change a persistence location, transport, embedding stack, or named dependency versus what the story or its linked ADRs specify. If the spec is wrong or impossible, the agent stops and emits a conflict report citing the affected sections.
+An agent may not change a persistence location, transport, embedding stack, or named dependency versus what the story or its linked architecture decision records specify. If the spec is wrong or impossible, the agent stops and emits a conflict report citing the affected sections.
 
 This rule exists because the most common failure mode in AI-assisted development is the model "improving" a binding decision without telling anyone.
 

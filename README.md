@@ -176,7 +176,7 @@ See [TRACEABILITY.md](TRACEABILITY.md) for how each of these artifacts feeds the
 - [BUILDING-BLOCKS.md](BUILDING-BLOCKS.md) — agents, commands, templates, artifacts, evidence, gates, and the composition matrix.
 - [ROLES.md](ROLES.md) — what each agent owns and how work hands off.
 - [TRACEABILITY.md](TRACEABILITY.md) — how intent flows through artifacts to evidence.
-- [POST-STORY.md](POST-STORY.md) — patches, reconciliation, diff reviews, audits, and escalation.
+- [POST-STORY.md](POST-STORY.md) — change classes, `/patch-story`, `/reconcile-story`, `/review-diff`, `/validate-story followups`, audits, and escalation.
 - [WHY-IT-WORKS.md](WHY-IT-WORKS.md) — the rationale, and what this methodology does not pretend to do.
 
 ---

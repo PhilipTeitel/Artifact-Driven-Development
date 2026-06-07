@@ -136,12 +136,12 @@ If the design would silently commit to a persistence choice, transport, auth mod
 
 - **Inputs.** Approved backlog, refined requirements, design, architecture decision records.
 - **Agent.** Architect.
-- **Artifact.** `docs/features/{STORY-ID}-*.md` — the implementer's spec. Includes linked architecture decision records, binding constraints, ports and adapters, API and frontend flow notes, file touchpoints, acceptance criteria, test plan rows, implementation order, completion metadata, and a post-complete follow-up ledger.
-- **Validation.** `/validate-story ready` confirms the story spec is complete enough to implement.
+- **Artifact.** `docs/features/{STORY-ID}-*.md` — the implementer's spec. Includes linked architecture decision records, Definition of Ready, binding constraints, ports and adapters (Section 4b), API and frontend flow notes, file touchpoints, acceptance criteria (including Phase Y binding and Phase Z quality gates), test plan rows with **Covers AC** and **Covers Sn** columns, implementation order, completion metadata, and a post-complete follow-up ledger.
+- **Validation.** `/validate-story ready` confirms the story spec matches the user-story template contract: required sections present, every acceptance criterion has an `Evidence:` line, every AC ID appears in the test plan, Gherkin `Sn` IDs are mapped (or explicitly out of scope), and when Section 4b lists ports or adapters, each port has a `contract` test row, each adapter has an `integration` test row, and Phase Y contains `(binding)` criteria citing non-mock evidence.
 - **Human gate.** **Gate 4: Approve story spec.**
 - **Exit.** An approved, validated story document.
 
-When a story touches an integration boundary, it must plan both a contract test for the port and an integration test for the adapter against the real backing service or fixture.
+When a story touches an integration boundary, Section 4b must list every port and adapter, Section 8a must plan a `contract` test row per port and an `integration` test row per adapter (against the real backing service or fixture — no mock of the boundary the adapter owns), and Phase Y must contain `(binding)` criteria citing the integration tests. Every Gherkin `Sn` ID from the linked requirements that this story implements must appear in the test plan's **Covers Sn** column.
 
 ### 5. `/implement-story`
 
@@ -184,6 +184,19 @@ Any `FAIL` or `BLOCKED` loops through `/fix-from-qa`, where the implementer fixe
 
 Documentation updates are driven by the story source of truth. The documenter does not update unrelated documentation just because it is nearby.
 
+### `/validate-story` (cross-cutting)
+
+`/validate-story` checks that a story document is structurally consistent with the user-story template and that its evidence, completion metadata, and follow-up ledger are coherent. Run it as a lightweight quality gate after planning, before implementation, after completion, or after post-story commands append ledger rows.
+
+| Mode | When to run | What it checks |
+|---|---|---|
+| `ready` | After `/plan-story`, before Gate 4 approval | Required sections, AC `Evidence:` lines, test plan coverage of every AC ID, port/adapter contract and integration test rows, Phase Y `(binding)` criteria |
+| `complete` | After `/document-story`, before Gate 6 approval | All criteria checked, Completion Metadata filled, review summary starts with `REVIEW SUMMARY:`, QA result shows all PASS |
+| `followups` | After `/patch-story` or `/reconcile-story` appends ledger rows | Each follow-up row has sequential ID, date, allowed change class, files touched, verification (or justified `TBD`), **Change ref**, **Review ref**, and AC impact |
+| *(default)* | Any time | All checks applicable to the story's current status |
+
+Output is a Story Validation Matrix with `PASS` / `FAIL` / `BLOCKED` per check.
+
 ---
 
 ## What each stage produces
@@ -195,7 +208,8 @@ Documentation updates are driven by the story source of truth. The documenter do
 | `/design-application` | Refined requirements | Design section and architecture decision records | Gate 2 |
 | `/plan-project` | Design and requirements | Backlog epics and story rows | Gate 3 |
 | `/plan-story` | Requirements, design, architecture decision records, backlog | `docs/features/{STORY-ID}-*.md` | Gate 4 |
-| `/validate-story ready` | Story document | Readiness validation | (supports Gate 4) |
+| `/validate-story ready` | Story document | Readiness validation (sections, AC evidence, test plan, ports/adapters) | (supports Gate 4) |
+| `/validate-story followups` | Completed story with ledger rows | Follow-up ledger validation (`Change ref`, `Review ref`, change class) | (supports post-story lanes) |
 | `/implement-story` | Story spec and architecture decision records | Code, tests, updated story status | — |
 | `/review-story` | Story and changed surface | Review artifact (`Pass`/`Block`) | — |
 | `/qa-story` | Story criteria and evidence | Criterion evidence matrix | Gate 5 |

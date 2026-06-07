@@ -66,7 +66,7 @@ A template is a contract for what an artifact must contain.
   - **README / design hub template** — architecture, stack, key decisions, API contract, environment, setup, backlog.
   - **Requirements template** — goals, non-goals, personas, constraints, resolved and open questions, Gherkin scenarios.
   - **architecture decision record template** — context, decision, alternatives considered, consequences.
-  - **User story template** — linked architecture decision records, binding constraints, ports and adapters, file touchpoints, acceptance criteria, test plan, implementation order, completion metadata, follow-up ledger.
+  - **User story template** — linked architecture decision records, Definition of Ready, binding constraints, ports and adapters table (Section 4b), file touchpoints, acceptance criteria (including Phase Y binding and Phase Z quality gates), test plan with **Covers AC** and **Covers Sn** columns and test levels (`unit`, `contract`, `integration`, `e2e` / `ui`), implementation order, completion metadata, post-complete follow-up ledger with **Change ref** and **Review ref** columns.
   - **Story-review template** — required actions, severity, machine-readable `REVIEW SUMMARY:` line.
   - **Audit template** — findings by category with evidence citations.
 
@@ -139,7 +139,7 @@ A gate is where work stops until someone — human or agent — decides whether 
 
 - **Purpose.** Make completion explicit instead of implicit.
 - **Examples.**
-  - **Agent gates.** Review `Pass` or `Block`. QA `PASS`, `FAIL`, or `BLOCKED` per criterion. `validate-story ready` and `validate-story complete`.
+  - **Agent gates.** Review `Pass` or `Block`. QA `PASS`, `FAIL`, or `BLOCKED` per criterion. `validate-story ready`, `validate-story complete`, and `validate-story followups`.
   - **Human gates.** The six approvals in the [README](README.md) swimlane: refined requirements, design and architecture decision records, backlog, story spec, QA evidence, documentation.
 
 Gates exist because skipping them has been observed to cost more later. A gate that becomes a formality has stopped doing its job.
@@ -157,7 +157,8 @@ The composition matrix shows which command produces or updates which artifact, w
 | `/design-application` | Architect | Application design; architecture decision records (as needed) | Project README design sections; `docs/decisions/ADR-NNN-*.md` |
 | `/plan-project` | Architect | Backlog | Project README backlog section |
 | `/plan-story` | Architect | Story spec | `docs/features/{STORY-ID}-*.md` |
-| `/validate-story ready` | Architect | Readiness validation | Assertion against the story spec; corrects readiness defects only |
+| `/validate-story ready` | Architect | Readiness validation | Story Validation Matrix against the story spec; corrects readiness defects only |
+| `/validate-story followups` | Implementer or Auditor | Follow-up ledger validation | Story Validation Matrix; corrects ledger drift only |
 | `/implement-story` | Implementer | Code, tests; story acceptance evidence | Codebase; story spec status field and criteria checkboxes |
 | `/review-story` | Auditor | Story review | `docs/features/{STORY-ID}-review.md` |
 | `/qa-story` | QA | QA evidence matrix | Story spec QA section |
@@ -165,8 +166,8 @@ The composition matrix shows which command produces or updates which artifact, w
 | `/document-story` | Documenter | Documentation updates; completion metadata | Project README and project documentation surfaces (OpenAPI, runbooks, environment docs); story spec completion metadata |
 | `/validate-story complete` | Documenter | Completion validation | Assertion against story spec; corrects metadata if needed |
 | `/patch-story` | Implementer | Post-complete follow-up ledger entry; targeted code, test, or doc changes | Story spec follow-up ledger; codebase or documentation surfaces |
-| `/reconcile-story` | Auditor | Drift classification and recommended lane | Recommendation only; no edits |
-| `/review-diff` | Auditor | Story review (diff scope) | `docs/reviews/*.md` |
+| `/reconcile-story` | Auditor | Drift classification; follow-up ledger entries when safe | Story spec follow-up ledger (when drift is reconcilable); Drift Reconciliation Summary |
+| `/review-diff` | Auditor | Story review (diff scope) | `docs/reviews/diff-{base}--{target}-{YYYYMMDD}.md` |
 | `/map-repo` | Auditor | System map | Audit findings |
 | `/audit-all` | Auditor | Audit findings across all categories | Audit findings |
 | `/audit-{category}` | Auditor | Category findings (`tooling`, `reliability`, `db`, `api-contracts`, `security`, `performance`, `test-coverage`) | Audit findings |

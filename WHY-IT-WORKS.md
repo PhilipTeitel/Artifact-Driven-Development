@@ -68,8 +68,9 @@ A team using this methodology well should be able to answer, for any shipped sto
 - Which review and QA gates passed, with what summary?
 - Which documentation surfaces were updated?
 - Who approved each gate?
+- What post-complete follow-ups happened, with what **Change ref** and **Review ref**?
 
-If those answers are all in the story document and its linked artifacts, the methodology is doing its job. If any of them requires reading the model's chat transcript, something earlier broke and the trace needs to be repaired before more work is layered on top.
+If those answers are all in the story document and its linked artifacts, the methodology is doing its job. If any of them requires reading the model's chat transcript, something earlier broke and the trace needs to be repaired — often via `/reconcile-story` — before more work is layered on top.
 
 ---
 

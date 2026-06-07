@@ -11,7 +11,7 @@ This methodology achieves traceability by chaining artifacts. Each artifact has 
 ```mermaid
 flowchart LR
     requirements["Requirements<br/>requirements<br/>Scenarios S1, S2, S3"]
-    architecture decision record["architecture decision records<br/>Binding decisions"]
+    architecture-decision-record["architecture decision records<br/>Binding decisions"]
     design["Design notes<br/>Architecture and<br/>operating context"]
     backlog["Backlog<br/>Epics and stories"]
     story["Story Spec<br/>Acceptance criteria<br/>Test plan<br/>File touchpoints"]
@@ -23,7 +23,7 @@ flowchart LR
     metadata["Completion Metadata<br/>+ Follow-up Ledger"]
 
     requirements --> story
-    architecture decision record --> story
+    architecture-decision-record --> story
     design --> story
     backlog --> story
     story --> tests

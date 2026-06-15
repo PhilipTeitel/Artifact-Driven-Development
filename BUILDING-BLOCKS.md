@@ -179,6 +179,7 @@ Read this matrix as: *the agent brings concern; the command brings control (inst
 
 ## Read next
 
+- [WORKFLOW-EXAMPLE.md](WORKFLOW-EXAMPLE.md) — a concrete walkthrough showing agents, commands, templates, artifacts, evidence, and gates in one completed story.
 - [ROLES.md](ROLES.md) — the agents in depth: what each one owns and how work hands off.
 - [PROCESS.md](PROCESS.md) — how these blocks chain together across the story lifecycle.
 - [TRACEABILITY.md](TRACEABILITY.md) — how the artifacts in this matrix link into a single trace from intent to evidence.

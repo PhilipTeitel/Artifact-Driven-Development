@@ -77,6 +77,7 @@ If those answers are all in the story document and its linked artifacts, the met
 ## Read next
 
 - [README.md](README.md) — start here if you arrived from outside.
+- [WORKFLOW-EXAMPLE.md](WORKFLOW-EXAMPLE.md) — a concrete artifact trace through the sample application.
 - [PROCESS.md](PROCESS.md) — the full lifecycle, stage by stage.
 - [BUILDING-BLOCKS.md](BUILDING-BLOCKS.md) — the composable pieces and how they wire together.
 - [TRACEABILITY.md](TRACEABILITY.md) — how intent flows through artifacts to evidence.

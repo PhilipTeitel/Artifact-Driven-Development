@@ -221,6 +221,7 @@ Output is a Story Validation Matrix with `PASS` / `FAIL` / `BLOCKED` per check.
 
 ## Read next
 
+- [WORKFLOW-EXAMPLE.md](WORKFLOW-EXAMPLE.md) — the same lifecycle shown through one completed story in the sample application.
 - [BUILDING-BLOCKS.md](BUILDING-BLOCKS.md) — what agents, commands, templates, artifacts, evidence, and gates each do, and how they compose.
 - [ROLES.md](ROLES.md) — what each agent owns and how work hands off between them.
 - [TRACEABILITY.md](TRACEABILITY.md) — how requirements, architecture decision records, and design flow through the story spec into evidence.

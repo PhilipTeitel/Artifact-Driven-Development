@@ -172,6 +172,7 @@ See [TRACEABILITY.md](TRACEABILITY.md) for how each of these artifacts feeds the
 
 ## Read next
 
+- [WORKFLOW-EXAMPLE.md](WORKFLOW-EXAMPLE.md) — a concrete walkthrough from informal idea to completed story evidence using the sample application.
 - [PROCESS.md](PROCESS.md) — the full lifecycle stage by stage, with human gates.
 - [BUILDING-BLOCKS.md](BUILDING-BLOCKS.md) — agents, commands, templates, artifacts, evidence, gates, and the composition matrix.
 - [ROLES.md](ROLES.md) — what each agent owns and how work hands off.

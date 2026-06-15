@@ -1,0 +1,65 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "llm-wiki"
+version = "0.1.0"
+description = "LLM-maintained wiki CLI for Obsidian vaults"
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+dependencies = [
+    "typer[all]",
+    "httpx",
+    "openai",
+    "anthropic",
+    "pydantic",
+    "rich",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest",
+    "ruff",
+    "mypy",
+]
+
+[project.scripts]
+llm-wiki = "llm_wiki.adapters.cli.main:app"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/llm_wiki"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src", "tests"]
+markers = [
+    "live_llm: optional tests requiring live Ollama/OpenAI/Anthropic providers",
+]
+python_functions = [
+    "test_*",
+    "*_A1", "*_A2", "*_A3", "*_A4", "*_A5",
+    "*_B1", "*_B2", "*_B3",
+    "*_C1", "*_C2", "*_C3",
+    "*_D1", "*_D2", "*_D3", "*_D4", "*_D5", "*_D6",
+    "*_E1", "*_E2", "*_E3",
+    "*_F1", "*_F2",
+    "*_G1", "*_G2",
+    "*_Y1", "*_Y2", "*_Y3", "*_Y4", "*_Y5", "*_Y6",
+    "stops_at_*",
+    "finds_*",
+]
+
+[tool.ruff]
+target-version = "py311"
+src = ["src", "tests"]
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+packages = ["llm_wiki"]

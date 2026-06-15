@@ -157,7 +157,7 @@ See [PROCESS.md](PROCESS.md) for the stage-by-stage walkthrough, and [POST-STORY
 
 ## Key ideas
 
-The methodology rests on a few principles. Every file in this repository points back to one of these.
+The methodology rests on a few principles. All documentation points back to one of these.
 
 - **Requirements define intent.** Until intent is written down, the model is guessing.
 - **architecture decision records preserve binding technical decisions.** They prevent silent substitution of important choices.

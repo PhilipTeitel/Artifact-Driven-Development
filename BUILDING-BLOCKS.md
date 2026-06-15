@@ -28,11 +28,11 @@ An agent is a durable role definition. It says what the model is allowed to thin
 - **Inputs.** A persona, responsibilities, and behavioral rules (for example, "do not invent requirements," "do not silently substitute named dependencies").
 - **Output.** A reusable role that any command can invoke.
 - **Examples.**
-  - **Architect** — turns ambiguity into requirements, design, architecture decision records, and story specs.
-  - **Implementer** — writes code and tests against an approved story spec.
-  - **Auditor** — provides review gates for stories, diffs, and full-repo audits.
-  - **QA** — verifies acceptance criteria against executable evidence.
-  - **Documenter** — keeps project documentation aligned with the story source of truth.
+  - **[Architect](assets/agents/architect.md)** — turns ambiguity into requirements, design, architecture decision records, and story specs.
+  - **[Implementer](assets/agents/implementer.md)** — writes code and tests against an approved story spec.
+  - **[Auditor](assets/agents/auditor.md)** — provides review gates for stories, diffs, and full-repo audits.
+  - **[QA](assets/agents/qa.md)** — verifies acceptance criteria against executable evidence.
+  - **[Documenter](assets/agents/documenter.md)** — keeps project documentation aligned with the story source of truth.
 
 An agent without a command is just a persona. It does nothing until a command tells it which step to perform.
 
@@ -46,10 +46,10 @@ A command is one workflow step under explicit control: the instructions the agen
 - **Inputs.** Required source artifacts, the agent to invoke, the template that shapes the output, the sections of which artifact may be edited, and the step-specific instructions and constraints.
 - **Output.** The invocation pattern that produces or updates a specific section of a specific artifact.
 - **Examples (by lane).**
-  - **Refinement and design.** `/init-project`, `/refine-feature`, `/design-application`, `/plan-project`, `/plan-story`, `/validate-story`.
-  - **Implementation and verification.** `/implement-story`, `/review-story`, `/qa-story`, `/fix-from-qa`, `/document-story`, `/complete-story`.
-  - **Post-story routing.** `/patch-story`, `/reconcile-story`, `/review-diff`.
-  - **Audit.** `/map-repo`, `/audit-all`, `/triage-audit-findings`, plus the category audits `/audit-tooling`, `/audit-reliability`, `/audit-db`, `/audit-api-contracts`, `/audit-security`, `/audit-performance`, `/audit-test-coverage`.
+  - **Refinement and design.** [`/init-project`](assets/commands/init-project.md), [`/refine-feature`](assets/commands/refine-feature.md), [`/design-application`](assets/commands/design-application.md), [`/plan-project`](assets/commands/plan-project.md), [`/plan-story`](assets/commands/plan-story.md), [`/validate-story`](assets/commands/validate-story.md).
+  - **Implementation and verification.** [`/implement-story`](assets/commands/implement-story.md), [`/review-story`](assets/commands/review-story.md), [`/qa-story`](assets/commands/qa-story.md), [`/fix-from-qa`](assets/commands/fix-from-qa.md), [`/document-story`](assets/commands/document-story.md), [`/complete-story`](assets/commands/complete-story.md).
+  - **Post-story routing.** [`/patch-story`](assets/commands/patch-story.md), [`/reconcile-story`](assets/commands/reconcile-story.md), [`/review-diff`](assets/commands/review-diff.md).
+  - **Audit.** [`/map-repo`](assets/commands/map-repo.md), [`/audit-all`](assets/commands/audit-all.md), [`/triage-audit-findings`](assets/commands/triage-audit-findings.md), plus the category audits [`/audit-tooling`](assets/commands/audit-tooling.md), [`/audit-reliability`](assets/commands/audit-reliability.md), [`/audit-db`](assets/commands/audit-db.md), [`/audit-api-contracts`](assets/commands/audit-api-contracts.md), [`/audit-security`](assets/commands/audit-security.md), [`/audit-performance`](assets/commands/audit-performance.md), [`/audit-test-coverage`](assets/commands/audit-test-coverage.md).
 
 A command without an agent has no judgment behind it. A command without a template has no defined output. Commands are the connective tissue, not the whole engine.
 
@@ -63,12 +63,12 @@ A template is a contract for what an artifact must contain.
 - **Inputs.** Required sections, required fields, machine-readable markers (for example, the `REVIEW SUMMARY:` line on a review artifact), and explicit placeholders for traceability links.
 - **Output.** A reusable artifact skeleton.
 - **Examples.**
-  - **README / design hub template** — architecture, stack, key decisions, API contract, environment, setup, backlog.
-  - **Requirements template** — goals, non-goals, personas, constraints, resolved and open questions, Gherkin scenarios.
-  - **architecture decision record template** — context, decision, alternatives considered, consequences.
-  - **User story template** — linked architecture decision records, Definition of Ready, binding constraints, ports and adapters table (Section 4b), file touchpoints, acceptance criteria (including Phase Y binding and Phase Z quality gates), test plan with **Covers AC** and **Covers Sn** columns and test levels (`unit`, `contract`, `integration`, `e2e` / `ui`), implementation order, completion metadata, post-complete follow-up ledger with **Change ref** and **Review ref** columns.
-  - **Story-review template** — required actions, severity, machine-readable `REVIEW SUMMARY:` line.
-  - **Audit template** — findings by category with evidence citations.
+  - **[README / design hub template](assets/templates/readme-template.md)** — architecture, stack, key decisions, API contract, environment, setup, backlog.
+  - **[Requirements template](assets/templates/requirements-template.md)** — goals, non-goals, personas, constraints, resolved and open questions, Gherkin scenarios.
+  - **[architecture decision record template](assets/templates/adr-template.md)** — context, decision, alternatives considered, consequences.
+  - **[User story template](assets/templates/user-story-template.md)** — linked architecture decision records, Definition of Ready, binding constraints, ports and adapters table (Section 4b), file touchpoints, acceptance criteria (including Phase Y binding and Phase Z quality gates), test plan with **Covers AC** and **Covers Sn** columns and test levels (`unit`, `contract`, `integration`, `e2e` / `ui`), implementation order, completion metadata, post-complete follow-up ledger with **Change ref** and **Review ref** columns.
+  - **[Story-review template](assets/templates/story-review-template.md)** — required actions, severity, machine-readable `REVIEW SUMMARY:` line.
+  - **[Audit template](assets/templates/audit-template.md)** — findings by category with evidence citations.
 
 A template is what prevents an artifact from drifting into a different shape every time it is produced.
 

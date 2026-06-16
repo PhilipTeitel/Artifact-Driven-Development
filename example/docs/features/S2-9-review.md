@@ -12,8 +12,8 @@ REVIEW SUMMARY: result=Pass TEST-critical=0 TEST-high=0 SEC-critical=0 SEC-high=
 ## Scope
 
 - Story ID: S2-9
-- Linked refined requirements (Sn IDs in scope): S8, S13, S5, S16
-- Files in scope (from Section 7 intersected with working tree):
+- Linked refined requirements (Sn IDs in scope): S5, S8, S13, S16
+- Files in scope (from Section 7 "Files to CREATE/MODIFY" intersected with `git diff` when available):
   - `src/llm_wiki/domain/use_cases/query.py` — created
   - `src/llm_wiki/domain/prompts/query.py` — created
   - `src/llm_wiki/domain/models/query_result.py` — created
@@ -23,30 +23,34 @@ REVIEW SUMMARY: result=Pass TEST-critical=0 TEST-high=0 SEC-critical=0 SEC-high=
   - `tests/unit/test_import_boundaries.py` — modified
   - `README.md` — modified
   - `docs/features/S2-9-query-use-case.md` — modified
-- Tests in scope (from Section 8a Test Plan): all 11 unit tests verified present and passing
-- Adapters in scope: none (fakes only per Section 4b)
+- Tests in scope (from Section 8a Test Plan):
+  - `tests/unit/test_query_use_case.py::*`
+  - `tests/unit/test_import_boundaries.py::query_use_case_no_adapters_E1`
+  - `tests/unit/test_import_boundaries.py::query_no_rag_imports_Y3`
+- Adapters in scope (from Section 4b):
+  - None; use case consumes port fakes only.
 
 ### Out-of-plan changes
 
-None.
+- None.
 
 ---
 
 ## Findings
 
-### Test Coverage (`TEST-#`)
+### Test Coverage
 
 None.
 
-### Reliability (`REL-#`)
+### Reliability
 
 None.
 
-### Security (`SEC-#`)
+### Security
 
 None.
 
-### API Contracts (`API-#`)
+### API Contracts
 
 None.
 
@@ -54,7 +58,7 @@ None.
 
 ## Required actions before QA
 
-None — gate passed.
+None.
 
 ---
 

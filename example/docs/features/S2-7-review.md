@@ -12,45 +12,41 @@ REVIEW SUMMARY: result=Pass TEST-critical=0 TEST-high=0 SEC-critical=0 SEC-high=
 ## Scope
 
 - Story ID: S2-7
-- Linked refined requirements (Sn IDs in scope): S6 (present/prompt), S7 (batch delegation doc), S8 (confirm), S16 (contract)
-- Files in scope (from Section 7 intersected with working-tree diff):
+- Linked refined requirements (Sn IDs in scope): S6, S7, S8, S16
+- Files in scope (from Section 7 "Files to CREATE/MODIFY" intersected with `git diff` when available):
   - `src/llm_wiki/adapters/interaction/terminal.py` — created
   - `tests/integration/test_terminal_interaction.py` — created
-  - `scripts/verify-s2-7-interaction.sh` — created
   - `tests/contract/test_interaction_port_contract.py` — modified
+  - `scripts/verify-s2-7-interaction.sh` — created
   - `README.md` — modified
 - Tests in scope (from Section 8a Test Plan):
-  - `tests/integration/test_terminal_interaction.py::present_writes_output_A1`
-  - `tests/integration/test_terminal_interaction.py::confirm_yes_s8_B1`
-  - `tests/integration/test_terminal_interaction.py::confirm_no_s8_B2`
-  - `tests/integration/test_terminal_interaction.py::prompt_returns_input_C1`
-  - `tests/contract/test_interaction_port_contract.py::terminal_passes_contract_D1`
-  - `tests/contract/test_interaction_port_contract.py::terminal_passes_contract_Y2`
-  - `scripts/verify-s2-7-interaction.sh::documents_batch_delegation_s7_E1`
+  - `tests/integration/test_terminal_interaction.py::*`
+  - `tests/contract/test_interaction_port_contract.py::*`
+  - `scripts/verify-s2-7-interaction.sh::*`
 - Adapters in scope (from Section 4b):
   - `TerminalUserInteractionAdapter` for port `UserInteractionPort`
 
 ### Out-of-plan changes
 
-None.
+- None.
 
 ---
 
 ## Findings
 
-### Test Coverage (`TEST-#`)
+### Test Coverage
 
 None.
 
-### Reliability (`REL-#`)
+### Reliability
 
 None.
 
-### Security (`SEC-#`)
+### Security
 
 None.
 
-### API Contracts (`API-#`)
+### API Contracts
 
 None.
 
@@ -58,7 +54,7 @@ None.
 
 ## Required actions before QA
 
-None — gate passed.
+None.
 
 ---
 

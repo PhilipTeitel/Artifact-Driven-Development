@@ -18,29 +18,29 @@ REVIEW SUMMARY: result=Pass TEST-critical=0 TEST-high=0 SEC-critical=0 SEC-high=
   - `scripts/verify-wiki-schema-template.sh` — created
 - Tests in scope:
   - `scripts/verify-wiki-schema-template.sh` — all named checks (A1–Z1)
-- Adapters in scope: None (Section 4b N/A)
+- Adapters in scope: None
 
 ### Out-of-plan changes
 
-None.
+- None.
 
 ---
 
 ## Findings
 
-### Test Coverage (`TEST-#`)
+### Test Coverage 
 
 None.
 
-### Reliability (`REL-#`)
+### Reliability 
 
 None.
 
-### Security (`SEC-#`)
+### Security 
 
 None.
 
-### API Contracts (`API-#`)
+### API Contracts 
 
 None.
 
@@ -48,7 +48,7 @@ None.
 
 ## Required actions before QA
 
-None (gate Pass).
+None.
 
 ---
 

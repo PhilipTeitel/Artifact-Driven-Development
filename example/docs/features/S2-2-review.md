@@ -31,34 +31,43 @@ REVIEW SUMMARY: result=Pass TEST-critical=0 TEST-high=0 SEC-critical=0 SEC-high=
   - `scripts/verify-s2-2-ports.sh` — created
   - `README.md` — modified
   - `docs/features/S2-2-port-protocols-and-domain-models.md` — modified
-- Tests in scope (from Section 8a Test Plan): all 13 rows present and runnable
-- Adapters in scope: none (ports only; contract fakes are test-local)
+- Tests in scope:
+  - `tests/contract/test_*_port_contract.py::*`
+  - `tests/unit/test_domain_models.py::*`
+  - `tests/unit/test_import_boundaries.py::*`
+  - `scripts/verify-s2-2-ports.sh::*`
+- Adapters in scope:
+  - None; contract fakes only.
 
 ### Out-of-plan changes
 
-- `pyproject.toml` — added `python_functions` globs so AC-named contract tests (e.g. `configuration_properties_A1`) are collected by pytest; recommend adding to Section 7 MODIFY on next story reconcile
+- None.
 
 ---
 
 ## Findings
 
-### Test Coverage (`TEST-#`)
+### Test Coverage
+
 None.
 
-### Reliability (`REL-#`)
+### Reliability
+
 None.
 
-### Security (`SEC-#`)
+### Security
+
 None.
 
-### API Contracts (`API-#`)
+### API Contracts
+
 None.
 
 ---
 
 ## Required actions before QA
 
-(none — gate passed)
+None.
 
 ---
 

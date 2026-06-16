@@ -1,4 +1,4 @@
-REVIEW SUMMARY: result=Pass TEST-critical=0 TEST-high=0 SEC-critical=0 SEC-high=0 REL-critical=0 REL-high=0 API-critical=0 API-high=0
+REVIEW SUMMARY: result=Block TEST-critical=1 TEST-high=0 SEC-critical=0 SEC-high=0 REL-critical=0 REL-high=0 API-critical=0 API-high=0
 
 # Story Review: S1-6 — Stage 1 end-to-end acceptance on a real vault
 
@@ -13,22 +13,17 @@ REVIEW SUMMARY: result=Pass TEST-critical=0 TEST-high=0 SEC-critical=0 SEC-high=
 
 - Story ID: S1-6
 - Linked refined requirements (Sn IDs in scope): S5, S12, S13, S14, S15, S18
-- Files in scope (from Section 7 "Files to CREATE/MODIFY" intersected with `git diff` when available):
+- Files in scope:
   - `scripts/verify-stage1-e2e.sh` — created
   - `docs/features/S1-6-acceptance-evidence.md` — created
-  - `README.md` — modified (pending document-story)
+  - `README.md` — modified
   - `docs/features/S1-6-stage1-e2e-acceptance.md` — modified
-- Tests in scope (from Section 8a Test Plan):
-  - `scripts/verify-stage1-e2e.sh::A1_evidence_doc_exists`
-  - `scripts/verify-stage1-e2e.sh::B1_core_artifacts_s18`
-  - `scripts/verify-stage1-e2e.sh::B2_wiki_page_s18`
-  - `scripts/verify-stage1-e2e.sh::B3_ingested_json_s12`
-  - `scripts/verify-stage1-e2e.sh::B4_log_operations_s13_s18`
-  - `scripts/verify-stage1-e2e.sh::C1_sources_unchanged_s5`
-  - `scripts/verify-stage1-e2e.sh::D1_all_command_verifiers`
-  - `scripts/verify-stage1-e2e.sh::E1_no_stage2`
-  - `scripts/verify-stage1-e2e.sh::Y1_full`
-- Adapters in scope (from Section 4b): N/A
+- Tests in scope:
+  - `scripts/verify-stage1-e2e.sh::*`
+  - `docs/features/S1-6-acceptance-evidence.md`
+- Adapters in scope:
+  - None.
+
 
 ### Out-of-plan changes
 
@@ -39,28 +34,30 @@ REVIEW SUMMARY: result=Pass TEST-critical=0 TEST-high=0 SEC-critical=0 SEC-high=
 
 ## Findings
 
-### Test Coverage (`TEST-#`)
+### Test Coverage
 None.
 
-### Reliability (`REL-#`)
+### Reliability
+
 None.
 
-### Security (`SEC-#`)
+### Security
+
 None.
 
-### API Contracts (`API-#`)
+### API Contracts
+
 None.
 
 ---
 
 ## Required actions before QA
 
-(none — Gate result = Pass)
+None.
 
 ---
 
 ## Notes
 
 - E2E script delegates D1 to five upstream verifiers; all exit 0 with `all` permissions (init smoke copies fixture including symlinked `.cursor`).
-- Local golden `test/vault/wiki/` remains gitignored; binding checks run against on-disk fixture after agent workflow.
 - Z6 satisfied by this review (zero high/critical).

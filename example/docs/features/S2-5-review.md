@@ -12,41 +12,45 @@ REVIEW SUMMARY: result=Pass TEST-critical=0 TEST-high=0 SEC-critical=0 SEC-high=
 ## Scope
 
 - Story ID: S2-5
-- Linked refined requirements (Sn IDs in scope): S3, S11 (config fields only), S19
-- Files in scope (from Section 7 intersected with working-tree diff):
+- Linked refined requirements (Sn IDs in scope): S1, S3, S7, S11, S19
+- Files in scope (from Section 7 "Files to CREATE/MODIFY" intersected with `git diff` when available):
   - `src/llm_wiki/adapters/cli/configuration.py` — created
   - `src/llm_wiki/adapters/cli/vault_walk.py` — created
   - `src/llm_wiki/adapters/cli/errors.py` — created
   - `tests/integration/test_cli_configuration.py` — created
   - `tests/unit/test_vault_walk.py` — created
-  - `scripts/verify-s2-5-configuration.sh` — created
   - `tests/contract/test_configuration_port_contract.py` — modified
+  - `scripts/verify-s2-5-configuration.sh` — created
   - `README.md` — modified
-- Tests in scope (from Section 8a Test Plan): all 13 cited integration/unit/contract tests verified running (16 collected in S2-5 suite)
+- Tests in scope (from Section 8a Test Plan):
+  - `tests/integration/test_cli_configuration.py::*`
+  - `tests/unit/test_vault_walk.py::*`
+  - `tests/contract/test_configuration_port_contract.py::*`
+  - `scripts/verify-s2-5-configuration.sh::*`
 - Adapters in scope (from Section 4b):
-  - `CLIConfigurationAdapter` for `ConfigurationPort`
+  - `CLIConfigurationAdapter` for port `ConfigurationPort`
 
 ### Out-of-plan changes
 
-- `pyproject.toml` — added pytest `python_functions` patterns (`stops_at_*`, `finds_*`) so cited unit tests in `test_vault_walk.py` are discovered; no runtime behavior change
+- None.
 
 ---
 
 ## Findings
 
-### Test Coverage (`TEST-#`)
+### Test Coverage
 
 None.
 
-### Reliability (`REL-#`)
+### Reliability
 
 None.
 
-### Security (`SEC-#`)
+### Security
 
 None.
 
-### API Contracts (`API-#`)
+### API Contracts
 
 None.
 
@@ -54,7 +58,7 @@ None.
 
 ## Required actions before QA
 
-None — gate passed.
+None.
 
 ---
 

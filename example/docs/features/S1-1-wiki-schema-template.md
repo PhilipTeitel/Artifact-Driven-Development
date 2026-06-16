@@ -87,9 +87,9 @@ Not applicable — no UI. Stage 1 Cursor commands consume SCHEMA as markdown doc
 
 ### Files to MODIFY
 
-| # | Path | Change |
-|---|------|--------|
-| 1 | `README.md` | Ensure **Getting Started** / project structure mentions `templates/wiki/SCHEMA.md` if missing (one line only; do not edit other design sections) |
+| #   | Path        | Change                                                                                                                                           |
+| --- | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+| 1   | `README.md` | Ensure **Getting Started** / project structure mentions `templates/wiki/SCHEMA.md` if missing (one line only; do not edit other design sections) |
 
 ### Files UNCHANGED (confirm no modifications needed)
 

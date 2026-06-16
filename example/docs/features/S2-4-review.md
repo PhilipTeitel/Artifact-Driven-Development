@@ -12,8 +12,8 @@ REVIEW SUMMARY: result=Pass TEST-critical=0 TEST-high=0 SEC-critical=0 SEC-high=
 ## Scope
 
 - Story ID: S2-4
-- Linked refined requirements (Sn IDs in scope): S1, S2, S4, S5, S7 (partial), S12, S13, S16
-- Files in scope (from Section 7 intersected with working-tree diff):
+- Linked refined requirements (Sn IDs in scope): S1, S2, S4, S5, S7, S12, S13, S16
+- Files in scope (from Section 7 "Files to CREATE/MODIFY" intersected with `git diff` when available):
   - `src/llm_wiki/adapters/storage/filesystem.py` — created
   - `src/llm_wiki/adapters/schema/markdown.py` — created
   - `src/llm_wiki/adapters/schema/excludes_parser.py` — created
@@ -22,54 +22,50 @@ REVIEW SUMMARY: result=Pass TEST-critical=0 TEST-high=0 SEC-critical=0 SEC-high=
   - `tests/integration/conftest.py` — created
   - `tests/integration/test_filesystem_wiki_storage.py` — created
   - `tests/integration/test_markdown_schema_adapter.py` — created
-  - `scripts/verify-s2-4-adapters.sh` — created
+  - `tests/integration/conftest.py` — created
   - `tests/contract/test_storage_port_contract.py` — modified
   - `tests/contract/test_schema_port_contract.py` — modified
+  - `scripts/verify-s2-4-adapters.sh` — created
   - `README.md` — modified
-- Tests in scope (from Section 8a Test Plan): all 16 cited integration/contract tests verified running (27 collected in S2-4 suite)
+- Tests in scope (from Section 8a Test Plan):
+  - `tests/integration/test_filesystem_wiki_storage.py::*`
+  - `tests/integration/test_markdown_schema_adapter.py::*`
+  - `tests/contract/test_storage_port_contract.py::*`
+  - `tests/contract/test_schema_port_contract.py::*`
+  - `scripts/verify-s2-4-adapters.sh::*`
 - Adapters in scope (from Section 4b):
-  - `FilesystemWikiStorageAdapter` for `WikiStoragePort`
-  - `MarkdownSchemaAdapter` for `SchemaPort`
+  - `FilesystemWikiStorageAdapter` for port `WikiStoragePort`
+  - `MarkdownSchemaAdapter` for port `SchemaPort`
 
 ### Out-of-plan changes
 
-- `pyproject.toml` — added pytest `python_functions` patterns (`*_E2`, `*_F1`, `*_G1`, `*_G2`) required for story-named tests to be discovered; no runtime behavior change; recommend noting in Section 7 on future similar stories
+- None.
 
 ---
 
 ## Findings
 
-### Test Coverage (`TEST-#`)
+### Test Coverage
 
 None.
 
-All acceptance criteria A1–Z6 have matching Section 8a rows. Integration tests use hermetic temp vault copies from `tests/fixtures/vault/` with real disk I/O. Contract tests parametrize against both adapters. Verified via:
-
-`pytest tests/integration/test_filesystem_wiki_storage.py tests/integration/test_markdown_schema_adapter.py tests/contract/test_storage_port_contract.py tests/contract/test_schema_port_contract.py` — 27 passed.
-
-### Reliability (`REL-#`)
+### Reliability
 
 None.
 
-Wiki write paths are guarded by `_wiki_path()` with `WikiStorageBoundaryError` on escape attempts. Malformed SCHEMA excludes fall back to `default_excludes()` with warning logs. Init template copy uses byte-identical `read_bytes`/`write_bytes`.
-
-### Security (`SEC-#`)
+### Security
 
 None.
 
-All writes confined to `{wiki_dir}/`; path traversal via `..` rejected before filesystem access.
-
-### API Contracts (`API-#`)
+### API Contracts
 
 None.
-
-Both adapters satisfy port protocols; contract tests pass against real filesystem-backed instances.
 
 ---
 
 ## Required actions before QA
 
-None — gate passed.
+None.
 
 ---
 

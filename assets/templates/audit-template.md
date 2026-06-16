@@ -22,7 +22,6 @@ Audit report contract:
 - Scope: `whole-repo` | `package: <name>` | `paths: [<list>]`
 - Repository:
 - Stack(s) detected:
-- Time budget (optional):
 - Goal:
 - Constraints:
 - Highest-priority verification commands:
@@ -86,15 +85,14 @@ Confidence rubric:
 - `low`: plausible but incomplete evidence; prefer omitting unless it materially affects triage
 For deferred non-`TEST-#` findings, use `Why not now` values like `broad blast radius`, `unclear reproduction`, `needs environment access`, `cross-service change`, `insufficient time`, or `other: ...`.
 
-| ID | Category | Severity | Confidence | Short title | Fix now? | Verification |
-| --- | --- | --- | --- | --- | --- | --- |
-| API-1 | API Contracts |  |  |  |  |  |
-| DB-1 | Database |  |  |  |  |  |
+| ID | Category | Severity | Confidence | Short title | Verification |
+| --- | --- | --- | --- | --- | --- |
+| API-1 | API Contracts |  |  |  |  |
+| DB-1 | Database |  |  |  |  |
 
 ## Detailed Findings
 Each audit command should update only its assigned subsection below and the summary rows for findings it adds or changes.
 Every detailed finding must include the same severity shown in `Findings Summary`.
-Deferred non-`TEST-#` findings must include a concise `Why not now`.
 Do not use tables in this section.
 
 ### API Contracts
@@ -112,8 +110,6 @@ Do not use tables in this section.
 - Regression test idea:
 - Verification:
 - Related finding IDs or overlaps:
-- Decision: `fix now` | `defer`
-- Why not now: `n/a` for `fix now`; otherwise a short reason
 
 ### Reliability
 #### REL-1. { Short title }
@@ -129,8 +125,6 @@ Do not use tables in this section.
 - Regression test idea:
 - Verification:
 - Related finding IDs or overlaps:
-- Decision: `fix now` | `defer`
-- Why not now: `n/a` for `fix now`; otherwise a short reason
 
 ### Database
 #### DB-1. { Short title }
@@ -146,8 +140,6 @@ Do not use tables in this section.
 - Regression test idea:
 - Verification:
 - Related finding IDs or overlaps:
-- Decision: `fix now` | `defer`
-- Why not now: `n/a` for `fix now`; otherwise a short reason
 
 ### Security
 #### SEC-1. { Short title }
@@ -162,8 +154,6 @@ Do not use tables in this section.
 - Backward-compatibility or migration notes:
 - Verification:
 - Related finding IDs or overlaps:
-- Decision: `fix now` | `defer`
-- Why not now: `n/a` for `fix now`; otherwise a short reason
 
 ### Performance
 #### PERF-1. { Short title }
@@ -178,8 +168,6 @@ Do not use tables in this section.
 - Behavior to preserve:
 - Verification:
 - Related finding IDs or overlaps:
-- Decision: `fix now` | `defer`
-- Why not now: `n/a` for `fix now`; otherwise a short reason
 
 ### Tooling
 #### TOOL-1. { Short title }
@@ -193,8 +181,6 @@ Do not use tables in this section.
 - Minimal safe fix:
 - Verification:
 - Related finding IDs or overlaps:
-- Decision: `fix now` | `defer`
-- Why not now: `n/a` for `fix now`; otherwise a short reason
 
 ### Test Coverage Recommendations
 #### TEST-1. { Short title }
@@ -206,45 +192,8 @@ Do not use tables in this section.
 - Lightest-weight way to add it:
 - Verification gap:
 
-## Fix Plan
-### Selected Fixes
-Populate this section only from non-`TEST-#` findings whose `Decision` is `fix now`.
-#### API-1
-- Why this ranks well for the assessment:
-- Expected fix size:
-- Narrowest files to change:
-- Existing tests to anchor on:
-- Lightest new or updated regression test:
-- Smallest validation commands:
-- Behavior to preserve:
-- Commit message:
-
 ### Test Coverage Support
 - Link each selected fix to the regression test recommendation that protects it.
 
-## Issue Execution Loop
-For each selected issue:
-1. Restate the bug or risk and the behavior that must stay the same.
-2. Find the narrowest code path and the nearest existing tests.
-3. Add or update the lightest regression test that proves the intended behavior.
-4. Implement the minimal safe fix.
-5. Run the smallest relevant checks first, then broader package or root checks only if needed.
-6. Summarize the change in `Execution Log`.
-7. Commit immediately with a concise message focused on intent.
-
-## Execution Log
-| Issue | Code change summary | Tests updated | Commands run | Result | Commit |
-| --- | --- | --- | --- | --- | --- |
-| API-1 |  |  |  |  |  |
-
-## Deferred Findings
-Populate this section only from non-`TEST-#` findings whose `Decision` is `defer`.
-- `API-2`: `broad blast radius` - short note on why it should be reported now and fixed later
-
 ## Root Causes
-1.
-
-<!--
-Copyright (c) 2026 Philip Teitel.
-Licensed under the MIT License. See LICENSE for details.
--->
+1. 

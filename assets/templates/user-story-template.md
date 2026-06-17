@@ -19,11 +19,11 @@
 
 ## 2. Linked architecture decisions (ADRs)
 
-{List every ADR in `docs/decisions/` that constrains this story. If none apply, keep this section and write: **None — this story inherits only epic-level ADRs already linked from the README** (and name those ADRs).}
+{List every ADR in the configured decisions directory (default `docs/decisions/`) that constrains this story. If none apply, keep this section and write: **None — this story inherits only epic-level ADRs already linked from the configured design doc** (and name those ADRs).}
 
 | ADR | Why it binds this story |
 |-----|-------------------------|
-| [`docs/decisions/ADR-NNN-slug.md`](docs/decisions/ADR-NNN-slug.md) | {one line} |
+| [`{decisionsDir}/ADR-NNN-slug.md`]({decisionsDir}/ADR-NNN-slug.md) | {one line} |
 
 ---
 
@@ -32,12 +32,12 @@
 {The Architect confirms all items before the story is implementation-ready. If any fail, stop planning and output a **Tensions / conflicts** list for the user.}
 
 - [ ] Linked ADRs exist and are **Accepted** (or the story is explicitly labeled a **spike** and only **Proposed** ADRs apply)
-- [ ] README, requirements, and ADRs do not contradict each other on persistence, dependencies, or integration boundaries
+- [ ] The configured design doc, requirements, and ADRs do not contradict each other on persistence, dependencies, or integration boundaries
 - [ ] Section 4 (Binding constraints) is filled with 3–8 bullets copied or restated from those ADRs
 - [ ] Section 4b (Ports & Adapters) lists every port/adapter this story creates or modifies, or states explicitly that no integration boundaries are touched
 - [ ] Section 8a (Test Plan) is filled and **every AC ID** (including Phase Y and Phase Z) is referenced by at least one planned test row
 - [ ] For every adapter in Section 4b, Section 8a contains both a **contract test against the port** and an **integration test against the real backing service** (no mock of the boundary the adapter owns), and Phase Y has a `(binding)` criterion citing the integration test file
-- [ ] Every Gherkin `Sn` ID from the linked refined requirements (`docs/requirements/REQ-NNN-*.md`) is mapped to at least one acceptance test row in Section 8a — or the story explicitly states why a given `Sn` is out of scope here
+- [ ] Every Gherkin scenario ID from the linked refined requirements in the configured requirements directory (default `docs/requirements/REQ-NNN-*.md`) is mapped to at least one acceptance test row in Section 8a — or the story explicitly states why a given scenario ID is out of scope here
 - [ ] Phase Y includes at least one criterion with **non-mock** evidence where wrong-stack substitution is a risk
 
 ---
@@ -143,7 +143,7 @@ export interface ExampleResponse {
 **Required format:** Each criterion MUST use markdown task syntax so it can be checked off: `- [ ] **ID** — criterion title` (e.g. `- [ ] **A1** — ...`). Do not use plain bullets or bold-only IDs — the `- [ ]` is required.
 Each criterion must be specific and verifiable — not vague ("works correctly") but precise ("returns 200 with ProjectRow[] containing resolved names").
 Include one evidence bullet per criterion using this exact syntax: `- Evidence: \`path/to/file.test.ts::proof_name(command_or_runner)\``.
-For **binding** or **stack** criteria, evidence may be a manifest check, grep, or script, e.g. `- Evidence: \`package.json lists "some-pkg"\`` or `- Evidence: \`scripts/verify-stack.mjs(npm run verify:stack)\`` — tag the criterion title with **(binding)** so QA runs the real check.}
+For **binding** or **stack** criteria, evidence may be a manifest check, grep, or script using the configured evidence examples, e.g. `- Evidence: \`package.json lists "some-pkg"\`` or `- Evidence: \`scripts/verify-stack.mjs(npm run verify:stack)\`` — tag the criterion title with **(binding)** so QA runs the real check.}
 
 ### Phase A: {Phase Name}
 
@@ -176,20 +176,20 @@ Use **(binding)** in the criterion title so QA runs the real check.}
 
 ### Phase Z: Quality Gates
 
-{Always include these standard quality gates as the final phase:}
+{Always include these standard quality gates as the final phase, substituting configured stack commands and type/import policy values from the workflow profile:}
 
-- [ ] **Z1** — `npm run build` passes with zero TypeScript errors in all workspaces
-- [ ] **Z2** — `npm run lint` passes (or only has pre-existing warnings)
-- [ ] **Z3** — No `any` types in any new or modified file
-- [ ] **Z4** — All client imports from shared use `@shared/types` alias (not relative paths)
+- [ ] **Z1** — `{stack.buildCommand}` passes with zero build/type errors
+- [ ] **Z2** — `{stack.lintCommand}` passes (or only has pre-existing warnings)
+- [ ] **Z3** — Configured type policy passes (default: no `any` types in any new or modified file)
+- [ ] **Z4** — Configured shared type import policy passes (default: imports from shared use `@shared/types` alias, not relative paths)
 - [ ] **Z5** — New or modified code includes appropriate logging for errors and significant operations per the implementer's logging guidelines
-- [ ] **Z6** — `/review-story {STORY-ID}` reports zero `high` or `critical` `TEST-#`, `SEC-#`, `REL-#`, or `API-#` findings on the changed surface (machine-checkable summary line in the review output)
+- [ ] **Z6** — `/review-story {STORY-ID}` satisfies the configured review gate (default: zero `high` or `critical` `TEST-#`, `SEC-#`, `REL-#`, or `API-#` findings on the changed surface, with the configured machine-checkable summary line in the review output)
 
 ---
 
 ## 8a. Test Plan
 
-{Required for **every** story (per `~/.cursor/AGENTS.md` rule 3 "red-first by default" — tests cannot drive code if they aren't planned). One row per planned test. Every AC ID from Section 8 must appear in the **Covers AC** column of at least one row. Every Gherkin `Sn` from the linked refined requirements that this story implements must appear in **Covers Sn** of at least one row.
+{Required for **every** story (per the configured methodology profile's red-first setting — tests cannot drive code if they aren't planned). One row per planned test. Every AC ID from Section 8 must appear in the **Covers AC** column of at least one row. Every Gherkin scenario ID from the linked refined requirements that this story implements must appear in **Covers Sn** of at least one row.
 
 Test levels (use the smallest level that proves the behavior end-to-end at that boundary):
 
@@ -198,7 +198,7 @@ Test levels (use the smallest level that proves the behavior end-to-end at that 
 - `integration` — exercises an adapter against the **real** backing service or a hermetic fixture for it (no mocks of the boundary under test)
 - `e2e` / `ui` — full-stack or browser-driven flow
 
-Hexagonal rule (per `~/.cursor/AGENTS.md` rule 2): every port in Section 4b needs at least one `contract` row; every adapter needs at least one `integration` row.}
+Hexagonal rule (per the configured methodology profile): every port in Section 4b needs at least one configured contract test row; every adapter needs at least one configured integration test row. Defaults are `contract` and `integration`.}
 
 | # | Level | File::test name | Covers AC | Covers Sn | Notes |
 |---|-------|------------------|-----------|-----------|-------|
@@ -231,32 +231,27 @@ Each step should reference a specific file and map to one or more acceptance cri
 
 ## 10. Completion Metadata
 
-{Filled by `/complete-story` after implementation, review, QA, and docs handoff are complete. Preserve this section as the baseline for what `Status: Complete` meant at the time the story was completed.}
+{Filled by `/complete-story` after implementation, review, QA, and docs handoff are complete. Preserve this section as the baseline for what the configured complete story status (default `Complete`) meant at the time the story was completed.}
 
 | Field | Value |
 |-------|-------|
 | Completed at | `{YYYY-MM-DD}` |
 | Completion ref | `{commit SHA, branch ref, or "TBD if not committed"}` |
-| Final review summary | `REVIEW SUMMARY: ...` |
-| Final QA command | `{command that produced all PASS, e.g. npm test -- ...}` |
-| QA result | `{all PASS / link or pasted summary}` |
+| Final review summary | `{configured review summary line, default REVIEW SUMMARY: ...}` |
+| Final QA command | `{command that produced all configured pass results, e.g. stack.testCommand with targeted args}` |
+| QA result | `{all configured pass results / link or pasted summary}` |
 | Docs handoff | `{docs updated / no docs update needed, with reason}` |
 
 ---
 
 ## 11. Post-complete Follow-up Ledger
 
-{Append-only. Use this for small verified changes after the story is already `Complete`: debugging fixes, polish, copy tweaks, UI refinements, or other local changes that do not alter binding constraints or invalidate the original acceptance criteria. If a follow-up changes original acceptance criteria, persistence/auth/API boundaries, adapters, or ADR-backed constraints, stop and plan a new story instead. Record `Change ref` (commit SHA, PR URL, or `uncommitted` / `TBD`) so each follow-up is traceable in version control; use `Review ref` when `/review-diff` produced an artifact for the follow-up.}
+{Append-only. Use this for small verified changes after the story already has the configured complete status: debugging fixes, polish, copy tweaks, UI refinements, or other local changes that do not alter binding constraints or invalidate the original acceptance criteria. If a follow-up changes original acceptance criteria, persistence/auth/API boundaries, adapters, or ADR-backed constraints, stop and plan a new story instead. Record `Change ref` (commit SHA, PR URL, or `uncommitted` / `TBD`) so each follow-up is traceable in version control; use `Review ref` when `/review-diff` produced an artifact for the follow-up.}
 
 | ID | Date | Change class | Intent | Files touched | Verification | Change ref | Review ref | Docs impact | AC impact |
 |----|------|--------------|--------|---------------|--------------|------------|------------|-------------|-----------|
-| F1 | `{YYYY-MM-DD}` | `story-followup` / `trivial-code` / `docs-only` | `{one sentence}` | `{paths}` | `{command or inspection proof}` | `{commit SHA, PR URL, or "uncommitted" / "TBD"}` | `{none / docs/reviews/diff-....md}` | `{none / docs path}` | `{none / explain affected AC}` |
+| F1 | `{YYYY-MM-DD}` | `{configured workflow lane, e.g. story-followup / trivial-code / docs-only}` | `{one sentence}` | `{paths}` | `{command or inspection proof}` | `{commit SHA, PR URL, or "uncommitted" / "TBD"}` | `{none / configured diff review path}` | `{none / docs path}` | `{none / explain affected AC}` |
 
 ---
 
 *Created: {YYYY-MM-DD} | Story: {STORY-ID} | Epic: {Epic number} — {Epic name}*
-
-<!--
-Copyright (c) 2026 Philip Teitel.
-Licensed under the MIT License. See LICENSE for details.
--->

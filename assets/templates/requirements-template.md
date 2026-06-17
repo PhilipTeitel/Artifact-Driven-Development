@@ -1,9 +1,9 @@
 <!--
 Refined-requirements contract:
 - This file is produced by /refine-feature (architect in Discovery / Refinement Mode).
-- Save it under `docs/requirements/REQ-NNN-short-slug.md`. Use sequential three-digit `NNN`.
+- Save it under the configured requirements directory using the configured requirement naming pattern (default `docs/requirements/REQ-NNN-short-slug.md`). Use sequential three-digit `NNN` unless the profile overrides the pattern.
 - Do not delete or renumber existing REQ files; append the next number.
-- Every Gherkin scenario must have an `Sn` ID. The architect references those IDs from story Test Plans so each scenario traces to a concrete test.
+- Every Gherkin scenario must have an ID matching the configured scenario ID pattern (default `Sn`). The architect references those IDs from story Test Plans so each scenario traces to a concrete test.
 - Unresolved questions are listed under `Open questions` — they are blocking. Do not write design or stories until they are resolved (architect should stop and re-ask).
 -->
 
@@ -94,8 +94,3 @@ Then  ...
 ---
 
 *Created: {YYYY-MM-DD} | Refined by: architect in Discovery Mode*
-
-<!--
-Copyright (c) 2026 Philip Teitel.
-Licensed under the MIT License. See LICENSE for details.
--->

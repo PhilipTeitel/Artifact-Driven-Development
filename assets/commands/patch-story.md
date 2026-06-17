@@ -1,20 +1,20 @@
 # patch-story
 
-Apply a small, verified follow-up to a story that is already `Complete` without reopening the full `/plan-story` -> `/complete-story` workflow.
+Apply a small, verified follow-up to a story that already has the configured complete status (default `Complete`) without reopening the full configured story workflow (default `/plan-story` -> `/complete-story`). Before acting, resolve the workflow profile and use its story glob, status vocabulary, workflow lanes, reviews directory, and completion-ref strategy.
 
 Use this for `story-followup`, `trivial-code`, or `docs-only` changes that are clearly tied to one completed story: polish, small bug fixes, copy tweaks, local debugging discoveries, targeted test repairs, or documentation corrections. Do **not** use it for new capabilities, binding constraint changes, adapter/port changes, API contract changes, persistence/auth changes, broad refactors, or changes that invalidate original acceptance criteria; route those to `/plan-story` or `/review-diff` instead.
 
 ## Inputs
 
-- A story document at `docs/features/{STORY-ID}-*.md`.
+- A story document matching the configured story glob (default `docs/features/{STORY-ID}-*.md`).
 - A concise description of the requested follow-up change.
 - Optional: changed files already present in the working tree.
 
 ## Steps
 
 1. Find and read the story document. If it is missing, stop and tell the user to run `/plan-story` first.
-2. Confirm the story header has `**Status**: Complete`. If it is `Open` or `In Progress`, stop and use `/implement-story` or `/fix-from-qa` instead.
-3. Classify the change using `~/.cursor/AGENTS.md` rule 1b:
+2. Confirm the story header has the configured complete status. If it has the configured open or active status, stop and use `/implement-story` or `/fix-from-qa` instead.
+3. Classify the change using the configured workflow lanes:
    - `story-followup`
    - `trivial-code`
    - `docs-only`
@@ -32,7 +32,7 @@ Use this for `story-followup`, `trivial-code`, or `docs-only` changes that are c
    - files touched
    - verification command or inspection proof
    - change ref — commit SHA, PR URL, or `uncommitted` / `TBD` with justification (use `git rev-parse HEAD` when the follow-up is committed)
-   - review ref — `none`, or the path to `docs/reviews/...` when `/review-diff` was run for this follow-up
+   - review ref — `none`, or the configured diff-review artifact path when `/review-diff` was run for this follow-up
    - docs impact
    - AC impact (`none` unless a criterion needs a new story)
 9. Update docs only when the follow-up changes setup, API behavior, user-visible behavior that docs describe, or operational procedures.
@@ -45,14 +45,9 @@ Run `/review-diff` only when the change is not obviously local, affects security
 
 ## Examples
 
-- `/patch-story OTO-2 fix empty-state copy after QA walkthrough`
-- `/patch-story CHAT-4 debug retry spinner that remains visible after success`
-- `/patch-story FND-1 docs-only: correct dev server port in README`
+- `/patch-story {STORY-ID} fix empty-state copy after QA walkthrough`
+- `/patch-story {STORY-ID} debug retry spinner that remains visible after success`
+- `/patch-story {STORY-ID} docs-only: correct dev server port in configured design doc`
 
 This command is available in chat with `/patch-story`.
 It expects a story ID and a short follow-up description.
-
-<!--
-Copyright (c) 2026 Philip Teitel.
-Licensed under the MIT License. See LICENSE for details.
--->

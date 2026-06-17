@@ -11,7 +11,7 @@ Audit report contract:
 - Every finding must appear in both `Findings Summary` and the matching `Detailed Findings` subsection.
 - Every selected fix must appear in both `Fix Plan` and `Execution Log`.
 - The `Decision` field in each detailed finding is the source of truth for triage.
-- Every non-`TEST-#` finding must include `Severity`, `Confidence`, and `Evidence checked`.
+- Every finding whose configured prefix is not the test-coverage prefix (default non-`TEST-#`) must include `Severity`, `Confidence`, and `Evidence checked`.
 - `Decision: fix now` means the finding belongs in `Fix Plan -> Selected Fixes`.
 - `Decision: defer` means the finding belongs in `Deferred Findings` and must include `Why not now`.
 -->
@@ -61,7 +61,7 @@ Audit report contract:
 - Smallest useful verification commands:
 
 ## Findings Summary
-Use category-specific IDs:
+Use configured category-specific IDs. Defaults:
 - `API-#` for API contract findings
 - `DB-#` for database findings
 - `REL-#` for reliability findings
@@ -70,8 +70,8 @@ Use category-specific IDs:
 - `TOOL-#` for tooling findings
 - `TEST-#` for test coverage recommendations
 
-Every finding must include a severity. Use one of: `critical`, `high`, `medium`, `low`.
-Every non-`TEST-#` finding must include a confidence. Use one of: `high`, `medium`, `low`.
+Every finding must include a severity. Use configured severity values; defaults are `critical`, `high`, `medium`, `low`.
+Every finding whose prefix is not the configured test-coverage prefix must include a confidence. Use configured confidence values; defaults are `high`, `medium`, `low`.
 Order findings by severity descending within each category.
 The `Fix now?` column must match the finding's `Decision` field.
 Severity rubric:

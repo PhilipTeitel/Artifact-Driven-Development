@@ -1,19 +1,19 @@
 # audit-reliability
 
-Audit this codebase for concrete reliability defects. Focus on unhandled errors, malformed-input crashes, race conditions, invalid assumptions at API boundaries, startup fragility, state leakage across requests, retries/timeouts, and data corruption risks.
+Audit this codebase for concrete reliability defects. Focus on unhandled errors, malformed-input crashes, race conditions, invalid assumptions at API boundaries, startup fragility, state leakage across requests, retries/timeouts, and data corruption risks. Before acting, resolve the workflow profile and use its configured audit file, audit template, and finding prefixes.
 
-Read `audit-findings.md` in the target repo root first and use it as the shared audit state. If it does not exist, create it from `~/.cursor/templates/audit-template.md`.
+Read the configured audit file in the target repo root first and use it as the shared audit state. If it does not exist, create it from the configured audit template.
 
 Update only:
 - relevant rows in `Findings Summary`
 - `Detailed Findings` -> `Reliability`
 
 Do not overwrite unrelated sections or findings owned by other audit commands.
-Use only `REL-#` finding IDs for rows and headings created by this command.
+Use only the configured reliability finding prefix for rows and headings created by this command (default `REL-#`).
 Keep the report aligned to the template exactly. Do not replace category findings with tables.
 
 Before adding a finding:
-- check whether the same defect is already recorded in `audit-findings.md`
+- check whether the same defect is already recorded in the configured audit file
 - if another category already captured the same root cause, add or update overlap notes rather than duplicating it
 - omit issues that would be low-confidence or that lack a concrete trigger and verification path
 
@@ -38,8 +38,3 @@ Only report issues that can plausibly break production behavior. For each findin
 - related finding IDs or overlaps
 - decision
 - `Why not now` (`n/a` for `fix now`)
-
-<!--
-Copyright (c) 2026 Philip Teitel.
-Licensed under the MIT License. See LICENSE for details.
--->

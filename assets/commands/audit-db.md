@@ -1,19 +1,19 @@
 # audit-db
 
-Audit this codebase for concrete database and persistence defects. Focus on SQL files, ORM schemas and models, migrations, seeds and fixtures, test data, and query patterns. Look for missing or weak primary keys, missing or incorrectly defined foreign keys, missing, redundant, or misordered indexes, schema drift across migrations, unsafe nullability or defaults that weaken data integrity, and overly broad or inefficient queries such as `SELECT *`.
+Audit this codebase for concrete database and persistence defects. Focus on SQL files, ORM schemas and models, migrations, seeds and fixtures, test data, and query patterns. Look for missing or weak primary keys, missing or incorrectly defined foreign keys, missing, redundant, or misordered indexes, schema drift across migrations, unsafe nullability or defaults that weaken data integrity, and overly broad or inefficient queries such as `SELECT *`. Before acting, resolve the workflow profile and use its configured audit file, audit template, and finding prefixes.
 
-Read `audit-findings.md` in the target repo root first and use it as the shared audit state. If it does not exist, create it from `~/.cursor/templates/audit-template.md`.
+Read the configured audit file in the target repo root first and use it as the shared audit state. If it does not exist, create it from the configured audit template.
 
 Update only:
 - relevant rows in `Findings Summary`
 - `Detailed Findings` -> `Database`
 
 Do not overwrite unrelated sections or findings owned by other audit commands.
-Use only `DB-#` finding IDs for rows and headings created by this command.
+Use only the configured database finding prefix for rows and headings created by this command (default `DB-#`).
 Keep the report aligned to the template exactly. Do not replace category findings with tables.
 
 Before adding a finding:
-- check whether the same issue is already captured elsewhere in `audit-findings.md`
+- check whether the same issue is already captured elsewhere in the configured audit file
 - if the risk is primarily an API, reliability, or performance issue with a shared root cause, note the overlap instead of creating a weaker duplicate
 - omit speculative schema concerns that are not supported by concrete code, migration, fixture, or query evidence
 
@@ -40,8 +40,3 @@ Only report issues you can tie to concrete schema definitions, queries, migratio
 - `Why not now` (`n/a` for `fix now`)
 
 Prefer findings that can plausibly cause production correctness, integrity, or scalability problems.
-
-<!--
-Copyright (c) 2026 Philip Teitel.
-Licensed under the MIT License. See LICENSE for details.
--->

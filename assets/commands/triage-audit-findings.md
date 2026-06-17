@@ -1,22 +1,22 @@
 # triage-audit-findings
 
-Read `audit-findings.md` in the target repo root and reconcile triage using the `Decision` field from each detailed finding.
+Read the configured audit file in the target repo root (default `audit-findings.md`) and reconcile triage using the `Decision` field from each detailed finding. Before acting, resolve the workflow profile and use its configured audit template, finding prefixes, and severity/confidence vocabulary.
 
-Use `~/.cursor/templates/audit-template.md` as a strict contract. Preserve all headings and heading order. If a required section has no content yet, write `None yet.`.
+Use the configured audit template (default `~/.cursor/templates/audit-template.md`) as a strict contract. Preserve all headings and heading order. If a required section has no content yet, write `None yet.`.
 
 Treat `Decision` as the source of truth:
 - `fix now` -> include the finding in `Fix Plan` -> `Selected Fixes`
 - `defer` -> include the finding in `Deferred Findings`
 
 Before updating triage:
-- review severity, confidence, verification path, and expected fix scope for each non-`TEST-#` finding
+- review severity, confidence, verification path, and expected fix scope for each finding whose prefix is not the configured test-coverage prefix
 - look for near-duplicate or overlapping findings across categories
 - prefer the highest-confidence, narrowest-blast-radius framing when two findings describe the same underlying defect
 
 Update:
 - `Findings Summary` so the `Fix now?` column matches each finding's `Decision` and the `Confidence` column matches the detailed finding
-- `Fix Plan` -> `Selected Fixes` using only non-`TEST-#` findings marked `fix now`
-- `Deferred Findings` using only non-`TEST-#` findings marked `defer`
+- `Fix Plan` -> `Selected Fixes` using only non-test-prefix findings marked `fix now`
+- `Deferred Findings` using only non-test-prefix findings marked `defer`
 
 For each selected fix, fill:
 - why this is a strong fix candidate (severity, blast radius, reversibility)
@@ -52,8 +52,3 @@ Rank `fix now` candidates using this order:
 Use details already present in the report when possible. If information is missing, write `TBD` rather than inventing it.
 
 Do not rewrite `System Map`. Only edit detailed findings when needed to restore template conformance, add missing triage metadata, or resolve clear duplicate/overlap ambiguity.
-
-<!--
-Copyright (c) 2026 Philip Teitel.
-Licensed under the MIT License. See LICENSE for details.
--->

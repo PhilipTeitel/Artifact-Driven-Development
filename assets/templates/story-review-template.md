@@ -2,10 +2,10 @@
 Per-story review contract:
 - This file is produced by /review-story (or /review-diff for arbitrary base refs).
 - It is a focused, lightweight audit limited to the changed surface — not a full-repo audit.
-- Save as `docs/features/{STORY-ID}-review.md`.
+- Save using the configured story-review or diff-review path (defaults: `docs/features/{STORY-ID}-review.md` or `docs/reviews/diff-...md`).
 - The auditor agent owns this template.
-- The first non-comment line MUST be a single-line, machine-checkable "REVIEW SUMMARY" so QA and Phase Z (Z6) can grep it.
-- Use category-specific finding ID prefixes: `TEST-#` for Test Coverage, `REL-#` for Reliability, `SEC-#` for Security, and `API-#` for API Contracts. When both a full audit and a per-story review exist, IDs may overlap but are scoped to their own file (no cross-file renumbering).
+- The first non-comment line MUST use the configured machine-checkable review summary label and format (default "REVIEW SUMMARY") so QA and the configured quality gate can grep it.
+- Use configured category-specific finding ID prefixes. Defaults are `TEST-#` for Test Coverage, `REL-#` for Reliability, `SEC-#` for Security, and `API-#` for API Contracts. When both a full audit and a per-story review exist, IDs may overlap but are scoped to their own file (no cross-file renumbering).
 - Findings list must use bullets per finding, not a single table — same as `audit-template.md` Detailed Findings. Every finding subsection item must be headed as `#### PREFIX-#. { Short title }` using that section's prefix.
 - Severity is required on every finding; confidence is required on every non-`TEST-#` finding.
 - `None.` is an exclusive empty-state marker: include it only when a subsection has no findings, and do not include it alongside findings, evidence summaries, or positive assertions.
@@ -15,10 +15,10 @@ REVIEW SUMMARY: result={Pass|Block} TEST-critical={N} TEST-high={N} SEC-critical
 
 # Story Review: {STORY-ID} — {Story Title}
 
-**Reviewed against:** `docs/features/{STORY-ID}-{slug}.md`
+**Reviewed against:** `{configured story path, default docs/features/{STORY-ID}-{slug}.md}`
 **Date:** {YYYY-MM-DD}
 **Mode:** `/review-story` | `/review-diff <base-ref>`
-**Gate result:** `Pass` | `Block`
+**Gate result:** `{configured review pass value}` | `{configured review block value}` (defaults: `Pass` | `Block`)
 
 ---
 
@@ -48,7 +48,7 @@ REVIEW SUMMARY: result={Pass|Block} TEST-critical={N} TEST-high={N} SEC-critical
 
 ### Test Coverage {`TEST-#`}
 
-{Required checks, per `~/.cursor/agents/auditor.md` per-story rubric:
+{Required checks, per the configured auditor per-story rubric:
 - every AC ID in the story has a referenced test file in Section 8a, the file exists, and at least one test name matches and runs;
 - every adapter in Section 4b has at least one non-mock integration test in Section 8a that exists and runs;
 - every `Sn` from the linked refined requirements that this story implements is traceable to a test name in the changed surface (substring or annotation).}

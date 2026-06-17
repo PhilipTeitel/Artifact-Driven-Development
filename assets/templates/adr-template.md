@@ -48,8 +48,8 @@
 
 ## Links
 
-- Requirements: `{path/to/requirements.md}` (or "see README Requirements section")
-- Related README section: `{e.g. Key Design Decisions — ...}`
+- Requirements: `{path/to/requirements.md}` (or "see configured design doc Requirements section")
+- Related design doc section: `{e.g. Key Design Decisions — ...}`
 - Related stories: `{STORY-ID}` (optional)
 - Supersedes / superseded by: `{ADR-xxx}` (if any)
 
@@ -57,13 +57,8 @@
 
 ## File naming
 
-In the **target project repo**, save as:
+In the **target project repo**, save using the configured decisions directory and ADR naming pattern. Default:
 
 `docs/decisions/ADR-NNN-short-slug.md`
 
-Use sequential three-digit `NNN`. Do not renumber existing ADRs; append the next number.
-
-<!--
-Copyright (c) 2026 Philip Teitel.
-Licensed under the MIT License. See LICENSE for details.
--->
+Use sequential three-digit `NNN` unless the profile overrides the pattern. Do not renumber existing ADRs; append the next number.

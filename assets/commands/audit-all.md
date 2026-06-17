@@ -1,8 +1,8 @@
 # audit-all
 
-Run the full audit workflow for the repository and write all results into `audit-findings.md` in the target repo root.
+Run the full audit workflow for the repository and write all results into the configured audit file in the target repo root (default `audit-findings.md`). Before acting, resolve the workflow profile and use its configured auditor agent, audit template, audit command sequence, finding prefixes, and severity vocabulary.
 
-The auditor agent (`~/.cursor/agents/auditor.md`) executes each step. Use `~/.cursor/templates/audit-template.md` as a strict contract, not loose guidance.
+The configured auditor agent (default `~/.cursor/agents/auditor.md`) executes each step. Use the configured audit template (default `~/.cursor/templates/audit-template.md`) as a strict contract, not loose guidance.
 
 Requirements:
 - set the `Scope` field in `Scope And Timebox` (default `whole-repo` unless the user passes a package or path scope)
@@ -16,7 +16,7 @@ Requirements:
 - prefer high-confidence findings with a concrete verification path
 - avoid adding near-duplicate findings when an earlier step already captured the same defect
 
-Execute these commands sequentially in this exact order:
+Execute the configured audit command sequence sequentially. Default order:
 1. `map-repo`
 2. `audit-tooling`
 3. `audit-reliability`
@@ -27,10 +27,10 @@ Execute these commands sequentially in this exact order:
 8. `audit-test-coverage`
 9. `triage-audit-findings`
 
-Do not run these commands in parallel. They share `audit-findings.md` as state, so parallel execution risks clobbering findings written by earlier steps.
+Do not run these commands in parallel. They share the configured audit file as state, so parallel execution risks clobbering findings written by earlier steps.
 
 Before each step:
-- read the current `audit-findings.md`
+- read the current configured audit file
 - preserve all sections owned by earlier commands
 - update only the sections owned by the command being executed
 - preserve higher-confidence findings unless you are clearly tightening or de-duplicating them
@@ -49,17 +49,12 @@ Mid-run sanity check:
 
 ## Use cases
 
-This command is useful as a recurring repo health check, a pre-release sweep, or a scoped audit of a single package or set of paths. The output is intentionally one file (`audit-findings.md`) so the same report can be re-run, diffed, and shared.
+This command is useful as a recurring repo health check, a pre-release sweep, or a scoped audit of a single package or set of paths. The output is intentionally one configured audit file so the same report can be re-run, diffed, and shared.
 
-For story-scoped reviews of a single feature's changed surface, prefer `/review-story` — it runs only the categories most likely to catch story-scoped escapes against only the files the story changed and produces the grep-friendly `REVIEW SUMMARY:` line that gates Phase Z's `Z6` quality gate.
+For story-scoped reviews of a single feature's changed surface, prefer `/review-story` — it runs the configured per-story categories against only the files the story changed and produces the configured grep-friendly review summary line that gates Phase Z's `Z6` quality gate.
 
 ## Examples
 
 - `/audit-all` — full repo health check
 - `/audit-all package: api` — audit only one package
 - `/audit-all paths: src/payments,src/billing` — audit a focused set of paths
-
-<!--
-Copyright (c) 2026 Philip Teitel.
-Licensed under the MIT License. See LICENSE for details.
--->

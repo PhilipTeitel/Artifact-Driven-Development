@@ -1,19 +1,19 @@
 # audit-api-contracts
 
-Audit API handlers, schemas, and shared types for contract drift and compatibility risks. Focus on missing validation, inconsistent status codes, client/server schema mismatch, unsafe coercion, optional fields treated as required, and backward-incompatible behavior changes.
+Audit API handlers, schemas, and shared types for contract drift and compatibility risks. Focus on missing validation, inconsistent status codes, client/server schema mismatch, unsafe coercion, optional fields treated as required, and backward-incompatible behavior changes. Before acting, resolve the workflow profile and use its configured audit file, audit template, and finding prefixes.
 
-Read `audit-findings.md` in the target repo root first and use it as the shared audit state. If it does not exist, create it from `~/.cursor/templates/audit-template.md`.
+Read the configured audit file in the target repo root first and use it as the shared audit state. If it does not exist, create it from the configured audit template.
 
 Update only:
 - relevant rows in `Findings Summary`
 - `Detailed Findings` -> `API Contracts`
 
 Do not overwrite unrelated sections or findings owned by other audit commands.
-Use only `API-#` finding IDs for rows and headings created by this command.
+Use only the configured API finding prefix for rows and headings created by this command (default `API-#`).
 Keep the report aligned to the template exactly. Do not replace category findings with tables.
 
 Before adding a finding:
-- check whether the same issue is already captured elsewhere in `audit-findings.md`
+- check whether the same issue is already captured elsewhere in the configured audit file
 - if another category already covers the same root cause, keep the API framing only when the contract mismatch adds unique risk
 - omit low-confidence drift claims that are not tied to a concrete handler, schema, client type, or verification path
 
@@ -39,8 +39,3 @@ For each finding, include:
 - related finding IDs or overlaps
 - decision
 - `Why not now` (`n/a` for `fix now`)
-
-<!--
-Copyright (c) 2026 Philip Teitel.
-Licensed under the MIT License. See LICENSE for details.
--->

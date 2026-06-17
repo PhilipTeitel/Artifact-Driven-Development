@@ -1,0 +1,154 @@
+# Cursor workflow profile.
+#
+# This file captures the defaults that the agents, commands, and templates use
+# when a target project does not provide its own `.cursor/workflow.config.yml`.
+# Project-local values override this user profile key-by-key.
+
+profile:
+  name: default-cursor-sdlc
+  version: 1
+  description: Default Cursor SDLC workflow profile matching this repository's current behavior.
+  precedence:
+    - target-project:.cursor/workflow.config.yml
+    - user-profile:~/.cursor/workflow.config.yml
+    - documented-defaults:this-file
+
+cursor:
+  home: ~/.cursor
+  rulesFile: ~/.cursor/AGENTS.md
+  agentsDir: ~/.cursor/agents
+  commandsDir: ~/.cursor/commands
+  templatesDir: ~/.cursor/templates
+  excludedWorkflowSources:
+    - ~/.codex
+
+templates:
+  readme: ~/.cursor/templates/readme-template.md
+  adr: ~/.cursor/templates/adr-template.md
+  requirements: ~/.cursor/templates/requirements-template.md
+  story: ~/.cursor/templates/user-story-template.md
+  audit: ~/.cursor/templates/audit-template.md
+  storyReview: ~/.cursor/templates/story-review-template.md
+
+paths:
+  designDoc: README.md
+  featuresDir: docs/features
+  requirementsDir: docs/requirements
+  decisionsDir: docs/decisions
+  reviewsDir: docs/reviews
+  auditFile: audit-findings.md
+  storyGlob: docs/features/{STORY-ID}-*.md
+  storyFilePattern: docs/features/{STORY-ID}-{slug}.md
+  storyReviewPattern: docs/features/{STORY-ID}-review.md
+  diffReviewPattern: docs/reviews/diff-{base}-{target}.md
+
+workflow:
+  lanes:
+    fullStory:
+      description: New capability, broad refactor, persistence/auth/API change, adapter/port change, named dependency change, or binding-constraint change.
+      commands: [refine-feature, design-application, plan-story, complete-story]
+      alternatives: [plan-project]
+    storyFollowup:
+      description: Small behavior fix, debugging result, UI polish, copy adjustment, or local refinement tied to a completed story.
+      commands: [patch-story, review-story, qa-story, document-story]
+    hotfixDiff:
+      description: Unplanned bug fix or branch diff that does not map cleanly to one story.
+      commands: [review-diff]
+    docsOnly:
+      description: Documentation-only updates.
+      commands: [document-story, review-diff]
+    trivialCode:
+      description: Non-behavioral typo, formatting, comment, or mechanical cleanup.
+      commands: []
+  completeStorySequence:
+    - implement-story
+    - review-story
+    - qa-story
+    - document-story
+    - validate-story
+  auditSequence:
+    - map-repo
+    - audit-test-coverage
+    - audit-reliability
+    - audit-security
+    - audit-api-contracts
+    - audit-db
+    - audit-performance
+    - audit-tooling
+    - triage-audit-findings
+
+methodology:
+  sourceOfTruth: strict
+  adrBinding: required
+  hexagonalPortsAdapters: required
+  redFirstTesting: required
+  gherkinScenarioTraceability: required
+  bindingPhase: Phase Y
+  qualityPhase: Phase Z
+  portTestTypes: [contract, integration]
+  allowSpikeWithProposedAdr: true
+
+status:
+  story:
+    open: Open
+    active: In Progress
+    complete: Complete
+  backlog:
+    open: Not Started
+    active: In Progress
+    complete: Done
+  qa:
+    pass: PASS
+    fail: FAIL
+    blocked: BLOCKED
+  review:
+    pass: Pass
+    block: Block
+
+review:
+  summaryLineLabel: REVIEW SUMMARY
+  summaryFormat: "REVIEW SUMMARY: result=<Pass|Block> TEST-critical=<N> TEST-high=<N> SEC-critical=<N> SEC-high=<N> REL-critical=<N> REL-high=<N> API-critical=<N> API-high=<N>"
+  gate:
+    blockOnSeverity: [high, critical]
+    requiredResultForQa: Pass
+  perStoryCategories: [Test Coverage, Reliability, Security, API Contracts]
+  wholeRepoFindingPrefixes: [API, DB, REL, SEC, PERF, TOOL, TEST]
+
+qa:
+  evidenceReferenceExamples:
+    - "path/to/file.test.ts::proof_name(command_or_runner)"
+    - "package.json lists \"pkg-name\""
+    - "scripts/verify-stack.mjs(npm run verify:stack)"
+
+stack:
+  language: typescript
+  packageManager: npm
+  installCommand: npm install
+  buildCommand: npm run build
+  lintCommand: npm run lint
+  testCommand: npm test
+  typePolicy:
+    disallowAny: true
+    sharedTypesAlias: "@shared/types"
+  logger:
+    format: structured-json
+    levels: [debug, info, warn, error]
+    examples: [Pino, Winston, structlog, slog]
+
+naming:
+  requirementPattern: REQ-NNN-short-slug.md
+  adrPattern: ADR-NNN-short-slug.md
+  storyPattern: "{STORY-ID}-{slug}.md"
+  scenarioIdPattern: "S<number>"
+  acceptanceCriterionPattern: "<PhaseLetter><number>"
+  findingPrefixes: [TEST, SEC, API, REL, DB, PERF, TOOL]
+
+git:
+  defaultBaseBranches: [main, master]
+  defaultRemoteBase: origin/main
+  completionRefCommand: git rev-parse --short HEAD
+  fallbackCompletionRef: "TBD: not committed"
+
+templateHandling:
+  neutralizeProjectSpecificExamples: true
+  unresolvedPlaceholderPolicy: keep-heading-and-write-TBD

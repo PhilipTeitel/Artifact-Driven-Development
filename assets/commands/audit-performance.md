@@ -1,19 +1,19 @@
 # audit-performance
 
-Audit this codebase for meaningful performance issues on realistic hot paths. Focus on repeated I/O, N+1 behavior, unbounded queries or loops, expensive parsing, cache misuse, blocking work on request paths, and pathological user-controlled operations.
+Audit this codebase for meaningful performance issues on realistic hot paths. Focus on repeated I/O, N+1 behavior, unbounded queries or loops, expensive parsing, cache misuse, blocking work on request paths, and pathological user-controlled operations. Before acting, resolve the workflow profile and use its configured audit file, audit template, and finding prefixes.
 
-Read `audit-findings.md` in the target repo root first and use it as the shared audit state. If it does not exist, create it from `~/.cursor/templates/audit-template.md`.
+Read the configured audit file in the target repo root first and use it as the shared audit state. If it does not exist, create it from the configured audit template.
 
 Update only:
 - relevant rows in `Findings Summary`
 - `Detailed Findings` -> `Performance`
 
 Do not overwrite unrelated sections or findings owned by other audit commands.
-Use only `PERF-#` finding IDs for rows and headings created by this command.
+Use only the configured performance finding prefix for rows and headings created by this command (default `PERF-#`).
 Keep the report aligned to the template exactly. Do not replace category findings with tables.
 
 Before adding a finding:
-- check whether the same issue already exists in `audit-findings.md`
+- check whether the same issue already exists in the configured audit file
 - if another category already captured the root cause, keep a performance finding only when the hot-path or scalability impact adds unique value
 - omit micro-optimizations, hypothetical bottlenecks, or issues without a realistic hot path and verification path
 
@@ -37,8 +37,3 @@ Ignore micro-optimizations. For each finding, include:
 - related finding IDs or overlaps
 - decision
 - `Why not now` (`n/a` for `fix now`)
-
-<!--
-Copyright (c) 2026 Philip Teitel.
-Licensed under the MIT License. See LICENSE for details.
--->

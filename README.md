@@ -172,6 +172,7 @@ See [TRACEABILITY.md](TRACEABILITY.md) for how each of these artifacts feeds the
 
 ## Read next
 
+- [SETUP.md](SETUP.md) — install the agents, commands, templates, and workflow profile on a machine running Cursor.
 - [WORKFLOW-EXAMPLE.md](WORKFLOW-EXAMPLE.md) — a concrete walkthrough from informal idea to completed story evidence using the sample application.
 - [PROCESS.md](PROCESS.md) — the full lifecycle stage by stage, with human gates.
 - [BUILDING-BLOCKS.md](BUILDING-BLOCKS.md) — agents, commands, templates, artifacts, evidence, gates, and the composition matrix.

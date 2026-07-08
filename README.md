@@ -30,7 +30,7 @@ Context is managed through a small set of building blocks that stay independent 
 - **Commands** define what workflow step is being performed and the control applied — the instructions the agent follows and the constraints it must respect.
 - **Templates** define what an acceptable output looks like.
 
-Together, these produce **artifacts** — requirements, design notes, architecture decision records, story specs, review reports, QA evidence matrices, documentation updates, completion metadata. Artifacts are durable. They become the input to the next step and the trace for everything that followed.
+Together, these produce **artifacts** — purpose statements, domain models, requirements, design notes, architecture decision records, walking skeleton stories, review reports, QA evidence matrices, documentation updates, completion metadata. Artifacts are durable. They become the input to the next step and the trace for everything that followed.
 
 Prompts are ephemeral. They explain what someone wanted in the moment. A prompt may be preserved as part of the documentation to provide history, but it is the **artifact** that proves intent was captured, decisions were made, and the result was verified. Artifacts close the loop between intent and delivery.
 
@@ -44,7 +44,7 @@ Four ideas run through every part of the methodology.
 
 ### Context
 
-Context is everything the model needs to produce the right output: requirements, architecture decision records, design notes, prior artifacts, backlog state, and the rules of the current step. Managing context is the central engineering problem in AI-assisted development.
+Context is everything the model needs to produce the right output: purpose, domain model, requirements, architecture decision records, design notes, prior artifacts, backlog state, and the rules of the current step. Managing context is the central engineering problem in AI-assisted development.
 
 The methodology manages context through **modularity**. Agents, commands, and templates are kept separate because each one manages context along a different dimension — concern, control, and output shape. Keeping the dimensions independent lets the same agent be reused across many commands, and the same command be expressed through different templates, without one dimension polluting another.
 
@@ -56,7 +56,7 @@ Control turns "ask the model nicely" into a repeatable contract.
 
 ### Artifacts
 
-Artifacts are the durable outputs of the workflow. A refined requirement, an architecture decision record, a story spec, a review report, a QA matrix, a documentation update — each is a file a human can read, challenge, and reuse. Artifacts are how intent survives between sessions, between people, and between tools.
+Artifacts are the durable outputs of the workflow. A purpose statement, domain model, refined requirement, architecture decision record, story spec, review report, QA matrix, or documentation update — each is a file a human can read, challenge, and reuse. Artifacts are how intent survives between sessions, between people, and between tools.
 
 ### Evidence
 
@@ -68,10 +68,10 @@ Evidence is the proof that an artifact was satisfied: the tests that ran, the fi
 
 | Block | What it manages | Purpose | Examples |
 |---|---|---|---|
-| Agent | Concern | Defines role, responsibilities, and judgment | architect, implementer, auditor, QA, documenter |
-| Command | Control | Invokes one workflow step with specific instructions and constraints | `/refine-feature`, `/plan-story`, `/implement-story`, `/qa-story` |
-| Template | Output shape | Defines what an acceptable artifact must contain | requirements, architecture decision record, user-story, story-review, audit |
-| Artifact | — | Durable output used by later steps | requirements document, architecture decision record, story spec, review report |
+| Agent | Concern | Defines role, responsibilities, and judgment | modeler, architect, implementer, auditor, QA, documenter |
+| Command | Control | Invokes one workflow step with specific instructions and constraints | `/define-purpose`, `/model-domain`, `/plan-skeleton`, `/plan-story`, `/qa-story` |
+| Template | Output shape | Defines what an acceptable artifact must contain | purpose, domain model, requirements, architecture decision record, user-story, story-review, audit |
+| Artifact | — | Durable output used by later steps | purpose document, domain model, requirements document, architecture decision record, story spec, review report |
 | Evidence | — | Proof a criterion was satisfied | tests, changed files, QA matrix, review summary |
 | Gate | — | Decision point: continue, return for repair, or escalate | review Pass/Block, QA PASS/FAIL/BLOCKED, human approvals |
 
@@ -87,8 +87,11 @@ The lifecycle is a swim-lane flow across the human and the agents. Each agent ow
 flowchart TD
     subgraph Human [Human]
         rawIdea["Raw idea or notes"]
+        approvePurpose{"Approve purpose"}
         approveReqs{"Approve refined requirements"}
+        approveDomain{"Approve domain model"}
         approveDesign{"Approve design and architecture decision records"}
+        acceptSkeleton{"Accept walking skeleton"}
         approveBacklog{"Approve backlog"}
         approveStory{"Approve story spec"}
         acceptQa{"Accept QA evidence"}
@@ -96,13 +99,22 @@ flowchart TD
         done["Story shipped"]
     end
 
+    subgraph Modeler [Modeler agent]
+        definePurpose["/define-purpose"]
+        modelDomain["/model-domain"]
+        purposeDoc[/"Purpose"/]
+        domainDoc[/"Domain model and data dictionary"/]
+    end
+
     subgraph Architect [Architect agent]
         refine["/refine-feature"]
         design["/design-application"]
+        planSkeleton["/plan-skeleton"]
         planProj["/plan-project"]
         planStory["/plan-story"]
         reqsDoc[/"requirements"/]
         designDoc[/"Design and architecture decision records"/]
+        skeletonDoc[/"Walking-skeleton story"/]
         backlog[/"Backlog epics and stories"/]
         storyDoc[/"Implementation-ready story spec"/]
     end
@@ -128,9 +140,13 @@ flowchart TD
         docsUpdate[/"README, API, runbook updates"/]
     end
 
-    rawIdea --> refine --> reqsDoc --> approveReqs
-    approveReqs --> design --> designDoc --> approveDesign
-    approveDesign --> planProj --> backlog --> approveBacklog
+    rawIdea --> definePurpose --> purposeDoc --> approvePurpose
+    approvePurpose --> refine --> reqsDoc --> approveReqs
+    approveReqs --> modelDomain --> domainDoc --> approveDomain
+    approveDomain --> design --> designDoc --> approveDesign
+    approveDesign --> planSkeleton --> skeletonDoc --> implement
+    qaMatrix -->|Skeleton all PASS| acceptSkeleton
+    acceptSkeleton --> planProj --> backlog --> approveBacklog
     approveBacklog --> planStory --> storyDoc --> approveStory
     approveStory --> implement --> code --> review --> reviewArtifact
     reviewArtifact -->|Block| implement
@@ -140,14 +156,17 @@ flowchart TD
     acceptQa --> docStory --> docsUpdate --> approveDocs --> done
 ```
 
-The human intervenes at six gates:
+The human intervenes at nine gates:
 
-1. Approve refined requirements before any design work begins.
-2. Approve the application design and any new architecture decision records before backlog planning.
-3. Approve the backlog before story specs are written.
-4. Approve the story spec before implementation begins.
-5. Accept the QA evidence matrix before documentation runs.
-6. Approve the documentation updates before the story is considered shipped.
+1. Approve the purpose before requirements refinement hardens around the wrong center.
+2. Approve refined requirements before domain modeling and design work begin.
+3. Approve the domain model and data dictionary before technical design.
+4. Approve the application design and any new architecture decision records before the walking skeleton.
+5. Accept the walking skeleton and record any purpose/domain/requirement deltas before backlog planning.
+6. Approve the backlog before story specs are written.
+7. Approve the story spec before implementation begins.
+8. Accept the QA evidence matrix before documentation runs.
+9. Approve the documentation updates before the story is considered shipped.
 
 Each gate is a real review, not a formality. The agents do the work; the human makes the decisions that bind it.
 
@@ -159,12 +178,15 @@ See [PROCESS.md](PROCESS.md) for the stage-by-stage walkthrough, and [POST-STORY
 
 The methodology rests on a few principles. All documentation points back to one of these.
 
-- **Requirements define intent.** Until intent is written down, the model is guessing.
+- **Purpose defines the center.** Until the product thesis, job, north-star outcome, trade-off rule, and anti-thesis are written down, the model is optimizing locally.
+- **Domain model defines meaning.** Ubiquitous language, data dictionary fields, entities, invariants, lifecycles, and consistency boundaries keep code aligned with the real application concept.
+- **Requirements define behavior.** Until observable behavior is written down, the model is guessing at features.
 - **architecture decision records preserve binding technical decisions.** They prevent silent substitution of important choices.
 - **Design notes describe architecture and operating context.** They give the model the project's shape, not just its features.
+- **Walking skeletons expose tacit intent early.** A thin running path lets the human react before feature stories build on the wrong model.
 - **Epics and stories organize delivery.** They turn a design into a sequence of shippable work.
 - **Story specs turn intent into implementation-ready instructions.** They are the central handoff artifact.
-- **Tests, review artifacts, QA evidence, and documentation close the loop.** They prove the intent was delivered.
+- **Tests, model-fidelity review, QA evidence, and documentation close the loop.** They prove the intent was delivered and the code still mirrors the domain model.
 
 See [TRACEABILITY.md](TRACEABILITY.md) for how each of these artifacts feeds the next, and what every story must make answerable.
 

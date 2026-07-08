@@ -11,11 +11,11 @@ Each problem from the [README](README.md) is addressed by a specific artifact or
 | Problem | What addresses it | How |
 |---|---|---|
 | Vibe coding produces inconsistent and messy code | Templates and agent roles | Templates make output shape explicit; agent roles keep concerns from blurring. The same request, asked twice, returns the same artifact shape because the contract is in the template, not the prompt. |
-| Any code written requires a line-by-line review | Review and QA gates | The auditor reviews the changed surface for reliability, security, and contract risk before QA. QA verifies each acceptance criterion against executable evidence. Review remains essential, but it is reviewing claims tied to evidence rather than unaccompanied output. |
-| Getting a satisfactory result can require more effort than writing the code | Story specs | The story spec captures linked architecture decision records, binding constraints, file touchpoints, acceptance criteria, and a test plan *before* implementation begins. The model is not asked to figure out the project from a chat window; it is given the context the implementer needs. |
+| Any code written requires a line-by-line review | Review, model-fidelity, and QA gates | The auditor reviews the changed surface for reliability, security, contract risk, coverage, and fidelity to the purpose/domain model before QA. QA verifies each acceptance criterion against executable evidence. Review remains essential, but it is reviewing claims tied to evidence rather than unaccompanied output. |
+| Getting a satisfactory result can require more effort than writing the code | Purpose, domain model, walking skeleton, and story specs | The purpose and domain model capture intent and meaning before design. The walking skeleton exposes tacit "not what I meant" feedback early. The story spec captures linked context, binding constraints, file touchpoints, acceptance criteria, and a test plan before implementation begins. |
 | Where is the productivity gain? | Artifact reuse | The expensive work — refining requirements, recording binding decisions, designing the system — is captured once and reused across every story that touches it. The model's speed compounds because it does not relitigate the same context. |
-| The purpose is to build applications, not write code | Artifact-driven workflow | Requirements, design, architecture decision records, and story specs sit upstream of code. Code is one output among several: tests, review artifacts, QA matrices, documentation diffs, and completion metadata are equally first-class. |
-| Aim higher: build applications with AI | The full lifecycle | Refinement, design, planning, implementation, review, QA, documentation, and validation are each a distinct step with a distinct artifact. The methodology operates at the level of an application, not a function. |
+| The purpose is to build applications, not write code | Artifact-driven workflow | Purpose, domain model, requirements, design, architecture decision records, and story specs sit upstream of code. Code is one output among several: tests, review artifacts, QA matrices, documentation diffs, and completion metadata are equally first-class. |
+| Aim higher: build applications with AI | The full lifecycle | Purpose definition, refinement, domain modeling, design, skeleton proof, planning, implementation, review, QA, documentation, and validation are each a distinct step with a distinct artifact. The methodology operates at the level of an application, not a function. |
 
 ---
 
@@ -33,7 +33,7 @@ Agents manage the concern dimension. Commands manage the control dimension — i
 
 ### Single source of truth per concern.
 
-Requirements live in one file. architecture decision records live in one file each. Design lives in one section of the README. Story scope lives in the story document. Documentation lives in the surfaces it describes. The workflow refuses to silently reconcile conflicts between sources; it surfaces them.
+Purpose lives in `docs/PURPOSE.md`. Domain language and data meaning live in `docs/DOMAIN.md`. Requirements live in one file each. architecture decision records live in one file each. Design lives in one section of the README. Story scope lives in the story document. Documentation lives in the surfaces it describes. The workflow refuses to silently reconcile conflicts between sources; it surfaces them.
 
 ### Evidence is what makes "done" mean something.
 
@@ -41,7 +41,7 @@ Tests, changed files, the QA matrix, the review summary, the documentation diff 
 
 ### Humans own the decisions that bind work.
 
-The agents do the work. The human approves the refined requirements, the design and architecture decision records, the backlog, the story spec, the QA evidence, and the documentation. Six gates is more than zero gates. It is also fewer than the number of places where ad-hoc AI-assisted work usually requires backtracking.
+The agents do the work. The human approves the purpose, refined requirements, domain model, design and architecture decision records, walking skeleton, backlog, story spec, QA evidence, and documentation. Nine gates is more than zero gates. It is also fewer than the number of places where ad-hoc AI-assisted work usually requires backtracking.
 
 ---
 
@@ -51,7 +51,7 @@ It is worth being explicit about the limits.
 
 - **It does not eliminate review.** The auditor reduces the surface area a human reviewer must examine, but a human still owns the QA-acceptance and documentation-approval gates.
 - **It does not eliminate QA.** The QA matrix records evidence; a human still decides whether the evidence is good enough.
-- **It does not make architectural decisions.** The architect agent records and structures decisions; the human still owns whether a decision is correct.
+- **It does not make purpose, domain, or architectural decisions.** The modeler and architect agents record and structure decisions; the human still owns whether those decisions are correct.
 - **It does not make AI "autonomous."** It makes AI more reviewable. The two are different, and the methodology takes the second goal seriously and treats the first with skepticism.
 - **It does not work without discipline.** A skipped gate, a silently substituted decision, or a story marked complete with unchecked criteria breaks the trace. The methodology gives the discipline somewhere to live; it does not replace the discipline itself.
 
@@ -61,6 +61,7 @@ It is worth being explicit about the limits.
 
 A team using this methodology well should be able to answer, for any shipped story:
 
+- Which purpose and domain model did it preserve?
 - Where is the requirement that caused it?
 - Which architecture decision records constrained how it was built?
 - What were the acceptance criteria?

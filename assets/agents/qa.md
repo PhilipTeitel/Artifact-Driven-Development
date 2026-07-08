@@ -38,6 +38,13 @@ For each acceptance criterion in the story, determine whether it passes based on
 - For binding criteria, **do not infer PASS** from unit tests that mock the storage or integration layer under test. PASS requires evidence that matches the story: e.g. integration test hitting the real adapter boundary, script output, manifest grep, or build output that proves the mandated dependency or code path.
 - If evidence is only a mocked unit test for a binding criterion, mark **FAIL** or **BLOCKED** and state that non-mock evidence is required.
 
+## Model-fidelity criteria
+
+- Treat the configured model-fidelity quality gate as required when the story includes a Phase Z criterion like `Z7` or when the workflow profile sets `methodology.modelFidelity: required`.
+- PASS requires a story-review artifact whose configured summary line includes `MODEL-critical=0` and `MODEL-high=0` and whose gate result is the configured pass value.
+- If the review artifact is missing, lacks `MODEL-critical` / `MODEL-high` counts, or reports any high or critical `MODEL-#` finding, mark the criterion **FAIL** or **BLOCKED** and cite the review gap.
+- Do not infer model fidelity directly from requirements or tests. QA verifies the Auditor's model-fidelity gate result.
+
 ## Evidence and command rules
 
 - Prefer the smallest-scope command that validates the criterion.

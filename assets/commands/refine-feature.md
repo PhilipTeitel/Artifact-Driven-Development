@@ -1,8 +1,8 @@
 # refine-feature
 
-This **directs the architect** in **Discovery / Refinement Mode** to take raw, ambiguous, or partial feature input and produce a refined requirements document with Gherkin acceptance scenarios. Before acting, resolve the workflow profile and use its configured requirements template, requirements directory, naming pattern, scenario ID pattern, and status vocabulary.
+This **directs the architect** in **Discovery / Refinement Mode** to take raw, ambiguous, or partial feature input and produce a refined requirements document with Gherkin acceptance scenarios. Before acting, resolve the workflow profile and use its configured purpose path, domain path, requirements template, requirements directory, naming pattern, scenario ID pattern, and status vocabulary.
 
-This is workflow step (a-prime): it runs **before** `/design-application` or `/plan-project` so that those steps consume a clean, unambiguous specification instead of raw notes.
+This is workflow step (a-prime): it runs **after** `/define-purpose` when purpose is available and **before** `/model-domain`, `/design-application`, or `/plan-project` so those steps consume a clean, unambiguous specification instead of raw notes.
 
 ## Why this exists
 
@@ -10,7 +10,7 @@ When raw requirements go straight into design, the architect often has to guess.
 
 ## What the architect will do
 
-1. Read every source the user points to (notes, tickets, transcripts, slide decks, pasted text). The user must point to them — the architect does not assume a path.
+1. Read every source the user points to (notes, tickets, transcripts, slide decks, pasted text). The user must point to them — the architect does not assume a path. If the configured purpose artifact exists, read it as intent context.
 2. Read the configured requirements template (default `~/.cursor/templates/requirements-template.md`) for output structure.
 3. Extract goals, non-goals, personas, constraints, and candidate user scenarios from the source.
 4. Use `AskQuestion` to resolve every meaningful ambiguity. Acceptable resolution targets include:
@@ -20,8 +20,9 @@ When raw requirements go straight into design, the architect often has to guess.
    - Integration boundaries (what services/data sources are in/out of scope).
    - Non-functional bounds (latency, volume, security, audit).
 5. Translate the resolved scenarios into **Gherkin** (`Given/When/Then`), one block per scenario, each tagged with an ID matching the configured scenario ID pattern (default `S1`, `S2`, …). These IDs are what later stories' Test Plans must trace to.
-6. Identify constraints that imply long-lived binding decisions and list them under **Suggested ADR triggers** so `/design-application` or `/plan-project` knows to create the ADRs.
-7. Write the result using the configured requirements directory and naming pattern (default `docs/requirements/REQ-NNN-short-slug.md`) using the next sequential `NNN`. Do not renumber existing REQ files.
+6. Identify terms, entities, fields, invariants, lifecycles, or boundaries that should be modeled in the configured domain artifact and call them out for `/model-domain`.
+7. Identify constraints that imply long-lived binding decisions and list them under **Suggested ADR triggers** so `/design-application` or `/plan-project` knows to create the ADRs.
+8. Write the result using the configured requirements directory and naming pattern (default `docs/requirements/REQ-NNN-short-slug.md`) using the next sequential `NNN`. Do not renumber existing REQ files.
 
 ## Hard rules
 

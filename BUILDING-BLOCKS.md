@@ -28,6 +28,7 @@ An agent is a durable role definition. It says what the model is allowed to thin
 - **Inputs.** A persona, responsibilities, and behavioral rules (for example, "do not invent requirements," "do not silently substitute named dependencies").
 - **Output.** A reusable role that any command can invoke.
 - **Examples.**
+  - **[Modeler](assets/agents/modeler.md)** — captures purpose and domain meaning before architecture and judges unresolved modeling gaps.
   - **[Architect](assets/agents/architect.md)** — turns ambiguity into requirements, design, architecture decision records, and story specs.
   - **[Implementer](assets/agents/implementer.md)** — writes code and tests against an approved story spec.
   - **[Auditor](assets/agents/auditor.md)** — provides review gates for stories, diffs, and full-repo audits.
@@ -46,7 +47,7 @@ A command is one workflow step under explicit control: the instructions the agen
 - **Inputs.** Required source artifacts, the agent to invoke, the template that shapes the output, the sections of which artifact may be edited, and the step-specific instructions and constraints.
 - **Output.** The invocation pattern that produces or updates a specific section of a specific artifact.
 - **Examples (by lane).**
-  - **Refinement and design.** [`/init-project`](assets/commands/init-project.md), [`/refine-feature`](assets/commands/refine-feature.md), [`/design-application`](assets/commands/design-application.md), [`/plan-project`](assets/commands/plan-project.md), [`/plan-story`](assets/commands/plan-story.md), [`/validate-story`](assets/commands/validate-story.md).
+  - **Intent, modeling, and design.** [`/init-project`](assets/commands/init-project.md), [`/define-purpose`](assets/commands/define-purpose.md), [`/refine-feature`](assets/commands/refine-feature.md), [`/model-domain`](assets/commands/model-domain.md), [`/design-application`](assets/commands/design-application.md), [`/plan-skeleton`](assets/commands/plan-skeleton.md), [`/plan-project`](assets/commands/plan-project.md), [`/plan-story`](assets/commands/plan-story.md), [`/validate-story`](assets/commands/validate-story.md).
   - **Implementation and verification.** [`/implement-story`](assets/commands/implement-story.md), [`/review-story`](assets/commands/review-story.md), [`/qa-story`](assets/commands/qa-story.md), [`/fix-from-qa`](assets/commands/fix-from-qa.md), [`/document-story`](assets/commands/document-story.md), [`/complete-story`](assets/commands/complete-story.md).
   - **Post-story routing.** [`/patch-story`](assets/commands/patch-story.md), [`/reconcile-story`](assets/commands/reconcile-story.md), [`/review-diff`](assets/commands/review-diff.md).
   - **Audit.** [`/map-repo`](assets/commands/map-repo.md), [`/audit-all`](assets/commands/audit-all.md), [`/triage-audit-findings`](assets/commands/triage-audit-findings.md), plus the category audits [`/audit-tooling`](assets/commands/audit-tooling.md), [`/audit-reliability`](assets/commands/audit-reliability.md), [`/audit-db`](assets/commands/audit-db.md), [`/audit-api-contracts`](assets/commands/audit-api-contracts.md), [`/audit-security`](assets/commands/audit-security.md), [`/audit-performance`](assets/commands/audit-performance.md), [`/audit-test-coverage`](assets/commands/audit-test-coverage.md).
@@ -64,8 +65,11 @@ A template is a contract for what an artifact must contain.
 - **Output.** A reusable artifact skeleton.
 - **Examples.**
   - **[README / design hub template](assets/templates/readme-template.md)** — architecture, stack, key decisions, API contract, environment, setup, backlog.
+  - **[Purpose template](assets/templates/purpose-template.md)** — thesis, job, north-star outcome, trade-off rule, anti-thesis, success signals.
+  - **[Domain model template](assets/templates/domain-model-template.md)** — ubiquitous language, data dictionary, entities, relationships, invariants, lifecycles, and consistency boundaries.
   - **[Requirements template](assets/templates/requirements-template.md)** — goals, non-goals, personas, constraints, resolved and open questions, Gherkin scenarios.
   - **[architecture decision record template](assets/templates/adr-template.md)** — context, decision, alternatives considered, consequences.
+  - **[Walking-skeleton template](assets/templates/walking-skeleton-template.md)** — one thin running end-to-end slice through the composition root and boundaries, with a reflection checkpoint.
   - **[User story template](assets/templates/user-story-template.md)** — linked architecture decision records, Definition of Ready, binding constraints, ports and adapters table (Section 4b), file touchpoints, acceptance criteria (including Phase Y binding and Phase Z quality gates), test plan with **Covers AC** and **Covers Sn** columns and test levels (`unit`, `contract`, `integration`, `e2e` / `ui`), implementation order, completion metadata, post-complete follow-up ledger with **Change ref** and **Review ref** columns.
   - **[Story-review template](assets/templates/story-review-template.md)** — required actions, severity, machine-readable `REVIEW SUMMARY:` line.
   - **[Audit template](assets/templates/audit-template.md)** — findings by category with evidence citations.
@@ -86,14 +90,17 @@ An artifact is a durable, reviewable output of the workflow. It is defined by **
 
 | Artifact | Carries | Produced or updated by |
 |---|---|---|
+| Purpose | Product thesis, job, north-star outcome, trade-off rule, anti-thesis, success signals | `/define-purpose` |
+| Domain model | Ubiquitous language, data dictionary, entities, relationships, invariants, lifecycles, consistency boundaries | `/model-domain` |
 | Refined requirements | Clarified intent, goals, non-goals, constraints, Gherkin scenarios | `/refine-feature` |
 | Application design | Architecture, stack, API contract, environment, setup, UI structure | `/design-application` |
 | architecture decision record | One binding technical decision, recorded durably | `/design-application` when a decision needs to be durable |
+| Walking skeleton | A thin running slice proving purpose, domain model, architecture, composition root, and boundaries | `/plan-skeleton`, then the normal implementation/review/QA tail |
 | Backlog | Epics and stories that organize delivery | `/plan-project`; status synced by `/document-story` |
-| Story spec | Implementation-ready instructions: linked context, acceptance criteria, test plan, file touchpoints, implementation order | `/plan-story` |
+| Story spec | Implementation-ready instructions: linked purpose/domain/requirements/design context, acceptance criteria, test plan, file touchpoints, implementation order | `/plan-story` |
 | Code and tests | Production behavior and the tests that prove each acceptance criterion | `/implement-story`, `/fix-from-qa`, `/patch-story` |
 | Story acceptance evidence | Status and criterion checkboxes flipped as evidence accumulates | `/implement-story`, `/fix-from-qa` |
-| Story review | Review of the changed surface for reliability, security, contract risk, coverage gaps | `/review-story`, `/review-diff` |
+| Story review | Review of the changed surface for reliability, security, contract risk, coverage gaps, and model fidelity | `/review-story`, `/review-diff` |
 | QA evidence matrix | Per-criterion `PASS` / `FAIL` / `BLOCKED` with cited evidence | `/qa-story` |
 | Documentation updates | Synchronized changes to project documentation surfaces | `/document-story` |
 | Completion metadata | Final review summary, QA result, docs handoff, completion ref | `/document-story`, `/validate-story complete` |
@@ -106,13 +113,14 @@ The methodology defines artifacts as concepts. The current implementation bundle
 
 Three examples of bundling:
 
-- The **story spec file** (`docs/features/{STORY-ID}-*.md`) carries the story spec, the implementer's status and acceptance-criteria evidence, the QA evidence matrix, the completion metadata, and the post-complete follow-up ledger entries — every artifact tied to one story in one document so the trace stays in one place.
+- The **story spec file** (`docs/features/{STORY-ID}-*.md`) carries the story spec, the implementer's status and acceptance-criteria evidence, the QA evidence matrix, the completion metadata, and the post-complete follow-up ledger entries — every artifact tied to one story in one document so the trace stays in one place. A walking-skeleton story uses the same file pattern with a thinner scope.
 - The **project README** carries the application design and the backlog because both describe the same project.
+- The **purpose and domain files** (`docs/PURPOSE.md` and `docs/DOMAIN.md`) stay separate because they are small, global source-of-truth artifacts that every later step reads.
 - The **story review file** carries one story review artifact; a diff review of the same shape lives under `docs/reviews/`.
 
 This bundling is a convenience. The artifacts are still distinct: each has one producer, one purpose, and one place in the trace. A project that wanted to keep them in separate files could; this methodology happens to keep them together because related context is easier to follow when it is co-located.
 
-Templates in this methodology — README, architecture decision record, requirements, user story, story review, audit — define the shape of those files, including which artifacts each file is expected to carry. The templates are an implementation choice. The artifacts are the design.
+Templates in this methodology — purpose, domain model, README, architecture decision record, requirements, walking skeleton, user story, story review, audit — define the shape of those files, including which artifacts each file is expected to carry. The templates are an implementation choice. The artifacts are the design.
 
 ### Project documentation surfaces
 
@@ -139,8 +147,8 @@ A gate is where work stops until someone — human or agent — decides whether 
 
 - **Purpose.** Make completion explicit instead of implicit.
 - **Examples.**
-  - **Agent gates.** Review `Pass` or `Block`. QA `PASS`, `FAIL`, or `BLOCKED` per criterion. `validate-story ready`, `validate-story complete`, and `validate-story followups`.
-  - **Human gates.** The six approvals in the [README](README.md) swimlane: refined requirements, design and architecture decision records, backlog, story spec, QA evidence, documentation.
+  - **Agent gates.** Review `Pass` or `Block`, including model-fidelity `MODEL-#` findings. QA `PASS`, `FAIL`, or `BLOCKED` per criterion. `validate-story ready`, `validate-story complete`, and `validate-story followups`.
+  - **Human gates.** The nine approvals in the [README](README.md) swimlane: purpose, refined requirements, domain model, design and architecture decision records, walking skeleton, backlog, story spec, QA evidence, documentation.
 
 Gates exist because skipping them has been observed to cost more later. A gate that becomes a formality has stopped doing its job.
 
@@ -153,8 +161,11 @@ The composition matrix shows which command produces or updates which artifact, w
 | Command | Agent | Artifact produced or updated | Recorded in |
 |---|---|---|---|
 | `/init-project` | Architect or human | Project scaffold | `README.md`, `docs/` layout |
+| `/define-purpose` | Modeler | Purpose | `docs/PURPOSE.md` |
 | `/refine-feature` | Architect | Refined requirements | `docs/requirements/REQ-NNN-*.md` |
+| `/model-domain` | Modeler | Domain model and data dictionary | `docs/DOMAIN.md` |
 | `/design-application` | Architect | Application design; architecture decision records (as needed) | Project README design sections; `docs/decisions/ADR-NNN-*.md` |
+| `/plan-skeleton` | Architect | Walking-skeleton story | `docs/features/SK-1-*.md` or configured story path |
 | `/plan-project` | Architect | Backlog | Project README backlog section |
 | `/plan-story` | Architect | Story spec | `docs/features/{STORY-ID}-*.md` |
 | `/validate-story ready` | Architect | Readiness validation | Story Validation Matrix against the story spec; corrects readiness defects only |

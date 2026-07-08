@@ -6,14 +6,29 @@ This document describes what each agent does, what it does *not* do, and how wor
 
 ---
 
+## Modeler
+
+The modeler operates before technical design and returns whenever new domain meaning appears. Its job is to make purpose and conceptual meaning explicit enough for the rest of the workflow to judge fidelity.
+
+- **Owns.** Purpose and domain model / data dictionary artifacts.
+- **Primary inputs.** Raw ideas, transcripts, product notes, approved refined requirements, and resolved user answers.
+- **Primary outputs.** `docs/PURPOSE.md` and `docs/DOMAIN.md`.
+- **Commands.** `/define-purpose`, `/model-domain`.
+- **Does not.** Design architecture, write code, write story acceptance criteria, or review implementation. It names the product center and domain meaning; other agents use those artifacts.
+- **Hands off to.** Architect, once purpose and domain model are approved.
+
+When the modeler finds a missing lifecycle, invariant, data field meaning, or consistency boundary, it records an open modeling question instead of guessing. Those questions block affected design or story work.
+
+---
+
 ## Architect
 
 The architect operates before implementation begins. Its job is to turn ambiguity into something an implementer can act on without guessing.
 
-- **Owns.** Refined requirements, application design, architecture decision records, backlog, and story specs.
-- **Primary inputs.** Raw notes, tickets, transcripts, prior requirements, prior architecture decision records, the project's existing design.
-- **Primary outputs.** requirements, design sections in the README, new architecture decision records, backlog rows, and `docs/features/{STORY-ID}-*.md` story specs.
-- **Commands.** `/refine-feature`, `/design-application`, `/plan-project`, `/plan-story`, `/validate-story ready`.
+- **Owns.** Refined requirements, application design, architecture decision records, walking-skeleton story, backlog, and story specs.
+- **Primary inputs.** Approved purpose, approved domain model, raw notes, tickets, transcripts, prior requirements, prior architecture decision records, the project's existing design.
+- **Primary outputs.** requirements, design sections in the README, new architecture decision records, walking-skeleton story, backlog rows, and `docs/features/{STORY-ID}-*.md` story specs.
+- **Commands.** `/refine-feature`, `/design-application`, `/plan-skeleton`, `/plan-project`, `/plan-story`, `/validate-story ready`.
 - **Does not.** Implement code. Make a binding technical decision without writing it down as an architecture decision record. Re-open completed stories to retrofit new scope.
 - **Hands off to.** Implementer, once a story spec is approved and validated as ready.
 
@@ -43,13 +58,13 @@ If implementation reveals that the plan is wrong, the implementer escalates back
 The auditor provides the review gates. Its job is to look at the changed surface — not the original story — and find the classes of mistake that QA does not.
 
 - **Owns.** Story review artifacts, diff review artifacts, repository map, and audit findings.
-- **Primary inputs.** The story document and the changed files; or a git diff range; or the full repository for a periodic audit.
+- **Primary inputs.** The story document, configured purpose/domain artifacts, and the changed files; or a git diff range; or the full repository for a periodic audit.
 - **Primary outputs.** `docs/features/{STORY-ID}-review.md` with a machine-readable `REVIEW SUMMARY:` line and a `Pass` or `Block` result; or `docs/reviews/*.md`; or `audit-findings.md`.
 - **Commands.** `/review-story`, `/review-diff`, `/reconcile-story`, `/map-repo`, `/audit-all`, `/triage-audit-findings`, and the seven category audits.
 - **Does not.** Verify acceptance criteria — that is QA's job. Re-design the work — that is the architect's job. Fix the code — that is the implementer's job. The auditor identifies; others repair.
 - **Hands off to.** Implementer (on `Block`) or QA (on `Pass`) for per-story review; back to architect or implementer for audit findings.
 
-Per-story review focuses on the changed surface for reliability, security, API contract, and test coverage issues. Full-repo audits are periodic health checks, not part of normal story completion.
+Per-story review focuses on the changed surface for reliability, security, API contract, test coverage, and model-fidelity issues. Full-repo audits are periodic health checks, not part of normal story completion.
 
 ---
 
@@ -89,9 +104,12 @@ Ownership is recorded per **artifact** (the conceptual output), not per file. A 
 
 | Artifact | Owner |
 |---|---|
+| Purpose | Modeler |
+| Domain model / data dictionary | Modeler |
 | Refined requirements | Architect |
 | Application design | Architect (Documenter syncs when stories change it) |
 | architecture decision record | Architect |
+| Walking skeleton story | Architect (planned); Implementer/Auditor/QA/Documenter for the normal tail |
 | Backlog | Architect (created); Documenter (status derived from story specs) |
 | Story spec | Architect |
 | Code and tests | Implementer |

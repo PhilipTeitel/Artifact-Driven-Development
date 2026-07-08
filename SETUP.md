@@ -119,8 +119,11 @@ Get-ChildItem "$env:USERPROFILE\.cursor\templates"
 In Cursor chat, the workflow slash commands should be available, including:
 
 ```text
+/define-purpose
 /refine-feature
+/model-domain
 /design-application
+/plan-skeleton
 /plan-project
 /plan-story
 /implement-story
@@ -141,6 +144,8 @@ That command checks profile completeness, workflow wiring, configured templates,
 
 Open the target application repository in Cursor. The default workflow writes project artifacts to:
 
+- `docs/PURPOSE.md` for the product purpose / thesis
+- `docs/DOMAIN.md` for the ubiquitous language, data dictionary, and conceptual model
 - `README.md` for the design hub
 - `docs/requirements/` for refined requirements
 - `docs/decisions/` for ADRs
@@ -151,8 +156,11 @@ Open the target application repository in Cursor. The default workflow writes pr
 A typical new feature flow is:
 
 ```text
+/define-purpose @path/to/raw-notes.md
 /refine-feature @path/to/raw-notes.md
+/model-domain @docs/requirements/REQ-001-short-slug.md
 /design-application @docs/requirements/REQ-001-short-slug.md
+/plan-skeleton SK-1
 /plan-project @docs/requirements/REQ-001-short-slug.md
 /plan-story STORY-ID
 /implement-story STORY-ID

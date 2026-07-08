@@ -5,13 +5,13 @@ Per-story review contract:
 - Save using the configured story-review or diff-review path (defaults: `docs/features/{STORY-ID}-review.md` or `docs/reviews/diff-...md`).
 - The auditor agent owns this template.
 - The first non-comment line MUST use the configured machine-checkable review summary label and format (default "REVIEW SUMMARY") so QA and the configured quality gate can grep it.
-- Use configured category-specific finding ID prefixes. Defaults are `TEST-#` for Test Coverage, `REL-#` for Reliability, `SEC-#` for Security, and `API-#` for API Contracts. When both a full audit and a per-story review exist, IDs may overlap but are scoped to their own file (no cross-file renumbering).
+- Use configured category-specific finding ID prefixes. Defaults are `TEST-#` for Test Coverage, `REL-#` for Reliability, `SEC-#` for Security, `API-#` for API Contracts, and `MODEL-#` for Model Fidelity. When both a full audit and a per-story review exist, IDs may overlap but are scoped to their own file (no cross-file renumbering).
 - Findings list must use bullets per finding, not a single table — same as `audit-template.md` Detailed Findings. Every finding subsection item must be headed as `#### PREFIX-#. { Short title }` using that section's prefix.
 - Severity is required on every finding; confidence is required on every non-`TEST-#` finding.
 - `None.` is an exclusive empty-state marker: include it only when a subsection has no findings, and do not include it alongside findings, evidence summaries, or positive assertions.
 -->
 
-REVIEW SUMMARY: result={Pass|Block} TEST-critical={N} TEST-high={N} SEC-critical={N} SEC-high={N} REL-critical={N} REL-high={N} API-critical={N} API-high={N}
+REVIEW SUMMARY: result={Pass|Block} TEST-critical={N} TEST-high={N} SEC-critical={N} SEC-high={N} REL-critical={N} REL-high={N} API-critical={N} API-high={N} MODEL-critical={N} MODEL-high={N}
 
 # Story Review: {STORY-ID} — {Story Title}
 
@@ -25,6 +25,10 @@ REVIEW SUMMARY: result={Pass|Block} TEST-critical={N} TEST-high={N} SEC-critical
 ## Scope
 
 - Story ID:
+- Purpose artifact: `{configured purpose path, default docs/PURPOSE.md}` — {present / missing / not applicable because story creates it}
+- Domain artifact: `{configured domain path, default docs/DOMAIN.md}` — {present / missing / not applicable because story creates it}
+- Domain terms/entities in scope:
+  - `{Term}` — from `{configured domain path}`
 - Linked refined requirements (Sn IDs in scope):
 - Files in scope (from Section 7 "Files to CREATE/MODIFY" intersected with `git diff` when available):
   - `path/to/file` — created
@@ -102,6 +106,27 @@ REVIEW SUMMARY: result={Pass|Block} TEST-critical={N} TEST-high={N} SEC-critical
 - Minimal safe fix:
 - Backward-compatibility or migration notes:
 - Regression test idea:
+- Verification:
+
+### Model Fidelity {`MODEL-#`}
+
+{Required checks, per the configured auditor per-story rubric:
+- the story and changed code serve the configured purpose thesis and do not implement the anti-thesis;
+- domain nouns in story text, code, tests, API contracts, UI copy, and docs use terms from the configured domain model;
+- new or changed domain fields have data dictionary rows;
+- affected invariants and lifecycles are enforced and tested;
+- aggregate / consistency boundaries from the domain model are respected.}
+
+#### MODEL-1. { Short title }
+- Severity:
+- Confidence:
+- Purpose / domain section affected:
+- Files and lines:
+- Evidence checked:
+- Fidelity break:
+- Why it matters:
+- Minimal safe fix:
+- Regression or model update needed:
 - Verification:
 
 ---

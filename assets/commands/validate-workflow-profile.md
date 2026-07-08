@@ -32,6 +32,8 @@ Validate that a copied or customized Cursor workflow profile is complete enough 
    - `templateHandling`
 3. Verify required path and template keys are present and non-empty:
    - `paths.designDoc`
+   - `paths.purposeDoc`
+   - `paths.domainDoc`
    - `paths.featuresDir`
    - `paths.requirementsDir`
    - `paths.decisionsDir`
@@ -40,6 +42,9 @@ Validate that a copied or customized Cursor workflow profile is complete enough 
    - `paths.storyGlob`
    - `paths.storyFilePattern`
    - `templates.readme`
+   - `templates.purpose`
+   - `templates.domain`
+   - `templates.skeleton`
    - `templates.adr`
    - `templates.requirements`
    - `templates.story`
@@ -59,6 +64,8 @@ Validate that a copied or customized Cursor workflow profile is complete enough 
 6. Verify methodology compatibility:
    - if `methodology.hexagonalPortsAdapters` is `required`, `methodology.portTestTypes` includes both configured contract and integration concepts
    - if `methodology.gherkinScenarioTraceability` is `required`, `naming.scenarioIdPattern` is set
+   - if `methodology.modelFidelity` is `required`, `review.perStoryCategories` includes `Model Fidelity` and configured finding prefixes include `MODEL`
+   - if `methodology.walkingSkeleton` is `required`, `templates.skeleton` and `plan-skeleton` are wired
    - if `methodology.redFirstTesting` is `required`, `qa.evidenceReferenceExamples` is non-empty
 7. Verify stack defaults:
    - `stack.packageManager`, `stack.buildCommand`, `stack.lintCommand`, and `stack.testCommand` are set

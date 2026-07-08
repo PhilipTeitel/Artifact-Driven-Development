@@ -1,6 +1,6 @@
 # validate-story
 
-Validate that a story document is structurally consistent with the configured story template (default `~/.cursor/templates/user-story-template.md`) and that its evidence, completion metadata, and post-complete follow-up ledger are coherent. Before acting, resolve the workflow profile and use its story glob, template path, methodology, status vocabulary, QA values, review summary format, lane names, and reviews directory.
+Validate that a story document is structurally consistent with the configured story template (default `~/.cursor/templates/user-story-template.md`) and that its evidence, model-fidelity references, completion metadata, and post-complete follow-up ledger are coherent. Before acting, resolve the workflow profile and use its story glob, template path, purpose path, domain path, methodology, status vocabulary, QA values, review summary format, lane names, and reviews directory.
 
 Use this as a lightweight quality gate after `/plan-story`, before `/implement-story`, after `/complete-story`, or after `/patch-story` / `/reconcile-story`.
 
@@ -18,7 +18,7 @@ Use this as a lightweight quality gate after `/plan-story`, before `/implement-s
 1. Find and read the story document using the configured story glob. If missing, stop and report the configured blocked value (default `BLOCKED`).
 2. Read the configured story template for the required section contract.
 3. Verify required sections exist in order:
-   - Summary
+   - Summary (including Domain model touchpoints)
    - Linked architecture decisions (ADRs)
    - Definition of Ready (DoR)
    - Binding constraints
@@ -35,16 +35,21 @@ Use this as a lightweight quality gate after `/plan-story`, before `/implement-s
 4. Parse all acceptance criteria IDs from markdown task items (`- [ ] **A1**` / `- [x] **A1**`) and verify each has exactly one `Evidence:` line.
 5. Verify every AC ID appears in Section 8a Test Plan `Covers AC`.
 6. Verify every Test Plan row has a file/test reference or an explicit non-test evidence note for manifest/static/script checks.
-7. If Section 4b lists ports or adapters, verify:
+7. Verify model-fidelity readiness:
+   - if the story is not explicitly creating or bootstrapping the configured purpose/domain artifacts, the configured purpose document and domain model exist or are linked as approved prerequisites
+   - the story lists the domain terms, entities, invariants, lifecycles, or consistency boundaries it touches, or explicitly states that none apply
+   - Phase Z contains the configured model-fidelity criterion (default `Z7`) requiring zero high or critical `MODEL-#` findings
+8. If Section 4b lists ports or adapters, verify:
    - each port has at least one configured contract test row (default `contract`)
    - each adapter has at least one configured integration test row (default `integration`)
    - Phase Y contains a `(binding)` criterion citing non-mock evidence for each adapter
-8. If the story status is the configured complete value, verify:
+9. If the story status is the configured complete value, verify:
    - all acceptance criteria are checked
    - `Completion Metadata` is filled with no placeholder values except an explicitly justified `TBD`
    - final review summary starts with the configured review summary label (default `REVIEW SUMMARY:`)
+   - final review summary includes `MODEL-critical=0` and `MODEL-high=0` when model fidelity is required
    - QA result states all criteria passed using the configured pass value or links to the all-pass evidence
-9. If the follow-up ledger has rows beyond the example row, verify each row has:
+10. If the follow-up ledger has rows beyond the example row, verify each row has:
    - sequential ID (`F1`, `F2`, ...)
    - date
    - allowed change class from the configured workflow lanes (defaults include `story-followup`, `trivial-code`, and `docs-only`)
@@ -53,7 +58,7 @@ Use this as a lightweight quality gate after `/plan-story`, before `/implement-s
    - change ref — commit SHA, PR URL, `uncommitted`, or justified `TBD`
    - review ref — `none` or a path under the configured reviews directory
    - AC impact field
-10. Output a Story Validation Matrix with one row per check:
+11. Output a Story Validation Matrix with one row per check:
    - Check
    - Result (configured QA-style values; defaults: `PASS` / `FAIL` / `BLOCKED`)
    - Evidence

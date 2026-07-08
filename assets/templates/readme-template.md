@@ -18,6 +18,12 @@ This file is the structure for the configured design doc (default `README.md`).
 
 ## Requirements
 
+**Purpose and domain model**
+{ Link the configured purpose and domain artifacts used to generate this design. Default examples:
+- [docs/PURPOSE.md](docs/PURPOSE.md) — product thesis, job, north-star outcome, trade-off rule, anti-thesis
+- [docs/DOMAIN.md](docs/DOMAIN.md) — ubiquitous language, data dictionary, entities, invariants, lifecycles, consistency boundaries
+If either artifact is not available yet, write `TBD` and explain the risk. }
+
 <!-- Append-only log of requirement files that have been consumed to produce or update this design. Each entry is a linked file path. When new requirements are added via /design-application or /plan-project, append them here — do not remove or reorder prior entries. -->
 
 { A bullet list of every requirements file used to generate or update this design doc. Each item should be a markdown link to the configured requirements path (default example: `- [docs/requirements/01-initial.md](docs/requirements/01-initial.md)`). Append new entries when additional requirement files are consumed — do not remove prior entries. }
@@ -27,7 +33,7 @@ This file is the structure for the configured design doc (default `README.md`).
 
 ## High-Level Architecture
 
-{ Describe the high-level architecture.  Provide a mermaid diagram.  Give any additional clarifying information to help describe components, processes, flows, etc. }
+{ Describe the high-level architecture.  Provide a mermaid diagram.  Give any additional clarifying information to help describe components, processes, flows, etc. Explain how the architecture preserves the purpose thesis and the domain model's consistency boundaries. }
 
 ## Technical Stack
 

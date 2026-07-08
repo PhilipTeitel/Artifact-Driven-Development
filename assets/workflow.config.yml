@@ -24,6 +24,9 @@ cursor:
 
 templates:
   readme: ~/.cursor/templates/readme-template.md
+  purpose: ~/.cursor/templates/purpose-template.md
+  domain: ~/.cursor/templates/domain-model-template.md
+  skeleton: ~/.cursor/templates/walking-skeleton-template.md
   adr: ~/.cursor/templates/adr-template.md
   requirements: ~/.cursor/templates/requirements-template.md
   story: ~/.cursor/templates/user-story-template.md
@@ -32,6 +35,8 @@ templates:
 
 paths:
   designDoc: README.md
+  purposeDoc: docs/PURPOSE.md
+  domainDoc: docs/DOMAIN.md
   featuresDir: docs/features
   requirementsDir: docs/requirements
   decisionsDir: docs/decisions
@@ -46,8 +51,8 @@ workflow:
   lanes:
     fullStory:
       description: New capability, broad refactor, persistence/auth/API change, adapter/port change, named dependency change, or binding-constraint change.
-      commands: [refine-feature, design-application, plan-story, complete-story]
-      alternatives: [plan-project]
+      commands: [define-purpose, refine-feature, model-domain, design-application, plan-skeleton, plan-project, plan-story, complete-story]
+      alternatives: []
     storyFollowup:
       description: Small behavior fix, debugging result, UI polish, copy adjustment, or local refinement tied to a completed story.
       commands: [patch-story, review-story, qa-story, document-story]
@@ -83,6 +88,10 @@ methodology:
   hexagonalPortsAdapters: required
   redFirstTesting: required
   gherkinScenarioTraceability: required
+  purposeTraceability: required
+  domainModelTraceability: required
+  modelFidelity: required
+  walkingSkeleton: required
   bindingPhase: Phase Y
   qualityPhase: Phase Z
   portTestTypes: [contract, integration]
@@ -107,12 +116,12 @@ status:
 
 review:
   summaryLineLabel: REVIEW SUMMARY
-  summaryFormat: "REVIEW SUMMARY: result=<Pass|Block> TEST-critical=<N> TEST-high=<N> SEC-critical=<N> SEC-high=<N> REL-critical=<N> REL-high=<N> API-critical=<N> API-high=<N>"
+  summaryFormat: "REVIEW SUMMARY: result=<Pass|Block> TEST-critical=<N> TEST-high=<N> SEC-critical=<N> SEC-high=<N> REL-critical=<N> REL-high=<N> API-critical=<N> API-high=<N> MODEL-critical=<N> MODEL-high=<N>"
   gate:
     blockOnSeverity: [high, critical]
     requiredResultForQa: Pass
-  perStoryCategories: [Test Coverage, Reliability, Security, API Contracts]
-  wholeRepoFindingPrefixes: [API, DB, REL, SEC, PERF, TOOL, TEST]
+  perStoryCategories: [Test Coverage, Reliability, Security, API Contracts, Model Fidelity]
+  wholeRepoFindingPrefixes: [API, DB, REL, SEC, PERF, TOOL, TEST, MODEL]
 
 qa:
   evidenceReferenceExamples:
@@ -141,7 +150,7 @@ naming:
   storyPattern: "{STORY-ID}-{slug}.md"
   scenarioIdPattern: "S<number>"
   acceptanceCriterionPattern: "<PhaseLetter><number>"
-  findingPrefixes: [TEST, SEC, API, REL, DB, PERF, TOOL]
+  findingPrefixes: [TEST, SEC, API, REL, DB, PERF, TOOL, MODEL]
 
 git:
   defaultBaseBranches: [main, master]

@@ -27,6 +27,11 @@ Requirements and design traceability live under `docs/requirements/`, `docs/deci
 
 ## Requirements
 
+Purpose and domain artifacts:
+
+- [docs/PURPOSE.md](docs/PURPOSE.md) — product thesis, job, trade-off rule, anti-thesis, and success signals
+- [docs/DOMAIN.md](docs/DOMAIN.md) — ubiquitous language, data dictionary, entities, invariants, lifecycles, and consistency boundaries
+
 Consumed requirement files (append-only):
 
 - [docs/requirements/REQ-001-llm-wiki-cli.md](REQ-001-llm-wiki-cli.md) — LLM Wiki CLI (refined; Gherkin S1–S19)
@@ -180,6 +185,8 @@ ADD-LLM-wiki/
 ├── test/vault/                    # Populated vault fixture; .obsidian stub for init smoke
 └── docs/
     ├── requirements/
+    ├── PURPOSE.md
+    ├── DOMAIN.md
     ├── decisions/                 # ADR-001 … ADR-005
     └── features/                  # Story plans from /plan-story
 ```
@@ -345,6 +352,14 @@ Provider priority when not overridden: Ollama if reachable → OpenAI if key set
 ## Backlog Items
 
 Backlog derived from [REQ-001](REQ-001-llm-wiki-cli.md) delivery phases and accepted ADRs. Run **`/plan-story <id>`** to author story documents under `docs/features/`.
+
+### Skeleton: Architectural and model proof
+
+Thin running slice proving purpose, domain model, composition root, and boundaries before normal feature stories.
+
+| ID | Status | Story | Size | Notes |
+| ---- | -------- | --------------------------------------------------------------------- | ---- | ------------------------------------------------------------------------------------------- |
+| [SK-1](docs/features/SK-1-walking-skeleton.md) | Not Started | Walking skeleton for Stage 2 CLI validate path | S | Proves `ConfigurationPort`, `WikiStoragePort`, Typer composition root, and model-fidelity gate |
 
 ### Epic 1: Stage 1 — Cursor daily driver
 

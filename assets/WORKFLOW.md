@@ -10,10 +10,17 @@ This document describes the end-to-end flow for building software with Cursor us
 
 ```mermaid
 flowchart TD
-    Init["/init-project"] --> Refine["/refine-feature"]
+    Init["/init-project"] --> Purpose["/define-purpose"]
+    Purpose --> PurposeDoc["docs/PURPOSE.md"]
+    PurposeDoc --> Refine["/refine-feature"]
     Refine --> Reqs["docs/requirements/REQ-NNN.md"]
-    Reqs --> Design["/design-application"]
-    Design --> PlanProj["/plan-project"]
+    Reqs --> Domain["/model-domain"]
+    Domain --> DomainDoc["docs/DOMAIN.md"]
+    DomainDoc --> Design["/design-application"]
+    Design --> Skeleton["/plan-skeleton"]
+    Skeleton --> SkeletonStory["docs/features/SK-1-*.md"]
+    SkeletonStory --> SkeletonTail["/implement-story -> /review-story -> /qa-story"]
+    SkeletonTail --> PlanProj["/plan-project"]
     PlanProj --> Backlog["README backlog + ADRs"]
     Backlog --> PlanStory["/plan-story"]
     PlanStory --> Story["docs/features/STORY-ID-*.md"]
@@ -27,9 +34,12 @@ flowchart TD
     Audit["/audit-all periodic"] -.-> Backlog
 ```
 
-- **`/init-project`** is optional: scaffolds `README` + `docs/features` from [templates/readme-template.md](templates/readme-template.md). You can skip straight to `/design-application` with requirements.
+- **`/init-project`** is optional: scaffolds `README` + `docs/features` from [templates/readme-template.md](templates/readme-template.md). You can skip straight to `/design-application` with requirements for legacy projects.
+- **`/define-purpose`** captures the product thesis, job, north-star outcome, trade-off rule, anti-thesis, and success signals via [templates/purpose-template.md](templates/purpose-template.md).
 - **`/refine-feature`** turns raw notes into clarified requirements with Gherkin scenarios (`S1`, `S2`, …) via [templates/requirements-template.md](templates/requirements-template.md).
+- **`/model-domain`** creates the ubiquitous language, data dictionary, entities, relationships, invariants, lifecycles, and consistency boundaries via [templates/domain-model-template.md](templates/domain-model-template.md).
 - **`/design-application`** fills the project `README` with architecture; **`/plan-project`** adds epics/stories to the backlog only.
+- **`/plan-skeleton`** produces a walking-skeleton story via [templates/walking-skeleton-template.md](templates/walking-skeleton-template.md), then the normal implement/review/QA tail proves one running path before feature planning.
 - **`/plan-story`** produces a full story doc using [templates/user-story-template.md](templates/user-story-template.md) (ports/adapters, test plan, binding criteria).
 - **`/implement-story`** drives red-first implementation per [agents/implementer.md](agents/implementer.md).
 - **`/review-story`** is a soft gate (changed-surface audit) before QA; output gates Phase Z criterion **Z6**.
@@ -44,8 +54,11 @@ flowchart TD
 | Command | Purpose |
 |---------|---------|
 | [init-project](commands/init-project.md) | Human: scaffold README + `docs/features` |
+| [define-purpose](commands/define-purpose.md) | Modeler: `docs/PURPOSE.md` product thesis + trade-off rule |
 | [refine-feature](commands/refine-feature.md) | Architect: refined REQ file + Gherkin `Sn` scenarios |
+| [model-domain](commands/model-domain.md) | Modeler: `docs/DOMAIN.md` ubiquitous language + data dictionary |
 | [design-application](commands/design-application.md) | Architect: full README design from requirements |
+| [plan-skeleton](commands/plan-skeleton.md) | Architect: walking-skeleton story before backlog planning |
 | [plan-project](commands/plan-project.md) | Architect: backlog epics/stories only |
 | [plan-story](commands/plan-story.md) | Architect: `docs/features/{STORY-ID}-*.md` |
 | [implement-story](commands/implement-story.md) | Implementer: code + story checkboxes |
@@ -66,6 +79,7 @@ Category audits: [audit-tooling](commands/audit-tooling.md), [audit-reliability]
 
 | Agent | File |
 |-------|------|
+| Modeler | [agents/modeler.md](agents/modeler.md) |
 | Architect | [agents/architect.md](agents/architect.md) |
 | Implementer | [agents/implementer.md](agents/implementer.md) |
 | QA | [agents/qa.md](agents/qa.md) |
@@ -79,6 +93,9 @@ Category audits: [audit-tooling](commands/audit-tooling.md), [audit-reliability]
 | Template | Path |
 |----------|------|
 | README / design hub | [templates/readme-template.md](templates/readme-template.md) |
+| Purpose | [templates/purpose-template.md](templates/purpose-template.md) |
+| Domain model / data dictionary | [templates/domain-model-template.md](templates/domain-model-template.md) |
+| Walking skeleton | [templates/walking-skeleton-template.md](templates/walking-skeleton-template.md) |
 | ADR | [templates/adr-template.md](templates/adr-template.md) |
 | Refined requirements | [templates/requirements-template.md](templates/requirements-template.md) |
 | User story | [templates/user-story-template.md](templates/user-story-template.md) |
@@ -89,13 +106,17 @@ Category audits: [audit-tooling](commands/audit-tooling.md), [audit-reliability]
 
 ## Typical session order (new feature)
 
-1. `/refine-feature @your-notes` → commit `docs/requirements/REQ-001-*.md` in the **target project** repo.
-2. `/design-application @docs/requirements/REQ-001-*.md` (or folder).
-3. `/plan-project @docs/requirements/...` → backlog rows in target `README`.
-4. For each story ID: `/plan-story FND-1` → story doc + backlog link.
-5. `/implement-story FND-1`
-6. `/review-story FND-1` → fix blockers until gate **Pass**.
-7. `/qa-story FND-1` → if needed `/fix-from-qa FND-1` then re-`/qa-story`.
-8. `/document-story FND-1`
+1. `/define-purpose @your-notes` → commit `docs/PURPOSE.md` in the **target project** repo.
+2. `/refine-feature @your-notes` → commit `docs/requirements/REQ-001-*.md`.
+3. `/model-domain @docs/requirements/REQ-001-*.md` → commit `docs/DOMAIN.md`.
+4. `/design-application @docs/requirements/REQ-001-*.md` (or folder).
+5. `/plan-skeleton SK-1` → walking-skeleton story.
+6. Run the skeleton through `/implement-story`, `/review-story`, `/qa-story`, and `/document-story`, then demo it and route reflection deltas to `/refine-feature` or `/model-domain`.
+7. `/plan-project @docs/requirements/...` → backlog rows in target `README`.
+8. For each story ID: `/plan-story FND-1` → story doc + backlog link.
+9. `/implement-story FND-1`
+10. `/review-story FND-1` → fix blockers until gate **Pass**.
+11. `/qa-story FND-1` → if needed `/fix-from-qa FND-1` then re-`/qa-story`.
+12. `/document-story FND-1`
 
 Project files live in the **application repo**; this file documents commands that live under **`~/.cursor`**.

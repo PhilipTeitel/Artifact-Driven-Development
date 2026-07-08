@@ -13,7 +13,16 @@
 - What this story accomplishes and why it matters
 - How it fits into the broader epic / what depends on it
 - The key design principle or constraint guiding the approach
-- Pointers to requirements files and ADRs (full links live in section 2)
+- Pointers to purpose, domain model, requirements files, and ADRs (full ADR links live in section 2)
+
+### 1a. Domain model touchpoints
+
+{List the configured purpose and domain artifacts this story depends on, plus every domain term, entity, invariant, lifecycle, or consistency boundary the story touches. If none apply, state why. These entries give `/review-story` a concrete model-fidelity target.}
+
+| Domain artifact section | Terms / entities / boundaries touched | Why it matters for this story |
+|-------------------------|----------------------------------------|-------------------------------|
+| `docs/PURPOSE.md#thesis` | {purpose thesis / anti-thesis / trade-off rule} | {one line} |
+| `docs/DOMAIN.md#...` | `{Term}`, `{Entity.attribute}`, `{Boundary}` | {one line} |
 
 ---
 
@@ -32,6 +41,8 @@
 {The Architect confirms all items before the story is implementation-ready. If any fail, stop planning and output a **Tensions / conflicts** list for the user.}
 
 - [ ] Linked ADRs exist and are **Accepted** (or the story is explicitly labeled a **spike** and only **Proposed** ADRs apply)
+- [ ] The configured purpose document and domain model exist, or this story explicitly creates / bootstraps them
+- [ ] Section 1a lists every domain term, entity, invariant, lifecycle, and consistency boundary this story touches, or states why none apply
 - [ ] The configured design doc, requirements, and ADRs do not contradict each other on persistence, dependencies, or integration boundaries
 - [ ] Section 4 (Binding constraints) is filled with 3–8 bullets copied or restated from those ADRs
 - [ ] Section 4b (Ports & Adapters) lists every port/adapter this story creates or modifies, or states explicitly that no integration boundaries are touched
@@ -184,6 +195,7 @@ Use **(binding)** in the criterion title so QA runs the real check.}
 - [ ] **Z4** — Configured shared type import policy passes (default: imports from shared use `@shared/types` alias, not relative paths)
 - [ ] **Z5** — New or modified code includes appropriate logging for errors and significant operations per the implementer's logging guidelines
 - [ ] **Z6** — `/review-story {STORY-ID}` satisfies the configured review gate (default: zero `high` or `critical` `TEST-#`, `SEC-#`, `REL-#`, or `API-#` findings on the changed surface, with the configured machine-checkable summary line in the review output)
+- [ ] **Z7** — `/review-story {STORY-ID}` satisfies the configured model-fidelity gate (default: zero `high` or `critical` `MODEL-#` findings; no new domain nouns, data fields, invariants, lifecycles, or consistency-boundary changes absent from `docs/DOMAIN.md`; no contradiction of `docs/PURPOSE.md`)
 
 ---
 

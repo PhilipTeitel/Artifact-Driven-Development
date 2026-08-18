@@ -2,6 +2,8 @@
 
 This directs the **Modeler** agent in **Domain mode** to create or update the configured domain model and data dictionary artifact (default `docs/DOMAIN.md`). Before acting, resolve the workflow profile and use its configured purpose path, domain template, domain path, requirements directory, decisions directory, and scenario ID pattern.
 
+**Command-agent binding:** This command is role-bound to `agents.modeler`. Before executing any step, load the configured Modeler agent definition and follow it as binding role context.
+
 This is workflow step (a-plus): it runs after `/define-purpose` and `/refine-feature`, before `/design-application`, `/plan-skeleton`, `/plan-project`, or `/plan-story`.
 
 ## Why this exists

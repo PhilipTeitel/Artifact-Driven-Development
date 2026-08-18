@@ -2,6 +2,8 @@
 
 This directs the **Architect** to create the walking-skeleton story from approved purpose, domain model, requirements, design, and ADRs. Before acting, resolve the workflow profile and use its configured purpose path, domain path, design doc, decisions directory, features directory, skeleton template, story file pattern, methodology settings, and status vocabulary.
 
+**Command-agent binding:** This command is role-bound to `agents.architect`. Before executing any step, load the configured Architect agent definition and follow it as binding role context.
+
 The walking skeleton runs after `/design-application` and before `/plan-project` or feature `/plan-story` work. It proves that the intended product shape, domain model, architecture, composition root, and integration boundaries can execute together in the thinnest possible end-to-end slice.
 
 ## Why this exists

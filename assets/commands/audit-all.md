@@ -2,7 +2,9 @@
 
 Run the full audit workflow for the repository and write all results into the configured audit file in the target repo root (default `audit-findings.md`). Before acting, resolve the workflow profile and use its configured auditor agent, audit template, audit command sequence, finding prefixes, and severity vocabulary.
 
-The configured auditor agent (default `~/.cursor/agents/auditor.md`) executes each step. Use the configured audit template (default `~/.cursor/templates/audit-template.md`) as a strict contract, not loose guidance.
+**Command-agent binding:** This command is role-bound to `agents.auditor`. Before executing any step, load the configured Auditor agent definition and follow it as binding role context.
+
+The configured auditor agent executes each step. When subagent delegation is available, run the configured Auditor subagent for the audit sequence and pass the active workflow profile, this command spec, the loaded Auditor definition, and the configured audit command sequence as binding context. If subagent delegation is unavailable, continue in the current chat only after loading the same Auditor definition and state in the output that the loaded-agent fallback was used. Use the configured audit template (default `~/.cursor/templates/audit-template.md`) as a strict contract, not loose guidance.
 
 Requirements:
 - set the `Scope` field in `Scope And Timebox` (default `whole-repo` unless the user passes a package or path scope)

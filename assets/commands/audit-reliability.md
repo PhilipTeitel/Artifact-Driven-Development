@@ -2,6 +2,8 @@
 
 Audit this codebase for concrete reliability defects. Focus on unhandled errors, malformed-input crashes, race conditions, invalid assumptions at API boundaries, startup fragility, state leakage across requests, retries/timeouts, and data corruption risks. Before acting, resolve the workflow profile and use its configured audit file, audit template, and finding prefixes.
 
+**Command-agent binding:** This command is role-bound to `agents.auditor`. Before executing any step, load the configured Auditor agent definition and follow it as binding role context.
+
 Read the configured audit file in the target repo root first and use it as the shared audit state. If it does not exist, create it from the configured audit template.
 
 Update only:

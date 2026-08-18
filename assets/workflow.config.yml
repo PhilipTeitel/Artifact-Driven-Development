@@ -22,7 +22,29 @@ cursor:
   excludedWorkflowSources:
     - ~/.codex
 
+agents:
+  archaeologist: ~/.cursor/agents/archaeologist.md
+  architect: ~/.cursor/agents/architect.md
+  auditor: ~/.cursor/agents/auditor.md
+  docsPm: ~/.cursor/agents/docs-pm.md
+  implementer: ~/.cursor/agents/implementer.md
+  migrationStrategist: ~/.cursor/agents/migration-strategist.md
+  modeler: ~/.cursor/agents/modeler.md
+  qa: ~/.cursor/agents/qa.md
+
 templates:
+  behaviorCatalog: ~/.cursor/templates/behavior-catalog-template.md
+  defectLedger: ~/.cursor/templates/defect-ledger-template.md
+  dependencyLedger: ~/.cursor/templates/dependency-ledger-template.md
+  intentLedger: ~/.cursor/templates/intent-ledger-template.md
+  legacyFlow: ~/.cursor/templates/legacy-flow-template.md
+  legacyMap: ~/.cursor/templates/legacy-map-template.md
+  migrationPlan: ~/.cursor/templates/migration-plan-template.md
+  modernizationAssessment: ~/.cursor/templates/modernization-assessment-template.md
+  oracle: ~/.cursor/templates/oracle-template.md
+  parityReport: ~/.cursor/templates/parity-report-template.md
+  portStory: ~/.cursor/templates/port-story-template.md
+  translationGap: ~/.cursor/templates/translation-gap-template.md
   readme: ~/.cursor/templates/readme-template.md
   purpose: ~/.cursor/templates/purpose-template.md
   domain: ~/.cursor/templates/domain-model-template.md
@@ -34,6 +56,18 @@ templates:
   storyReview: ~/.cursor/templates/story-review-template.md
 
 paths:
+  modernizationDir: docs/modernization
+  assessmentDoc: docs/modernization/ASSESSMENT.md
+  legacyMapDoc: docs/modernization/legacy-map.md
+  intentLedgerDoc: docs/modernization/intent-ledger.md
+  dependencyLedgerDoc: docs/modernization/dependency-ledger.md
+  translationGapDoc: docs/modernization/translation-gaps.md
+  defectLedgerDoc: docs/modernization/defect-ledger.md
+  migrationPlanDoc: docs/modernization/migration-plan.md
+  oracleDoc: docs/modernization/oracle.md
+  behaviorGlob: docs/modernization/behaviors/BEH-NNN-*.md
+  flowsDir: docs/modernization/flows
+  parityReportPattern: docs/modernization/parity/{STORY-ID}-parity.md
   designDoc: README.md
   purposeDoc: docs/PURPOSE.md
   domainDoc: docs/DOMAIN.md
@@ -53,6 +87,9 @@ workflow:
       description: New capability, broad refactor, persistence/auth/API change, adapter/port change, named dependency change, or binding-constraint change.
       commands: [define-purpose, refine-feature, model-domain, design-application, plan-skeleton, plan-project, plan-story, complete-story]
       alternatives: []
+    modernizationPort:
+      description: Brownfield modernization or language/framework port requiring assessment, recovered documentation, target design, parity evidence, and cutover planning.
+      commands: [assess-modernization, document-legacy, refine-feature, recover-domain, plan-migration, design-application, plan-project, plan-port-story, complete-port-story]
     storyFollowup:
       description: Small behavior fix, debugging result, UI polish, copy adjustment, or local refinement tied to a completed story.
       commands: [patch-story, review-story, qa-story, document-story]
@@ -81,6 +118,26 @@ workflow:
     - audit-performance
     - audit-tooling
     - triage-audit-findings
+  modernizationAssessSequence:
+    - map-legacy
+    - mine-history
+    - inventory-dependencies
+    - analyze-translation-gap
+    - build-oracle
+    - assess-modernization
+  legacyRecoverySequence:
+    - catalog-behavior
+    - trace-flow
+    - recover-domain
+    - ledger-defects
+    - document-legacy
+  completePortStorySequence:
+    - implement-story
+    - review-story
+    - verify-parity
+    - qa-story
+    - document-story
+    - validate-story
 
 methodology:
   sourceOfTruth: strict
@@ -91,7 +148,10 @@ methodology:
   purposeTraceability: required
   domainModelTraceability: required
   modelFidelity: required
+  provenanceTraceability: required
+  parityEvidence: required
   walkingSkeleton: required
+  parityPhase: Phase P
   bindingPhase: Phase Y
   qualityPhase: Phase Z
   portTestTypes: [contract, integration]
@@ -113,21 +173,54 @@ status:
   review:
     pass: Pass
     block: Block
+  assessment:
+    go: go
+    goWithConditions: go-with-conditions
+    noGo: no-go
 
 review:
   summaryLineLabel: REVIEW SUMMARY
-  summaryFormat: "REVIEW SUMMARY: result=<Pass|Block> TEST-critical=<N> TEST-high=<N> SEC-critical=<N> SEC-high=<N> REL-critical=<N> REL-high=<N> API-critical=<N> API-high=<N> MODEL-critical=<N> MODEL-high=<N>"
+  summaryFormat: "REVIEW SUMMARY: result=<Pass|Block> TEST-critical=<N> TEST-high=<N> SEC-critical=<N> SEC-high=<N> REL-critical=<N> REL-high=<N> API-critical=<N> API-high=<N> MODEL-critical=<N> MODEL-high=<N> PAR-critical=<N> PAR-high=<N> PROV-critical=<N> PROV-high=<N>"
   gate:
     blockOnSeverity: [high, critical]
     requiredResultForQa: Pass
-  perStoryCategories: [Test Coverage, Reliability, Security, API Contracts, Model Fidelity]
-  wholeRepoFindingPrefixes: [API, DB, REL, SEC, PERF, TOOL, TEST, MODEL]
+  perStoryCategories: [Test Coverage, Reliability, Security, API Contracts, Model Fidelity, Parity, Provenance]
+  wholeRepoFindingPrefixes: [API, DB, REL, SEC, PERF, TOOL, TEST, MODEL, PAR, PROV]
 
 qa:
   evidenceReferenceExamples:
     - "path/to/file.test.ts::proof_name(command_or_runner)"
     - "package.json lists \"pkg-name\""
     - "scripts/verify-stack.mjs(npm run verify:stack)"
+
+modernization:
+  legacyRepoPath: TBD
+  sourceStack:
+    language: TBD
+    version: TBD
+    framework: TBD
+  targetStack:
+    language: TBD
+    version: TBD
+    framework: TBD
+  oracleTier: T3 documented-only
+  evidenceGrades:
+    E1: verified
+    E2: documented
+    E3: code-derived
+    E4: inferred
+    E5: unknown
+  stagingStrategies: [strangler, phased-rewrite, big-bang-parallel-run]
+  structureFidelity: [preserve-then-refactor, refactor-now]
+  defectPolicy: reproduce-then-backlog
+  parity:
+    numericTolerance:
+      relative: 0.000001
+      absolute: 0.000001
+    textNormalization:
+      trimWhitespace: true
+      normalizeLineEndings: true
+      caseSensitive: true
 
 stack:
   language: typescript
@@ -145,12 +238,16 @@ stack:
     examples: [Pino, Winston, structlog, slog]
 
 naming:
+  behaviorPattern: BEH-NNN-short-slug.md
+  defectPattern: DEF-NNN-short-slug.md
+  gapPattern: GAP-NNN-short-slug.md
+  riskPattern: RISK-NNN-short-slug.md
   requirementPattern: REQ-NNN-short-slug.md
   adrPattern: ADR-NNN-short-slug.md
   storyPattern: "{STORY-ID}-{slug}.md"
   scenarioIdPattern: "S<number>"
   acceptanceCriterionPattern: "<PhaseLetter><number>"
-  findingPrefixes: [TEST, SEC, API, REL, DB, PERF, TOOL, MODEL]
+  findingPrefixes: [TEST, SEC, API, REL, DB, PERF, TOOL, MODEL, PAR, PROV]
 
 git:
   defaultBaseBranches: [main, master]

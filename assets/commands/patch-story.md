@@ -2,6 +2,8 @@
 
 Apply a small, verified follow-up to a story that already has the configured complete status (default `Complete`) without reopening the full configured story workflow (default `/plan-story` -> `/complete-story`). Before acting, resolve the workflow profile and use its story glob, status vocabulary, workflow lanes, reviews directory, and completion-ref strategy.
 
+**Command-agent binding:** This command is role-bound to `agents.implementer`. Before executing any step, load the configured Implementer agent definition and follow it as binding role context.
+
 Use this for `story-followup`, `trivial-code`, or `docs-only` changes that are clearly tied to one completed story: polish, small bug fixes, copy tweaks, local debugging discoveries, targeted test repairs, or documentation corrections. Do **not** use it for new capabilities, binding constraint changes, adapter/port changes, API contract changes, persistence/auth changes, broad refactors, or changes that invalidate original acceptance criteria; route those to `/plan-story` or `/review-diff` instead.
 
 ## Inputs

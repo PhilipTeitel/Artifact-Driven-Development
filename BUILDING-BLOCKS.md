@@ -34,6 +34,8 @@ An agent is a durable role definition. It says what the model is allowed to thin
   - **[Auditor](assets/agents/auditor.md)** — provides review gates for stories, diffs, and full-repo audits.
   - **[QA](assets/agents/qa.md)** — verifies acceptance criteria against executable evidence.
   - **[Documenter](assets/agents/documenter.md)** — keeps project documentation aligned with the story source of truth.
+  - **[Archaeologist](assets/agents/archaeologist.md)** — recovers evidence-graded facts from legacy repositories, documentation, release notes, history, and executable behavior.
+  - **[Migration Strategist](assets/agents/migration-strategist.md)** — assesses modernization feasibility, translation gaps, staging, cutover, and parity risk.
 
 An agent without a command is just a persona. It does nothing until a command tells it which step to perform.
 
@@ -51,6 +53,9 @@ A command is one workflow step under explicit control: the instructions the agen
   - **Implementation and verification.** [`/implement-story`](assets/commands/implement-story.md), [`/review-story`](assets/commands/review-story.md), [`/qa-story`](assets/commands/qa-story.md), [`/fix-from-qa`](assets/commands/fix-from-qa.md), [`/document-story`](assets/commands/document-story.md), [`/complete-story`](assets/commands/complete-story.md).
   - **Post-story routing.** [`/patch-story`](assets/commands/patch-story.md), [`/reconcile-story`](assets/commands/reconcile-story.md), [`/review-diff`](assets/commands/review-diff.md).
   - **Audit.** [`/map-repo`](assets/commands/map-repo.md), [`/audit-all`](assets/commands/audit-all.md), [`/triage-audit-findings`](assets/commands/triage-audit-findings.md), plus the category audits [`/audit-tooling`](assets/commands/audit-tooling.md), [`/audit-reliability`](assets/commands/audit-reliability.md), [`/audit-db`](assets/commands/audit-db.md), [`/audit-api-contracts`](assets/commands/audit-api-contracts.md), [`/audit-security`](assets/commands/audit-security.md), [`/audit-performance`](assets/commands/audit-performance.md), [`/audit-test-coverage`](assets/commands/audit-test-coverage.md).
+  - **Modernization.** [`/assess-modernization`](assets/commands/assess-modernization.md), [`/map-legacy`](assets/commands/map-legacy.md), [`/mine-history`](assets/commands/mine-history.md), [`/inventory-dependencies`](assets/commands/inventory-dependencies.md), [`/analyze-translation-gap`](assets/commands/analyze-translation-gap.md), [`/build-oracle`](assets/commands/build-oracle.md), [`/document-legacy`](assets/commands/document-legacy.md), [`/catalog-behavior`](assets/commands/catalog-behavior.md), [`/trace-flow`](assets/commands/trace-flow.md), [`/recover-domain`](assets/commands/recover-domain.md), [`/ledger-defects`](assets/commands/ledger-defects.md), [`/plan-migration`](assets/commands/plan-migration.md), [`/plan-port-story`](assets/commands/plan-port-story.md), [`/verify-parity`](assets/commands/verify-parity.md), [`/complete-port-story`](assets/commands/complete-port-story.md).
+
+Commands are also role-bound. The workflow profile maps each command to an agent definition, and a command must load that configured role contract before it runs. If the command and agent definition conflict, the workflow stops and reports the conflict instead of silently choosing one.
 
 A command without an agent has no judgment behind it. A command without a template has no defined output. Commands are the connective tissue, not the whole engine.
 
@@ -71,8 +76,10 @@ A template is a contract for what an artifact must contain.
   - **[architecture decision record template](assets/templates/adr-template.md)** — context, decision, alternatives considered, consequences.
   - **[Walking-skeleton template](assets/templates/walking-skeleton-template.md)** — one thin running end-to-end slice through the composition root and boundaries, with a reflection checkpoint.
   - **[User story template](assets/templates/user-story-template.md)** — linked architecture decision records, Definition of Ready, binding constraints, ports and adapters table (Section 4b), file touchpoints, acceptance criteria (including Phase Y binding and Phase Z quality gates), test plan with **Covers AC** and **Covers Sn** columns and test levels (`unit`, `contract`, `integration`, `e2e` / `ui`), implementation order, completion metadata, post-complete follow-up ledger with **Change ref** and **Review ref** columns.
+  - **[Port-story template](assets/templates/port-story-template.md)** — a modernization story shape based on the user-story template, adding `### 1b. Legacy source touchpoints`, `Phase P`, `## 8b. Parity Plan`, a **Covers BEH** test-plan column, and the `Z8` parity gate.
   - **[Story-review template](assets/templates/story-review-template.md)** — required actions, severity, machine-readable `REVIEW SUMMARY:` line.
   - **[Audit template](assets/templates/audit-template.md)** — findings by category with evidence citations.
+  - **Modernization templates.** [Modernization assessment](assets/templates/modernization-assessment-template.md), [legacy map](assets/templates/legacy-map-template.md), [intent ledger](assets/templates/intent-ledger-template.md), [dependency ledger](assets/templates/dependency-ledger-template.md), [translation gap analysis](assets/templates/translation-gap-template.md), [oracle strategy](assets/templates/oracle-template.md), [behavior catalog](assets/templates/behavior-catalog-template.md), [legacy flow](assets/templates/legacy-flow-template.md), [defect ledger](assets/templates/defect-ledger-template.md), [migration plan](assets/templates/migration-plan-template.md), and [parity report](assets/templates/parity-report-template.md).
 
 A template is what prevents an artifact from drifting into a different shape every time it is produced.
 
@@ -106,6 +113,17 @@ An artifact is a durable, reviewable output of the workflow. It is defined by **
 | Completion metadata | Final review summary, QA result, docs handoff, completion ref | `/document-story`, `/validate-story complete` |
 | Post-complete follow-up ledger entry | One small follow-up tied to a completed story | `/patch-story` |
 | Audit findings | System map, category findings, triage decisions from periodic audits | `/map-repo`, `/audit-all`, category audits, `/triage-audit-findings` |
+| Modernization assessment | Feasibility verdict, risks, blockers, oracle tier, walking-skeleton feasibility | `/assess-modernization` |
+| Legacy map | Source stack, topology, entrypoints, data stores, interfaces, tests, risk hotspots | `/map-legacy` |
+| Intent ledger | Evidence-graded intent statements from documentation, releases, tickets, and history | `/mine-history` |
+| Dependency ledger | Legacy dependencies, support status, substitution choices, impedance mismatches, blockers | `/inventory-dependencies` |
+| Translation-gap analysis | Language, runtime, framework, data, numeric, build, deployment, and operational gaps | `/analyze-translation-gap` |
+| Oracle strategy | Oracle tier, execution environment, containment, fixtures, tolerances, determinism hazards | `/build-oracle` |
+| Behavior catalog | `BEH-NNN` user-visible behaviors with triggers, inputs, outputs, rules, evidence, and draft Gherkin | `/catalog-behavior` |
+| Legacy flow | One traced legacy behavior or entrypoint from ingress through logic, state, persistence, and egress | `/trace-flow` |
+| Defect ledger | `DEF-NNN` decisions to reproduce faithfully, fix now, or fix later | `/ledger-defects` |
+| Migration plan | Staging strategy, slice plan, structure fidelity, cutover, rollback, parity strategy, forecast | `/plan-migration` |
+| Parity report | Per-port-story comparison of legacy expectation to new behavior, including `PAR-#` and `PROV-#` blockers | `/verify-parity` |
 
 ### Implementation note: artifacts and files
 
@@ -139,6 +157,8 @@ Evidence is what makes "done" mean something specific.
 
 Evidence answers the question "how do we know?" An artifact without evidence is a claim. Evidence turns the claim into a check.
 
+Modernization adds a second evidence axis: **provenance**. Greenfield evidence proves an acceptance criterion passed. Brownfield provenance proves where a recovered fact came from and how much confidence it deserves. The default grades are `E1 verified`, `E2 documented`, `E3 code-derived`, `E4 inferred`, and `E5 unknown`. `E4` and `E5` do not become implementation-ready facts unless a human resolves or explicitly accepts the uncertainty.
+
 ---
 
 ## Gate — the decision point
@@ -149,6 +169,7 @@ A gate is where work stops until someone — human or agent — decides whether 
 - **Examples.**
   - **Agent gates.** Review `Pass` or `Block`, including model-fidelity `MODEL-#` findings. QA `PASS`, `FAIL`, or `BLOCKED` per criterion. `validate-story ready`, `validate-story complete`, and `validate-story followups`.
   - **Human gates.** The nine approvals in the [README](README.md) swimlane: purpose, refined requirements, domain model, design and architecture decision records, walking skeleton, backlog, story spec, QA evidence, documentation.
+  - **Modernization gates.** M1 assessment verdict, M2 recovered documentation, M3 defect decisions, M4 migration plan, and M5 parity evidence. Parity adds `PAR-#` and `PROV-#` review findings, `PASS` / `FAIL` / `BLOCKED` verification rows, and the port-story `Z8` quality gate.
 
 Gates exist because skipping them has been observed to cost more later. A gate that becomes a formality has stopped doing its job.
 
@@ -183,6 +204,21 @@ The composition matrix shows which command produces or updates which artifact, w
 | `/audit-all` | Auditor | Audit findings across all categories | Audit findings |
 | `/audit-{category}` | Auditor | Category findings (`tooling`, `reliability`, `db`, `api-contracts`, `security`, `performance`, `test-coverage`) | Audit findings |
 | `/triage-audit-findings` | Auditor | Audit triage decisions | Audit findings |
+| `/map-legacy` | Archaeologist | Legacy map | `docs/modernization/legacy-map.md` |
+| `/mine-history` | Archaeologist | Intent ledger | `docs/modernization/intent-ledger.md` |
+| `/inventory-dependencies` | Migration Strategist | Dependency ledger | `docs/modernization/dependency-ledger.md` |
+| `/analyze-translation-gap` | Migration Strategist | Translation-gap analysis | `docs/modernization/translation-gaps.md` |
+| `/build-oracle` | Implementer | Oracle strategy and fixtures | `docs/modernization/oracle.md`; fixture or harness files when built |
+| `/assess-modernization` | Migration Strategist | Modernization assessment | `docs/modernization/ASSESSMENT.md` |
+| `/catalog-behavior` | Archaeologist | Behavior catalog entry | `docs/modernization/behaviors/BEH-NNN-*.md` |
+| `/trace-flow` | Archaeologist | Legacy flow document | `docs/modernization/flows/` |
+| `/recover-domain` | Modeler | Recovered purpose and domain model | `docs/PURPOSE.md`; `docs/DOMAIN.md` |
+| `/ledger-defects` | Archaeologist | Defect ledger | `docs/modernization/defect-ledger.md` |
+| `/document-legacy` | Archaeologist and Modeler | Legacy recovery artifacts | Behavior catalog, flow docs, purpose, domain model, defect ledger |
+| `/plan-migration` | Migration Strategist | Migration plan; architecture decision records as needed | `docs/modernization/migration-plan.md`; `docs/decisions/ADR-NNN-*.md` |
+| `/plan-port-story` | Architect | Port story spec | `docs/features/{STORY-ID}-*.md` |
+| `/verify-parity` | QA | Parity report | `docs/modernization/parity/{STORY-ID}-parity.md` |
+| `/complete-port-story` | Implementer, Auditor, QA, Docs-PM | Code, tests, review, parity report, QA evidence, documentation, validation | Codebase; story spec; story review; parity report; project docs |
 
 Read this matrix as: *the agent brings concern; the command brings control (instructions and constraints); the template shapes the file the artifact lands in; the artifact itself is the durable conceptual output.* Each axis moves independently. Change the template and the file layout changes; the artifacts do not. Change the command and where the artifact lands may change; the artifact does not. Change the agent and the judgment behind the artifact changes; everything else stays.
 
@@ -191,6 +227,7 @@ Read this matrix as: *the agent brings concern; the command brings control (inst
 ## Read next
 
 - [WORKFLOW-EXAMPLE.md](WORKFLOW-EXAMPLE.md) — a concrete walkthrough showing agents, commands, templates, artifacts, evidence, and gates in one completed story.
+- [MODERNIZATION.md](MODERNIZATION.md) — the brownfield modernization lane and its additional artifacts.
 - [ROLES.md](ROLES.md) — the agents in depth: what each one owns and how work hands off.
 - [PROCESS.md](PROCESS.md) — how these blocks chain together across the story lifecycle.
 - [TRACEABILITY.md](TRACEABILITY.md) — how the artifacts in this matrix link into a single trace from intent to evidence.

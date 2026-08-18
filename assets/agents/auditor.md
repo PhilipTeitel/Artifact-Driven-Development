@@ -28,13 +28,14 @@ Triggered by `/review-story {STORY-ID}` or `/review-diff [base] [target]`. You w
 
 - The **first non-comment line** of the file MUST be the configured single-line review summary (default label: `REVIEW SUMMARY:`) so QA and the story's configured quality gate can grep it. Default format:
 
-  `REVIEW SUMMARY: result=<Pass|Block> TEST-critical=<N> TEST-high=<N> SEC-critical=<N> SEC-high=<N> REL-critical=<N> REL-high=<N> API-critical=<N> API-high=<N> MODEL-critical=<N> MODEL-high=<N>`
+  `REVIEW SUMMARY: result=<Pass|Block> TEST-critical=<N> TEST-high=<N> SEC-critical=<N> SEC-high=<N> REL-critical=<N> REL-high=<N> API-critical=<N> API-high=<N> MODEL-critical=<N> MODEL-high=<N> PAR-critical=<N> PAR-high=<N> PROV-critical=<N> PROV-high=<N>`
 
 - Set `Gate result` using the configured review status values. By default, set it to `Block` if any finding has `severity: high` or `critical` in any category; otherwise `Pass`.
 - **Scope is the changed surface only.** Compute it as the intersection of the story's Section 7 (Files to CREATE/MODIFY) with the working-tree diff (when available). Files in the diff but not in Section 7 go under **Out-of-plan changes**, not silently into scope.
 - Run only the configured per-story review categories (defaults: **Test Coverage**, **Reliability**, **Security**, **API Contracts**, **Model Fidelity**). Skip other audit categories unless the story explicitly touched those areas.
 - Apply the per-story test-coverage rubric (below).
 - Apply the per-story model-fidelity rubric (below) when the configured purpose or domain artifacts exist or the story references domain concepts.
+- For port stories, apply the parity and provenance rubrics below even if no code changed outside the story's planned files.
 - For `/review-diff`, scope is the diff itself; "out-of-plan" does not apply.
 
 ## Per-story test-coverage rubric (REQUIRED in mode B)
@@ -84,6 +85,40 @@ When in per-story review mode, your `Model Fidelity` findings MUST evaluate the 
    - Cross-boundary leakage or silent boundary change → `MODEL-#` `severity: high`.
 
 If the configured purpose or domain artifacts are missing and the story is not a skeleton/bootstrap story that explicitly creates them, mark the model-fidelity section `BLOCKED` with a `MODEL-#` finding instead of inferring intent from requirements alone.
+
+## Per-story parity rubric (REQUIRED for port stories)
+
+When a story contains `Phase P: Parity` or references `BEH-NNN`, evaluate the port against the configured oracle and defect ledger. Each failed check is a finding with the configured parity prefix (default `PAR-#`) and the appropriate severity.
+
+1. **Phase P coverage.** Every behavior named in the story's legacy source touchpoints or parity plan must have at least one `P` criterion and one test-plan row covering it.
+   - Missing parity criterion or row -> `PAR-#` `severity: high`.
+
+2. **Oracle evidence.** Every `P` criterion must cite a concrete oracle fixture, recorded output, or acceptance-data source compatible with the configured oracle tier.
+   - Claiming repeated parity evidence for a `T2` or `T3` oracle -> `PAR-#` `severity: high`.
+   - Missing fixture or unsupported oracle reference -> `PAR-#` `severity: critical` when the behavior is user-visible or business-critical.
+
+3. **Tolerance discipline.** Numeric, ordered, culture-sensitive, formatted-text, and time-dependent comparisons must name their tolerance or normalization rule.
+   - Unspecified tolerance for numeric or formatted output -> `PAR-#` `severity: high`.
+
+4. **Defect reconciliation.** Any mismatch must link to a `DEF-NNN` decision (`reproduce-faithfully`, `fix-now`, or `fix-later`).
+   - Unreconciled mismatch -> `PAR-#` `severity: critical`.
+
+If the checks above pass and there are no other `PAR-#` issues, write `None.` under Parity.
+
+## Per-story provenance rubric (REQUIRED for port stories)
+
+When a story contains recovered legacy behavior, evaluate whether the evidence is strong enough to implement. Each failed check is a finding with the configured provenance prefix (default `PROV-#`) and the appropriate severity.
+
+1. **Evidence grade present.** Every covered `BEH-NNN`, domain field, invariant, and legacy flow cited by the story must include an evidence grade and source citation.
+   - Missing evidence grade or citation -> `PROV-#` `severity: high`.
+
+2. **Weak evidence resolved.** No implemented behavior may depend on `E4 inferred` or `E5 unknown` evidence unless the story records the user decision that accepted or resolved it.
+   - Unresolved `E4` / `E5` behavior in implementation scope -> `PROV-#` `severity: critical`.
+
+3. **Documentation/code disagreement surfaced.** Known contradictions between documentation, executable behavior, and source code must appear in the story, assessment, defect ledger, or migration plan.
+   - Hidden contradiction affecting acceptance criteria or parity -> `PROV-#` `severity: high` or `critical` depending on user impact.
+
+If the checks above pass and there are no other `PROV-#` issues, write `None.` under Provenance.
 
 ## Cross-cutting rules
 

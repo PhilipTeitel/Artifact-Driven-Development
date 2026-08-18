@@ -2,6 +2,8 @@
 
 This directs the **Implementer** to repair a story using the most recent **QA evidence matrix** as input. It closes the loop after `/qa-story` reports configured fail or blocked criteria (defaults: `FAIL` or `BLOCKED`). Before acting, resolve the workflow profile and use its story paths, QA result values, agent directory, and status vocabulary.
 
+**Command-agent binding:** This command is role-bound to `agents.implementer`. Before executing any step, load the configured Implementer agent definition and follow it as binding role context.
+
 ## Why this exists
 
 Without an explicit feedback command, "fix the QA failures" gets translated through free-form prompts and tends to (a) re-touch passing code paths, (b) skip the red-first workflow, or (c) silently change the design. This command constrains the implementer to the failed criteria and keeps the red-first discipline.

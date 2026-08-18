@@ -22,6 +22,7 @@ flowchart TD
     classify -->|"Hotfix, PR diff, or<br/>change not mapping to one story"| reviewDiff["/review-diff"]
     classify -->|"Documentation only"| docsOnly["Docs-only update"]
     classify -->|"Non-behavioral cleanup"| trivialCode["Minimal verification"]
+    classify -->|"Brownfield port or<br/>legacy replacement"| modernizationPort["Modernization lane"]
 
     patchStory --> ledger["Post-complete follow-up ledger entry"]
     reconcileStory --> laneDecision{"Recommended lane"}
@@ -32,12 +33,14 @@ flowchart TD
     reviewDiff --> reviewArtifact["Review artifact under docs/reviews/"]
     docsOnly --> docsNote["Documentation verification note"]
     trivialCode --> verification["Minimal verification note"]
+    modernizationPort --> modernizationDocs["Assessment, recovery,<br/>migration plan, port stories"]
 
     ledger --> validateFollowups["/validate-story followups"]
     validateFollowups --> handoff["Traceable handoff"]
     reviewArtifact --> handoff
     docsNote --> handoff
     verification --> handoff
+    modernizationDocs --> handoff
 ```
 
 The fast path is `/patch-story` when the change clearly belongs to one completed story. The slow path is the full story lifecycle when the change crosses a binding constraint. Most real changes are in the middle and need the auditor to classify them.
@@ -55,6 +58,7 @@ Before choosing a lane, classify the change (per the standing change-routing rul
 | `docs-only` | Documentation-only update | `/patch-story` or direct doc edit; `/review-diff` when setup, API contracts, or ops behavior are affected |
 | `hotfix-diff` | Unplanned fix or branch diff that does not map cleanly to one story | `/review-diff` |
 | `full-story` | New capability, binding constraint change, port/adapter change, API contract change, or work that invalidates original acceptance criteria | Full lifecycle (`/plan-story` → …) |
+| `modernization-port` | Brownfield modernization, language/framework port, or replacement of a legacy application | Modernization lane (`/assess-modernization` → `/document-legacy` → `/plan-migration` → `/plan-port-story` → `/complete-port-story`) |
 
 ---
 

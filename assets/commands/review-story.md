@@ -2,6 +2,8 @@
 
 This directs the **auditor** agent to run a focused, lightweight review of a single story's **changed surface** as a soft gate between `/implement-story` and `/qa-story`. Before acting, resolve the workflow profile and use its configured story glob, purpose path, domain path, review template, review artifact path, summary format, per-story categories, and review gate.
 
+**Command-agent binding:** This command is role-bound to `agents.auditor`. Before executing any step, load the configured Auditor agent definition and follow it as binding role context.
+
 ## Why this exists
 
 `audit-all` is the right tool for whole-repo health checks but is too heavy and too broad to run after every story. `/review-story` runs only the audit categories most likely to catch story-scoped escapes — reliability, security, api-contracts, test-coverage, and model fidelity — and only against the files the story actually changed. The result drives Phase Z's `Z6` and `Z7` quality gates and tells the implementer whether it is safe to ask QA to verify.

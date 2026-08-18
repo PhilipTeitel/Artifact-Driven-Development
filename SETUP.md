@@ -130,6 +130,21 @@ In Cursor chat, the workflow slash commands should be available, including:
 /review-story
 /qa-story
 /document-story
+/map-legacy
+/mine-history
+/inventory-dependencies
+/analyze-translation-gap
+/build-oracle
+/assess-modernization
+/catalog-behavior
+/trace-flow
+/recover-domain
+/ledger-defects
+/document-legacy
+/plan-migration
+/plan-port-story
+/verify-parity
+/complete-port-story
 ```
 
 You can also run:
@@ -151,6 +166,7 @@ Open the target application repository in Cursor. The default workflow writes pr
 - `docs/decisions/` for ADRs
 - `docs/features/` for story specs and story reviews
 - `docs/reviews/` for diff reviews
+- `docs/modernization/` for modernization assessments, recovered legacy evidence, migration plans, and parity reports
 - `audit-findings.md` for repository audit findings
 
 A typical new feature flow is:
@@ -167,6 +183,20 @@ A typical new feature flow is:
 /review-story STORY-ID
 /qa-story STORY-ID
 /document-story STORY-ID
+```
+
+A typical modernization flow is:
+
+```text
+/assess-modernization /path/to/legacy-repo target: <target stack>
+/document-legacy @docs/modernization/ASSESSMENT.md
+/refine-feature @docs/modernization/behaviors/BEH-001-short-slug.md
+/recover-domain @docs/modernization/behaviors/
+/plan-migration @docs/modernization/ASSESSMENT.md @docs/requirements/
+/design-application @docs/requirements/REQ-001-short-slug.md
+/plan-project @docs/modernization/migration-plan.md
+/plan-port-story STORY-ID BEH-001
+/complete-port-story STORY-ID
 ```
 
 For the full command sequence, see [`assets/WORKFLOW.md`](assets/WORKFLOW.md).

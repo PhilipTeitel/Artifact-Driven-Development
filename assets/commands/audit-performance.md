@@ -2,6 +2,8 @@
 
 Audit this codebase for meaningful performance issues on realistic hot paths. Focus on repeated I/O, N+1 behavior, unbounded queries or loops, expensive parsing, cache misuse, blocking work on request paths, and pathological user-controlled operations. Before acting, resolve the workflow profile and use its configured audit file, audit template, and finding prefixes.
 
+**Command-agent binding:** This command is role-bound to `agents.auditor`. Before executing any step, load the configured Auditor agent definition and follow it as binding role context.
+
 Read the configured audit file in the target repo root first and use it as the shared audit state. If it does not exist, create it from the configured audit template.
 
 Update only:

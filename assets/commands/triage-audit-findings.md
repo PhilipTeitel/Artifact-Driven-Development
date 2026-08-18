@@ -2,6 +2,8 @@
 
 Read the configured audit file in the target repo root (default `audit-findings.md`) and reconcile triage using the `Decision` field from each detailed finding. Before acting, resolve the workflow profile and use its configured audit template, finding prefixes, and severity/confidence vocabulary.
 
+**Command-agent binding:** This command is role-bound to `agents.auditor`. Before executing any step, load the configured Auditor agent definition and follow it as binding role context.
+
 Use the configured audit template (default `~/.cursor/templates/audit-template.md`) as a strict contract. Preserve all headings and heading order. If a required section has no content yet, write `None yet.`.
 
 Treat `Decision` as the source of truth:

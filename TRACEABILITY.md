@@ -57,6 +57,52 @@ Every arrow into the story spec is a piece of context the implementer is allowed
 
 Each box in the diagram is a distinct artifact — defined by what it carries, not by where it is recorded. The current implementation bundles related artifacts into a small number of files for trace co-location: the story spec, story acceptance evidence, QA evidence matrix, completion metadata, and post-complete follow-up ledger entries all ride in the same `docs/features/{STORY-ID}-*.md` document because keeping the trace co-located makes it readable. They are still separate artifacts with separate owners. See [BUILDING-BLOCKS.md](BUILDING-BLOCKS.md) for the artifact set and the composition matrix.
 
+Modernization adds provenance to the left side of the trace. A port story should be traceable not only back to purpose, domain, requirements, and ADRs, but also back to the legacy citation or oracle fixture that justified the recovered behavior.
+
+```mermaid
+flowchart LR
+    legacySources["Legacy sources<br/>docs, code, history,<br/>observed behavior"]
+    legacyMap["Legacy Map"]
+    intentLedger["Intent Ledger"]
+    behaviorCatalog["Behavior Catalog<br/>BEH-NNN"]
+    flowDocs["Legacy Flow Docs"]
+    defectLedger["Defect Ledger<br/>DEF-NNN"]
+    oracle["Oracle<br/>T1, T2, or T3"]
+    recoveredPurpose["Recovered Purpose"]
+    recoveredDomain["Recovered Domain"]
+    requirements["Requirements<br/>REQ-NNN and Sn"]
+    migrationPlan["Migration Plan"]
+    portStory["Port Story<br/>Phase P and Z8"]
+    parityReport["Parity Report<br/>PARITY SUMMARY"]
+    qaEvidence["QA Evidence Matrix"]
+    docsUpdate["Documentation Update"]
+
+    legacySources --> legacyMap
+    legacySources --> intentLedger
+    legacySources --> behaviorCatalog
+    behaviorCatalog --> flowDocs
+    behaviorCatalog --> defectLedger
+    legacySources --> oracle
+    intentLedger --> recoveredPurpose
+    behaviorCatalog --> recoveredDomain
+    flowDocs --> recoveredDomain
+    recoveredPurpose --> requirements
+    recoveredDomain --> requirements
+    behaviorCatalog --> requirements
+    requirements --> migrationPlan
+    oracle --> migrationPlan
+    defectLedger --> migrationPlan
+    migrationPlan --> portStory
+    behaviorCatalog --> portStory
+    oracle --> portStory
+    defectLedger --> portStory
+    portStory --> parityReport
+    parityReport --> qaEvidence
+    qaEvidence --> docsUpdate
+```
+
+This is why evidence grades matter. A citation marked `E1 verified` and a claim marked `E4 inferred` are not interchangeable, even if both appear in a polished artifact.
+
 ---
 
 ## The story spec as traceability hub
@@ -72,6 +118,9 @@ A well-formed story should make every one of these questions answerable without 
 - **Which ports and adapters are in play?** Section 4b lists every port and adapter the story creates or modifies — port file, adapter implementation, and real backing service or fixture — or states explicitly that no integration boundaries are touched.
 - **Which acceptance criteria define completion?** The criteria list, each with a stable ID (`A1`, `A2`..., `Y1`, `Z1`...) using markdown task syntax (`- [ ] **A1** — ...`) and exactly one `Evidence:` line per criterion.
 - **Which tests or checks prove each criterion?** Section 8a Test Plan rows mapping criteria to test paths, with test level (`unit`, `contract`, `integration`, `e2e` / `ui`) and **Covers AC** / **Covers Sn** columns filled. Every port needs at least one `contract` row; every adapter needs at least one `integration` row against the real backing service (no mock of the boundary the adapter owns). Phase Y `(binding)` criteria cite the integration tests for adapters.
+- **For port stories, which legacy behavior is being preserved or intentionally changed?** Section 1b links the `BEH-NNN` artifacts and evidence grades that justify the story scope.
+- **For port stories, what oracle proves parity?** Section 8b links the oracle tier, fixture IDs, tolerances, and any acceptance data gaps. A `T3 documented-only` oracle must not be described as executable parity.
+- **For port stories, which defect decisions apply?** The story links any `DEF-NNN` rows that say whether suspicious behavior is reproduced faithfully, fixed now, or fixed later.
 - **Which files changed?** The file touchpoints (planned) and the changed files (actual).
 - **Which gates passed?** The review artifact reference (including Phase Z6: zero `high` or `critical` `TEST-#`, `SEC-#`, `REL-#`, or `API-#` findings from `/review-story`, and Phase Z7: zero `high` or `critical` `MODEL-#` findings) and the QA matrix reference.
 - **Which documentation surfaces were updated?** The documentation diff, or an explicit note that no surface needed to change.
@@ -98,6 +147,8 @@ The README's closing principles are not slogans. Each one names a specific artif
 | Epics and stories organize delivery | The backlog rows in the project `README`, maintained by `/plan-project` |
 | Story specs turn intent into implementation-ready instructions | `docs/features/{STORY-ID}-*.md`, produced by `/plan-story`; validated by `/validate-story ready` |
 | Tests, model-fidelity review, QA evidence, and documentation close the loop | The test plan (with **Covers AC** and **Covers Sn**), story-review artifact including `MODEL-#` counts, QA matrix, and documentation diff — all referenced from the story's completion metadata; post-complete follow-ups recorded in the ledger with **Change ref** and **Review ref** |
+| Legacy behavior is evidence, not automatically requirement | `docs/modernization/behaviors/BEH-NNN-*.md`, legacy flow docs, intent ledger, and defect ledger, each with evidence grades and citations |
+| Parity confidence cannot exceed the oracle tier | `docs/modernization/oracle.md`, port-story `Phase P`, `Z8`, and `docs/modernization/parity/{STORY-ID}-parity.md` |
 
 A principle without an artifact is a hope. Anchoring each one to a specific file is what turns the methodology from intent into discipline.
 
@@ -121,6 +172,10 @@ An agent may not change a persistence location, transport, embedding stack, or n
 
 This rule exists because the most common failure mode in AI-assisted development is the model "improving" a binding decision without telling anyone.
 
+### No silent behavior improvement
+
+In modernization work, an agent may not decide that legacy behavior should be cleaned up during the port. If behavior appears wrong, the defect ledger records the human decision: `reproduce-faithfully`, `fix-now`, or `fix-later`. The auditor and QA enforce this with `PAR-#` and `PROV-#` findings, `Phase P` parity criteria, and the `Z8` gate in port stories.
+
 ### Story status discipline
 
 The story document is the single source of truth for story progress. Status transitions and acceptance criteria checkboxes are updated *as work happens*, not batched at the end. The backlog status is derived from the story document, never the other way around.
@@ -136,5 +191,6 @@ After a story is `Complete`, small verified changes do not reopen the story. The
 ## Read next
 
 - [PROCESS.md](PROCESS.md) — when in the lifecycle each artifact is produced.
+- [MODERNIZATION.md](MODERNIZATION.md) — how legacy evidence, oracle tiers, defect decisions, and parity reports extend the trace.
 - [BUILDING-BLOCKS.md](BUILDING-BLOCKS.md) — the composition matrix that names the agent, command, and template behind each artifact.
 - [POST-STORY.md](POST-STORY.md) — how the trace is preserved for follow-ups, patches, and diffs without forcing every change through a full story.

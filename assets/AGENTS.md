@@ -1,6 +1,6 @@
 # House Rules for All Agents
 
-These are the standing rules every agent in this workspace must follow. They are inherited by `architect`, `implementer`, `qa`, `docs-pm`, and `auditor`, and they apply across all projects unless a project-level `AGENTS.md` overrides a specific rule.
+These are the standing rules every agent in this workspace must follow. They are inherited by `architect`, `implementer`, `qa`, `docs-pm`, `auditor`, `archaeologist`, `migration-strategist`, and any configured role, and they apply across all projects unless a project-level `AGENTS.md` overrides a specific rule.
 
 When an agent prompt repeats one of these rules in its own file, this file is the source of truth — agent prompts should reference this file rather than restate it.
 
@@ -13,6 +13,20 @@ Before applying any workflow path, status vocabulary, command sequence, review g
 3. The documented defaults in `~/.cursor/workflow.config.yml`
 
 Project-local values override user-profile values key-by-key. If no profile is available, use the defaults documented in the user profile. Treat `AGENTS.md` as policy and the workflow profile as configuration.
+
+---
+
+## 0b. Command-agent binding
+
+Slash commands are workflow entrypoints; configured agent files are binding role contracts. Before executing any command that directs a named role (architect, modeler, implementer, auditor, QA, docs-pm, or another configured role), agents must:
+
+1. Resolve the active workflow profile using the profile precedence rules.
+2. Read the command spec from the configured commands directory.
+3. Read this house-rules file from the configured `cursor.rulesFile`.
+4. Read the role's configured agent definition from the active profile's `agents` mapping.
+5. Treat the loaded agent definition as mandatory role context for the command. If the command and agent definition conflict, stop and report the conflict instead of silently choosing one.
+
+Orchestrator commands must prefer delegating each role phase to the configured subagent when the runtime supports delegation. If delegation is unavailable, the current chat may execute the phase only after loading the same configured agent definition and stating that fallback was used.
 
 ---
 
@@ -34,9 +48,21 @@ Before implementing a requested change, classify it and choose the lightest work
 - **`story-followup`** — small behavior fix, debugging result, UI polish, copy adjustment, or local refinement tied to a completed story and not changing its binding constraints. Use `/patch-story {STORY-ID}` and append an entry to that story's Post-complete Follow-up Ledger (including `Change ref` and `Review ref` when applicable).
 - **`hotfix-diff`** — unplanned bug fix or branch diff that does not map cleanly to one story. Use `/review-diff` and write the review artifact under the configured reviews directory (default `docs/reviews/`).
 - **`docs-only`** — documentation-only updates. Update the relevant docs and record the verification note; use `/review-diff` when the docs affect setup, API contracts, or operational behavior.
+- **`modernization-port`** — brownfield modernization, language/framework port, or replacement of a legacy application. Use `/assess-modernization` before design, then `/document-legacy` → `/refine-feature` or `/recover-domain` → `/plan-migration` → `/design-application` or `/plan-project` → `/plan-port-story` → `/complete-port-story`. Do not skip the assessment unless the user explicitly accepts the unknown feasibility risk.
 - **`trivial-code`** — non-behavioral typo, formatting, comment, or mechanical cleanup. Keep verification minimal and use `/review-diff` only when risk is unclear.
 
 When a completed story needs follow-up work, do not silently reopen or rewrite its original acceptance criteria. Preserve the configured complete story status (default `Complete`) as "the planned criteria passed" and record later work in the follow-up ledger unless the change invalidates the original criteria or changes a binding constraint. If it does, stop and route to `full-story` or emit a conflict report.
+
+## 1c. Brownfield and modernization discipline
+
+When working on a brownfield modernization or language/framework port, the legacy application is evidence, not automatically the requirement. User-facing documentation, release notes, executable behavior, source code, and commit history can disagree; agents must surface those tensions instead of flattening them.
+
+- **Evidence grades are mandatory.** Every recovered behavior, domain field, invariant, flow, and risk must carry a configured evidence grade (defaults: `E1 verified`, `E2 documented`, `E3 code-derived`, `E4 inferred`, `E5 unknown`) plus a citation. Do not state a recovered fact without a grade and source.
+- **Provenance blocks readiness.** A port story is not implementation-ready when any covered behavior remains `E4` or `E5` unless the user has recorded a decision that accepts or resolves the uncertainty.
+- **Oracle tier honesty.** Classify the legacy oracle before planning parity work. `T1 executable` supports repeated legacy-vs-new comparison, `T2 recorded` supports a frozen fixture corpus, and `T3 documented-only` means parity is not independently provable. Do not claim parity confidence above the oracle tier.
+- **No silent behavior improvement.** If the legacy behavior appears wrong, record it in the configured defect ledger and choose `reproduce-faithfully`, `fix-now`, or `fix-later`. Do not "clean up" behavior during the port without a recorded decision and test expectation.
+- **Parity-first is the red-first specialization.** For port stories, characterization/parity tests are the first failing tests. Phase P criteria must cite oracle fixtures, tolerances, and defect-ledger decisions before implementation changes are made.
+- **Assessment and migration plan are binding once accepted.** The configured modernization assessment and migration plan govern staging strategy, target stack assumptions, structure-fidelity choices, cutover approach, and risk mitigations. If implementation discovers evidence that contradicts them, stop and update the artifacts before continuing.
 
 ## 2. Hexagonal port/adapter pairing
 

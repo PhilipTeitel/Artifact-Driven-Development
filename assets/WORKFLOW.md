@@ -41,6 +41,10 @@ flowchart TD
 - **`/design-application`** fills the project `README` with architecture; **`/plan-project`** adds epics/stories to the backlog only.
 - **`/plan-skeleton`** produces a walking-skeleton story via [templates/walking-skeleton-template.md](templates/walking-skeleton-template.md), then the normal implement/review/QA tail proves one running path before feature planning.
 - **`/plan-story`** produces a full story doc using [templates/user-story-template.md](templates/user-story-template.md) (ports/adapters, test plan, binding criteria).
+- **`/assess-modernization`** starts the brownfield lane: legacy mapping, history mining, dependency inventory, translation gaps, and oracle probing.
+- **`/document-legacy`** recovers evidence-graded behavior, flows, purpose/domain language, and defect decisions before requirements harden.
+- **`/plan-port-story`** produces a port story using [templates/port-story-template.md](templates/port-story-template.md), including `Phase P`, `8b. Parity Plan`, and `Z8`.
+- **`/complete-port-story`** runs the normal story tail with `/verify-parity` inserted between review and QA.
 - **`/implement-story`** drives red-first implementation per [agents/implementer.md](agents/implementer.md).
 - **`/review-story`** is a soft gate (changed-surface audit) before QA; output gates Phase Z criterion **Z6**.
 - **`/qa-story`** validates acceptance criteria with evidence; failures loop through **`/fix-from-qa`**.
@@ -70,6 +74,21 @@ flowchart TD
 | [map-repo](commands/map-repo.md) | Auditor: system map into `audit-findings.md` |
 | [audit-all](commands/audit-all.md) | Full audit pipeline + triage |
 | [triage-audit-findings](commands/triage-audit-findings.md) | Reconcile fix-now vs defer |
+| [map-legacy](commands/map-legacy.md) | Archaeologist: legacy map |
+| [mine-history](commands/mine-history.md) | Archaeologist: intent ledger |
+| [inventory-dependencies](commands/inventory-dependencies.md) | Migration Strategist: dependency ledger |
+| [analyze-translation-gap](commands/analyze-translation-gap.md) | Migration Strategist: source-to-target gap register |
+| [build-oracle](commands/build-oracle.md) | Implementer: oracle probe or fixture/harness build |
+| [assess-modernization](commands/assess-modernization.md) | Migration Strategist: feasibility verdict and risk register |
+| [catalog-behavior](commands/catalog-behavior.md) | Archaeologist: `BEH-NNN` behavior artifacts |
+| [trace-flow](commands/trace-flow.md) | Archaeologist: legacy flow trace |
+| [recover-domain](commands/recover-domain.md) | Modeler: recovered purpose and domain model |
+| [ledger-defects](commands/ledger-defects.md) | Archaeologist: defect decisions ledger |
+| [document-legacy](commands/document-legacy.md) | Orchestrator: behavior, flow, domain, and defect recovery |
+| [plan-migration](commands/plan-migration.md) | Migration Strategist: staging, slice, cutover, and parity plan |
+| [plan-port-story](commands/plan-port-story.md) | Architect: modernization port story |
+| [verify-parity](commands/verify-parity.md) | QA: parity report for a port story |
+| [complete-port-story](commands/complete-port-story.md) | Orchestrator: implement/review/parity/QA/document/validate |
 
 Category audits: [audit-tooling](commands/audit-tooling.md), [audit-reliability](commands/audit-reliability.md), [audit-db](commands/audit-db.md), [audit-api-contracts](commands/audit-api-contracts.md), [audit-security](commands/audit-security.md), [audit-performance](commands/audit-performance.md), [audit-test-coverage](commands/audit-test-coverage.md).
 
@@ -85,6 +104,8 @@ Category audits: [audit-tooling](commands/audit-tooling.md), [audit-reliability]
 | QA | [agents/qa.md](agents/qa.md) |
 | Docs + PM | [agents/docs-pm.md](agents/docs-pm.md) |
 | Auditor | [agents/auditor.md](agents/auditor.md) |
+| Archaeologist | [agents/archaeologist.md](agents/archaeologist.md) |
+| Migration Strategist | [agents/migration-strategist.md](agents/migration-strategist.md) |
 
 ---
 
@@ -99,8 +120,20 @@ Category audits: [audit-tooling](commands/audit-tooling.md), [audit-reliability]
 | ADR | [templates/adr-template.md](templates/adr-template.md) |
 | Refined requirements | [templates/requirements-template.md](templates/requirements-template.md) |
 | User story | [templates/user-story-template.md](templates/user-story-template.md) |
+| Port story | [templates/port-story-template.md](templates/port-story-template.md) |
 | Full-repo audit report | [templates/audit-template.md](templates/audit-template.md) |
 | Per-story review | [templates/story-review-template.md](templates/story-review-template.md) |
+| Modernization assessment | [templates/modernization-assessment-template.md](templates/modernization-assessment-template.md) |
+| Legacy map | [templates/legacy-map-template.md](templates/legacy-map-template.md) |
+| Intent ledger | [templates/intent-ledger-template.md](templates/intent-ledger-template.md) |
+| Dependency ledger | [templates/dependency-ledger-template.md](templates/dependency-ledger-template.md) |
+| Translation gap analysis | [templates/translation-gap-template.md](templates/translation-gap-template.md) |
+| Oracle strategy | [templates/oracle-template.md](templates/oracle-template.md) |
+| Behavior catalog | [templates/behavior-catalog-template.md](templates/behavior-catalog-template.md) |
+| Legacy flow | [templates/legacy-flow-template.md](templates/legacy-flow-template.md) |
+| Defect ledger | [templates/defect-ledger-template.md](templates/defect-ledger-template.md) |
+| Migration plan | [templates/migration-plan-template.md](templates/migration-plan-template.md) |
+| Parity report | [templates/parity-report-template.md](templates/parity-report-template.md) |
 
 ---
 
@@ -118,5 +151,17 @@ Category audits: [audit-tooling](commands/audit-tooling.md), [audit-reliability]
 10. `/review-story FND-1` → fix blockers until gate **Pass**.
 11. `/qa-story FND-1` → if needed `/fix-from-qa FND-1` then re-`/qa-story`.
 12. `/document-story FND-1`
+
+## Typical session order (modernization)
+
+1. `/assess-modernization /path/to/legacy target: <target stack>` → `docs/modernization/ASSESSMENT.md` and assessment-phase ledgers.
+2. Human accepts the verdict (`go`, `go-with-conditions`, or `no-go`) and resolves any conditions needed to proceed.
+3. `/document-legacy @docs/modernization/ASSESSMENT.md` → behavior catalog, flow docs, recovered purpose/domain, defect ledger.
+4. Human accepts recovered documentation and records defect decisions.
+5. `/refine-feature @docs/modernization/behaviors/BEH-NNN-short-slug.md` → requirements with `Sn` scenario trace points.
+6. `/plan-migration @docs/modernization/ASSESSMENT.md @docs/requirements/` → migration plan and ADR triggers.
+7. `/design-application @docs/requirements/REQ-NNN-short-slug.md` and `/plan-project @docs/modernization/migration-plan.md`.
+8. `/plan-port-story STORY-ID BEH-NNN` → port story with `Phase P`, `8b. Parity Plan`, and `Z8`.
+9. `/complete-port-story STORY-ID` → implement, review, verify parity, QA, document, validate.
 
 Project files live in the **application repo**; this file documents commands that live under **`~/.cursor`**.

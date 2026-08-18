@@ -45,6 +45,17 @@ For each acceptance criterion in the story, determine whether it passes based on
 - If the review artifact is missing, lacks `MODEL-critical` / `MODEL-high` counts, or reports any high or critical `MODEL-#` finding, mark the criterion **FAIL** or **BLOCKED** and cite the review gap.
 - Do not infer model fidelity directly from requirements or tests. QA verifies the Auditor's model-fidelity gate result.
 
+## Parity mode
+
+When invoked by `/verify-parity` or when a story contains `Phase P: Parity`, verify the port against the configured oracle:
+
+- Read the story's `8b. Parity plan`, covered `BEH-NNN` artifacts, configured oracle doc, parity report template, defect ledger, and tolerance settings.
+- For every `P` criterion, run or inspect the exact oracle-vs-new comparison evidence cited by the story. Use the configured parity report path (default `docs/modernization/parity/{STORY-ID}-parity.md`) for detailed results.
+- Mark `PASS` only when the new output matches the legacy oracle within the stated tolerance and any mismatch is reconciled to a `DEF-NNN` decision.
+- Mark `FAIL` when the comparison proves an unreconciled mismatch.
+- Mark `BLOCKED` when fixtures are missing, the oracle tier cannot support the requested evidence, the tolerance is unspecified, or behavior provenance is `E4` / `E5` without a recorded decision.
+- Do not claim parity for a `T3 documented-only` oracle; report acceptance-data coverage instead.
+
 ## Evidence and command rules
 
 - Prefer the smallest-scope command that validates the criterion.

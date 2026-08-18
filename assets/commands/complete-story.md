@@ -2,6 +2,21 @@
 
 Orchestrates the tail of the SDLC for a single story after planning: implementation, review gate, QA verification, and documentation updates. Before acting, resolve the workflow profile (target project `.cursor/workflow.config.yml`, then user `~/.cursor/workflow.config.yml`) and use its command directory, story paths, review gate, QA result values, and status vocabulary. For each phase, read and follow the corresponding command spec under the configured command directory (defaults: `implement-story.md`, `review-story.md`, `qa-story.md`, `document-story.md`, `fix-from-qa.md`) as the source of truth for steps and rules.
 
+## Command-Agent Binding And Delegation
+
+Before executing the sequence, load the configured house rules, this command spec, and the active workflow profile. For each phase, read the phase command spec and its configured agent definition before acting:
+
+| Phase command | Agent binding |
+|---|---|
+| `/implement-story` | `agents.implementer` |
+| `/review-story` | `agents.auditor` |
+| `/qa-story` | `agents.qa` |
+| `/fix-from-qa` | `agents.implementer` |
+| `/document-story` | `agents.docsPm` |
+| `/validate-story` | `agents.qa` |
+
+When subagent delegation is available, run each phase in the configured role subagent and pass the story ID, active workflow profile, command spec, and loaded agent definition as binding context. If subagent delegation is unavailable, continue in the current chat only after loading the same agent definition and state in the output which phases used this fallback.
+
 ## Preconditions
 
 - A story document exists at the configured story glob in the **target project** (default `docs/features/{STORY-ID}-*.md`, typically produced by `/plan-story`).

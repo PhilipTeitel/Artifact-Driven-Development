@@ -2,6 +2,8 @@
 
 Read the existing test suite and changed code paths. Identify the highest-risk missing regression tests for currently implemented behavior and for the bug fixes under consideration. Before acting, resolve the workflow profile and use its configured audit file, audit template, auditor agent path, and finding prefixes.
 
+**Command-agent binding:** This command is role-bound to `agents.auditor`. Before executing any step, load the configured Auditor agent definition and follow it as binding role context.
+
 Read the configured audit file in the target repo root first and use it as the shared audit state. If it does not exist, create it from the configured audit template.
 
 ## Mode

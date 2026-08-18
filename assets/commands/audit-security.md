@@ -2,6 +2,8 @@
 
 Audit this codebase for concrete security defects in the running application. Focus on authentication, authorization, trust boundaries, tampering, injection risks, XSS, CSRF, SSRF, path traversal, unsafe deserialization, secrets exposure, weak token/session handling, replay flaws, repudiation risks (missing or spoofable audit trails), denial-of-service risks (resource exhaustion, brute force, or unbounded work), business-logic abuse, multi-tenant isolation failures, and sensitive logging. Before acting, resolve the workflow profile and use its configured audit file, audit template, and finding prefixes.
 
+**Command-agent binding:** This command is role-bound to `agents.auditor`. Before executing any step, load the configured Auditor agent definition and follow it as binding role context.
+
 Read the configured audit file in the target repo root first and use it as the shared audit state. If it does not exist, create it from the configured audit template.
 
 Update only:

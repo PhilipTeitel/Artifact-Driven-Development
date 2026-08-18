@@ -2,6 +2,8 @@
 
 This directs the Implementer to implement the given user story. Before acting, resolve the workflow profile and use its story paths, decisions directory, review gate, QA result values, and status vocabulary. The story document in the configured features directory (default `docs/features/`) is the spec — read it fully before writing any code. Also read every ADR linked from the story's **Linked architecture decisions** section.
 
+**Command-agent binding:** This command is role-bound to `agents.implementer`. Before executing any step, load the configured Implementer agent definition and follow it as binding role context.
+
 ## Steps
 
 1. Find the story document at the configured story glob (default `docs/features/{STORY-ID}-*.md`).

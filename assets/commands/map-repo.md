@@ -2,6 +2,8 @@
 
 Map this repository before auditing it. Before acting, resolve the workflow profile and use its configured audit file, audit template, stack defaults, and finding prefixes. Works for any stack — TypeScript (npm/pnpm workspaces, Turborepo, Nx), Python (poetry, pip, uv, monorepo or single package), Go modules, Rust workspaces, JVM (Maven/Gradle), polyglot, or single-package projects.
 
+**Command-agent binding:** This command is role-bound to `agents.auditor`. Before executing any step, load the configured Auditor agent definition and follow it as binding role context.
+
 Write the result to the configured audit file in the target repo root (default `audit-findings.md`) using the configured audit template (default `~/.cursor/templates/audit-template.md`) as a strict structure. If the audit file does not exist, create it from the template first. Preserve all template headings and heading order. If a section has no content yet, write `None yet.`. Fill in at least:
 - `Scope And Timebox` — including the `Scope` field (`whole-repo` | `package: <name>` | `paths: [<list>]`) and the detected stack(s)
 - `System Map`

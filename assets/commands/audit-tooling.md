@@ -2,6 +2,8 @@
 
 Audit this codebase for developer-tooling and delivery risks that could cause regressions or slow safe changes. Focus on tests, CI, scripts, build config, environment loading, type-check or static-analysis coverage, lint gaps, migration safety, release workflow issues, workspace orchestration (npm/pnpm/yarn workspaces, Turborepo, Nx, Cargo workspaces, Go workspaces, Python monorepo tooling, etc.), root vs package scripts, task filtering or caching, CI job-to-package mapping, and language-specific module/path drift (TypeScript project references and path aliases, Python `pyproject` namespace packages, Go module replace directives, Rust workspace path deps). Before acting, resolve the workflow profile and use its configured audit file, audit template, stack defaults, and finding prefixes.
 
+**Command-agent binding:** This command is role-bound to `agents.auditor`. Before executing any step, load the configured Auditor agent definition and follow it as binding role context.
+
 Read the configured audit file in the target repo root first and use it as the shared audit state. If it does not exist, create it from the configured audit template.
 
 Update only:

@@ -2,6 +2,8 @@
 
 Classify existing working-tree drift and reconcile it with a story document. Use this when a story has the configured complete status (default `Complete`) but there are tracked or untracked changes from debugging, polish, or follow-up work that are not reflected in the story documentation. Before acting, resolve the workflow profile and use its story glob, status vocabulary, workflow lanes, base branch defaults, and completion-ref strategy.
 
+**Command-agent binding:** This command is role-bound to `agents.docsPm`. Before executing any step, load the configured Docs-PM agent definition and follow it as binding role context.
+
 This command does **not** assume the drift is safe. It maps changed files to a workflow lane first, then either appends follow-up ledger entries, recommends `/patch-story`, or escalates to `/review-diff` / a new story.
 
 ## Inputs

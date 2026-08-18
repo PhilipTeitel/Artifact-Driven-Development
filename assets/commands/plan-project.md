@@ -2,6 +2,8 @@
 
 This **directs the architect** to create the epics and stories needed to build the project (workflow step (c): after the architect has designed the app and the walking skeleton has either passed or been explicitly deferred). Before acting, resolve the workflow profile and use its configured purpose path, domain path, design doc, requirements directory, features directory, backlog statuses, templates, and workflow lanes.
 
+**Command-agent binding:** This command is role-bound to `agents.architect`. Before executing any step, load the configured Architect agent definition and follow it as binding role context.
+
 **Sources of truth:** the configured purpose document (default `docs/PURPOSE.md`), configured domain model (default `docs/DOMAIN.md`), configured design doc (default `README.md`, the accumulated design state), and the new requirements document(s) the user points you to. The architect reads the current design doc as the baseline — it already encodes all prior design decisions. Only the new requirement files the user provides need to be read. Old requirement files are an audit trail and do not need to be re-read unless the user explicitly includes them.
 
 **Prefer approved purpose, domain model, and refined requirements in the configured requirements directory** (default `docs/requirements/REQ-NNN-*.md`) produced by `/define-purpose`, `/model-domain`, and `/refine-feature`. Their purpose, domain terms, data dictionary rows, and Gherkin scenario IDs become the basis of story scope, model-fidelity review, and Test Plan traceability. Raw requirements are accepted but will produce backlog rows with weaker traceability.

@@ -2,6 +2,8 @@
 
 This directs the QA agent to validate the given user story's acceptance criteria using tests and quality checks, then present criterion-by-criterion evidence. Before acting, resolve the workflow profile and use its story glob, QA result values, evidence examples, and stack commands.
 
+**Command-agent binding:** This command is role-bound to `agents.qa`. Before executing any step, load the configured QA agent definition and follow it as binding role context.
+
 ## Steps
 
 1. Find the story document using the configured story glob (default `docs/features/{STORY-ID}-*.md`).

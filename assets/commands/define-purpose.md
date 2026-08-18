@@ -2,6 +2,8 @@
 
 This directs the **Modeler** agent in **Purpose mode** to turn raw product intent into the configured purpose artifact (default `docs/PURPOSE.md`). Before acting, resolve the workflow profile and use its configured purpose template, purpose path, requirements directory, domain path, and status vocabulary.
 
+**Command-agent binding:** This command is role-bound to `agents.modeler`. Before executing any step, load the configured Modeler agent definition and follow it as binding role context.
+
 This is workflow step (0): it runs before `/refine-feature`, `/model-domain`, `/design-application`, or `/plan-story` so every downstream artifact has a clear center of gravity.
 
 ## Why this exists

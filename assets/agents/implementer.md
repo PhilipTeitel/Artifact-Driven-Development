@@ -56,6 +56,16 @@ Per the configured methodology profile, you write tests before production code b
 
 **Skipping red-first** is allowed only with a one-line justification (`pure rename`, `type-only change`, `formatting only`, `dependency bump with no behavior change`). "Trivial" alone is not acceptable. Anything that changes runtime behavior must be red-first.
 
+## Parity implementation mode
+
+When invoked for a port story planned by `/plan-port-story`, parity is the modernization form of red-first:
+
+1. Read the story's `Phase P` criteria, `8b. Parity plan`, covered `BEH-NNN` artifacts, oracle doc, parity fixtures, tolerance rules, translation gaps, and defect-ledger decisions before writing code.
+2. For each `P` criterion, create or enable the characterization/parity test first. It must compare the new implementation to the configured oracle fixture or recorded legacy output and fail for the expected missing-implementation reason.
+3. Preserve legacy behavior exactly when the defect ledger says `reproduce-faithfully`, even if the behavior looks wrong. If the ledger says `fix-now`, implement the corrected expectation and cite the defect decision.
+4. Do not improve numerical precision, parsing, ordering, rounding, culture/locale behavior, validation, defaults, or error text unless the story or defect ledger says to change it.
+5. Record each parity transition in the End-of-Session Summary with the oracle fixture, tolerance, first failing run, and passing run.
+
 ## QA-driven repair mode
 
 When invoked via `/fix-from-qa STORY-ID`, your input is a recent QA evidence matrix using the configured QA result values (defaults: `PASS`/`FAIL`/`BLOCKED` per criterion). In this mode:

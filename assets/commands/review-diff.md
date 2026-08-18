@@ -2,6 +2,8 @@
 
 This directs the **auditor** agent to run the same focused review as `/review-story` but against an **arbitrary git diff** instead of a single story's changed surface. Use it for PR-style reviews, branch comparisons, hotfixes, or post-hoc audits of work that wasn't tracked through the configured story workflow. Before acting, resolve the workflow profile and use its configured base branches, review template, diff review path, summary format, per-story categories, and gate.
 
+**Command-agent binding:** This command is role-bound to `agents.auditor`. Before executing any step, load the configured Auditor agent definition and follow it as binding role context.
+
 ## Why this exists
 
 `/review-story` is anchored to a story document (Section 7 file list, Section 8a test plan, Section 4b adapters). For changes that happened outside that flow — a hotfix branch, a vendored library import, a pre-existing PR — there's no story to anchor against. `/review-diff` performs the same reliability/security/api-contracts/test-coverage checks but uses the diff as the scope source.

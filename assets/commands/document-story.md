@@ -2,6 +2,8 @@
 
 This directs the Docs-PM to review the given story and update all related documentation. Before acting, resolve the workflow profile and use its story paths, design doc, docs paths, and status mapping. The story document in the configured features directory (default `docs/features/`) is the source of truth for status.
 
+**Command-agent binding:** This command is role-bound to `agents.docsPm`. Before executing any step, load the configured Docs-PM agent definition and follow it as binding role context.
+
 ## Steps
 
 1. Find the story document using the configured story glob (default `docs/features/{STORY-ID}-*.md`).

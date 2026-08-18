@@ -2,6 +2,8 @@
 
 This **directs the architect** in **Discovery / Refinement Mode** to take raw, ambiguous, or partial feature input and produce a refined requirements document with Gherkin acceptance scenarios. Before acting, resolve the workflow profile and use its configured purpose path, domain path, requirements template, requirements directory, naming pattern, scenario ID pattern, and status vocabulary.
 
+**Command-agent binding:** This command is role-bound to `agents.architect`. Before executing any step, load the configured Architect agent definition and follow it as binding role context.
+
 This is workflow step (a-prime): it runs **after** `/define-purpose` when purpose is available and **before** `/model-domain`, `/design-application`, or `/plan-project` so those steps consume a clean, unambiguous specification instead of raw notes.
 
 ## Why this exists

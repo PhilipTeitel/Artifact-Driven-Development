@@ -2,6 +2,8 @@
 
 Validate that a story document is structurally consistent with the configured story template (default `~/.cursor/templates/user-story-template.md`) and that its evidence, model-fidelity references, completion metadata, and post-complete follow-up ledger are coherent. Before acting, resolve the workflow profile and use its story glob, template path, purpose path, domain path, methodology, status vocabulary, QA values, review summary format, lane names, and reviews directory.
 
+**Command-agent binding:** This command is role-bound to `agents.qa`. Before executing any step, load the configured QA agent definition and follow it as binding role context.
+
 Use this as a lightweight quality gate after `/plan-story`, before `/implement-story`, after `/complete-story`, or after `/patch-story` / `/reconcile-story`.
 
 ## Inputs

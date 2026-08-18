@@ -39,6 +39,10 @@ Purpose lives in `docs/PURPOSE.md`. Domain language and data meaning live in `do
 
 Tests, changed files, the QA matrix, the review summary, the documentation diff — these are not paperwork. They are what turn "the model says it's done" into "here is the executable proof, per criterion." Without evidence, completion is a claim. With evidence, completion is a check.
 
+### Evidence has a grade.
+
+Brownfield modernization fails when inferred facts are laundered into requirements. Evidence grades make provenance inspectable: `E1 verified`, `E2 documented`, `E3 code-derived`, `E4 inferred`, and `E5 unknown` do not carry the same authority. The model can recover and organize weak evidence, but it cannot silently promote weak evidence into implementation-ready truth.
+
 ### Humans own the decisions that bind work.
 
 The agents do the work. The human approves the purpose, refined requirements, domain model, design and architecture decision records, walking skeleton, backlog, story spec, QA evidence, and documentation. Nine gates is more than zero gates. It is also fewer than the number of places where ad-hoc AI-assisted work usually requires backtracking.
@@ -52,6 +56,7 @@ It is worth being explicit about the limits.
 - **It does not eliminate review.** The auditor reduces the surface area a human reviewer must examine, but a human still owns the QA-acceptance and documentation-approval gates.
 - **It does not eliminate QA.** The QA matrix records evidence; a human still decides whether the evidence is good enough.
 - **It does not make purpose, domain, or architectural decisions.** The modeler and architect agents record and structure decisions; the human still owns whether those decisions are correct.
+- **It does not manufacture an oracle.** If the legacy system cannot be executed and only `T3 documented-only` evidence exists, parity is not independently provable. The methodology records that limit instead of hiding it behind confident language.
 - **It does not make AI "autonomous."** It makes AI more reviewable. The two are different, and the methodology takes the second goal seriously and treats the first with skepticism.
 - **It does not work without discipline.** A skipped gate, a silently substituted decision, or a story marked complete with unchecked criteria breaks the trace. The methodology gives the discipline somewhere to live; it does not replace the discipline itself.
 
@@ -70,6 +75,7 @@ A team using this methodology well should be able to answer, for any shipped sto
 - Which documentation surfaces were updated?
 - Who approved each gate?
 - What post-complete follow-ups happened, with what **Change ref** and **Review ref**?
+- For a port story, which legacy citation, evidence grade, oracle tier, fixture, tolerance, and defect decision justified the parity claim?
 
 If those answers are all in the story document and its linked artifacts, the methodology is doing its job. If any of them requires reading the model's chat transcript, something earlier broke and the trace needs to be repaired — often via `/reconcile-story` — before more work is layered on top.
 
@@ -80,5 +86,6 @@ If those answers are all in the story document and its linked artifacts, the met
 - [README.md](README.md) — start here if you arrived from outside.
 - [WORKFLOW-EXAMPLE.md](WORKFLOW-EXAMPLE.md) — a concrete artifact trace through the sample application.
 - [PROCESS.md](PROCESS.md) — the full lifecycle, stage by stage.
+- [MODERNIZATION.md](MODERNIZATION.md) — how the workflow handles legacy assessment, recovery, parity, and migration planning.
 - [BUILDING-BLOCKS.md](BUILDING-BLOCKS.md) — the composable pieces and how they wire together.
 - [TRACEABILITY.md](TRACEABILITY.md) — how intent flows through artifacts to evidence.

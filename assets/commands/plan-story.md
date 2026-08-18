@@ -2,6 +2,8 @@
 
 This directs the Architect to plan and create a checklist for completing the given user story. Before acting, resolve the workflow profile and use its configured purpose path, domain path, features directory, story file pattern, templates, decisions directory, requirements directory, methodology settings, and design doc. The output will be a document in the configured features directory (default `docs/features`) following the configured story template (default `~/.cursor/templates/user-story-template.md`).
 
+**Command-agent binding:** This command is role-bound to `agents.architect`. Before executing any step, load the configured Architect agent definition and follow it as binding role context.
+
 Before writing, read the configured story template and follow it exactly. Every section in the template is required. If a section does not apply, keep the heading and state why. **Acceptance Criteria Checklist:** each criterion must use markdown checkboxes (`- [ ] **A1** — ...`) so they can be checked off — not plain bullets.
 
 **ADRs:** Read the configured ADR template. If the story touches a binding integration boundary (persistence, embeddings/vectors, auth, in-proc vs network, named dependencies) and no **Accepted** ADR exists, create an ADR in the configured decisions directory using the configured ADR naming pattern in the **target project**, then link it from the story and configured design doc summary. If the design doc, requirements, and ADRs disagree, **stop** and output a **Tensions / conflicts** list — do not write an implementation-ready story until the user resolves it (unless the story is explicitly a **spike** using only **Proposed** ADRs and the profile allows that).

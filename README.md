@@ -36,6 +36,8 @@ Prompts are ephemeral. They explain what someone wanted in the moment. A prompt 
 
 The result is software development where the AI is fast, but the work is still reviewable, traceable, and grounded in engineering discipline.
 
+The same model also supports brownfield modernization: porting an existing application to a new language, framework, architecture, or operating model. In that lane, the workflow first examines the legacy system, grades the evidence behind recovered behavior, records parity and defect decisions, and then rejoins the normal story lifecycle.
+
 ---
 
 ## Core concepts
@@ -68,9 +70,9 @@ Evidence is the proof that an artifact was satisfied: the tests that ran, the fi
 
 | Block    | What it manages | Purpose                                                              | Examples                                                                                                       |
 | -------- | --------------- | -------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------- |
-| Agent    | Concern         | Defines role, responsibilities, and judgment                         | modeler, architect, implementer, auditor, QA, documenter                                                       |
-| Command  | Control         | Invokes one workflow step with specific instructions and constraints | `/define-purpose`, `/model-domain`, `/plan-skeleton`, `/plan-story`, `/qa-story`                               |
-| Template | Output shape    | Defines what an acceptable artifact must contain                     | purpose, domain model, requirements, architecture decision record, user-story, story-review, audit             |
+| Agent    | Concern         | Defines role, responsibilities, and judgment                         | modeler, architect, implementer, auditor, QA, documenter, archaeologist, migration strategist                  |
+| Command  | Control         | Invokes one workflow step with specific instructions and constraints | `/define-purpose`, `/model-domain`, `/plan-skeleton`, `/plan-story`, `/qa-story`, `/assess-modernization`      |
+| Template | Output shape    | Defines what an acceptable artifact must contain                     | purpose, domain model, requirements, architecture decision record, user-story, port-story, story-review, audit |
 | Artifact | —               | Durable output used by later steps                                   | purpose document, domain model, requirements document, architecture decision record, story spec, review report |
 | Evidence | —               | Proof a criterion was satisfied                                      | tests, changed files, QA matrix, review summary                                                                |
 | Gate     | —               | Decision point: continue, return for repair, or escalate             | review Pass/Block, QA PASS/FAIL/BLOCKED, human approvals                                                       |
@@ -82,6 +84,21 @@ See [BUILDING-BLOCKS.md](BUILDING-BLOCKS.md) for the deep dive and the compositi
 ## High-level process
 
 The lifecycle is a swim-lane flow across the human and the agents. Each agent owns a specific kind of judgment. The human owns the decisions that bind the work.
+
+The normal path starts from an idea and moves through purpose, requirements, domain, design, skeleton, backlog, and stories. A modernization path starts from a legacy application, adds assessment and recovery work, and then rejoins the same delivery workflow.
+
+```mermaid
+flowchart LR
+    idea["Raw idea"] --> standardLifecycle["Standard lifecycle"]
+    legacy["Legacy application"] --> assess["Assess modernization"]
+    assess --> recover["Recover behavior and domain"]
+    recover --> planMigration["Plan migration"]
+    planMigration --> portStories["Plan port stories"]
+    standardLifecycle --> delivery["Implement, review, QA, document"]
+    portStories --> delivery
+```
+
+The detailed diagram below shows the standard lifecycle. See [MODERNIZATION.md](MODERNIZATION.md) for the brownfield assessment, recovery, parity, and migration-planning lane.
 
 ```mermaid
 flowchart TD
@@ -187,6 +204,8 @@ The methodology rests on a few principles. All documentation points back to one 
 - **Epics and stories organize delivery.** They turn a design into a sequence of shippable work.
 - **Story specs turn intent into implementation-ready instructions.** They are the central handoff artifact.
 - **Tests, model-fidelity review, QA evidence, and documentation close the loop.** They prove the intent was delivered and the code still mirrors the domain model.
+- **Legacy behavior is evidence, not automatically requirement.** Brownfield work grades each recovered fact by source and keeps conflicts visible until a human decision resolves them.
+- **Parity confidence cannot exceed the oracle tier.** If the legacy system cannot be executed, the workflow says so and limits parity claims to recorded or documented expectations.
 
 See [TRACEABILITY.md](TRACEABILITY.md) for how each of these artifacts feeds the next, and what every story must make answerable.
 
@@ -197,6 +216,7 @@ See [TRACEABILITY.md](TRACEABILITY.md) for how each of these artifacts feeds the
 - [SETUP.md](SETUP.md) — install the agents, commands, templates, and workflow profile on a machine running Cursor.
 - [WORKFLOW-EXAMPLE.md](WORKFLOW-EXAMPLE.md) — a concrete walkthrough from informal idea to completed story evidence using the sample application.
 - [PROCESS.md](PROCESS.md) — the full lifecycle stage by stage, with human gates.
+- [MODERNIZATION.md](MODERNIZATION.md) — the brownfield modernization lane for legacy assessment, recovery, parity, and migration planning.
 - [BUILDING-BLOCKS.md](BUILDING-BLOCKS.md) — agents, commands, templates, artifacts, evidence, gates, and the composition matrix.
 - [ROLES.md](ROLES.md) — what each agent owns and how work hands off.
 - [TRACEABILITY.md](TRACEABILITY.md) — how intent flows through artifacts to evidence.

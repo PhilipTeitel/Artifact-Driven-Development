@@ -66,14 +66,14 @@ Evidence is the proof that an artifact was satisfied: the tests that ran, the fi
 
 ## Building blocks at a glance
 
-| Block | What it manages | Purpose | Examples |
-|---|---|---|---|
-| Agent | Concern | Defines role, responsibilities, and judgment | modeler, architect, implementer, auditor, QA, documenter |
-| Command | Control | Invokes one workflow step with specific instructions and constraints | `/define-purpose`, `/model-domain`, `/plan-skeleton`, `/plan-story`, `/qa-story` |
-| Template | Output shape | Defines what an acceptable artifact must contain | purpose, domain model, requirements, architecture decision record, user-story, story-review, audit |
-| Artifact | — | Durable output used by later steps | purpose document, domain model, requirements document, architecture decision record, story spec, review report |
-| Evidence | — | Proof a criterion was satisfied | tests, changed files, QA matrix, review summary |
-| Gate | — | Decision point: continue, return for repair, or escalate | review Pass/Block, QA PASS/FAIL/BLOCKED, human approvals |
+| Block    | What it manages | Purpose                                                              | Examples                                                                                                       |
+| -------- | --------------- | -------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------- |
+| Agent    | Concern         | Defines role, responsibilities, and judgment                         | modeler, architect, implementer, auditor, QA, documenter                                                       |
+| Command  | Control         | Invokes one workflow step with specific instructions and constraints | `/define-purpose`, `/model-domain`, `/plan-skeleton`, `/plan-story`, `/qa-story`                               |
+| Template | Output shape    | Defines what an acceptable artifact must contain                     | purpose, domain model, requirements, architecture decision record, user-story, story-review, audit             |
+| Artifact | —               | Durable output used by later steps                                   | purpose document, domain model, requirements document, architecture decision record, story spec, review report |
+| Evidence | —               | Proof a criterion was satisfied                                      | tests, changed files, QA matrix, review summary                                                                |
+| Gate     | —               | Decision point: continue, return for repair, or escalate             | review Pass/Block, QA PASS/FAIL/BLOCKED, human approvals                                                       |
 
 See [BUILDING-BLOCKS.md](BUILDING-BLOCKS.md) for the deep dive and the composition matrix showing which agent, command, and template combine to produce each artifact.
 

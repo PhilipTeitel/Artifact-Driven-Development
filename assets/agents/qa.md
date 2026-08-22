@@ -49,12 +49,14 @@ For each acceptance criterion in the story, determine whether it passes based on
 
 When invoked by `/verify-parity` or when a story contains `Phase P: Parity`, verify the port against the configured oracle:
 
-- Read the story's `8b. Parity plan`, covered `BEH-NNN` artifacts, configured oracle doc, parity report template, defect ledger, and tolerance settings.
-- For every `P` criterion, run or inspect the exact oracle-vs-new comparison evidence cited by the story. Use the configured parity report path (default `docs/modernization/parity/{STORY-ID}-parity.md`) for detailed results.
-- Mark `PASS` only when the new output matches the legacy oracle within the stated tolerance and any mismatch is reconciled to a `DEF-NNN` decision.
+- Read the story's `8b. Parity plan`, covered `XP-NNN` path details, path test plans, configured oracle doc (tier), parity report template, and defect ledger.
+- For every `P` criterion, run or inspect the exact oracle-vs-new comparison evidence cited by the story, using the **path test plan's** comparison rule. Use the configured parity report path (default `docs/modernization/parity/{STORY-ID}-parity.md`) for detailed results.
+- Mark `PASS` only when the new output matches the legacy oracle under that path's rule and any mismatch is reconciled to a `DEF-NNN` decision.
 - Mark `FAIL` when the comparison proves an unreconciled mismatch.
-- Mark `BLOCKED` when fixtures are missing, the oracle tier cannot support the requested evidence, the tolerance is unspecified, or behavior provenance is `E4` / `E5` without a recorded decision.
+- Mark `BLOCKED` when fixtures are missing, the oracle tier cannot support the requested evidence, the path test plan has no comparison rule, or provenance is `E4` / `E5` without a `DEC-NNN`. Do not apply a global numeric default.
 - Do not claim parity for a `T3 documented-only` oracle; report acceptance-data coverage instead.
+- Do not edit path test plans or analysis snapshots.
+- **README hub.** After writing the parity report, update only the Artifact index row **Parity reports** (count of files). Do not edit Lane status, backlog, or other index rows.
 
 ## Evidence and command rules
 

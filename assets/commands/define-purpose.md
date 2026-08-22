@@ -31,6 +31,7 @@ The user must point to source material. The Modeler does not assume a path.
 4. Ask the user to resolve contradictions or purpose-level gaps that would change downstream design.
 5. Write or update the configured purpose artifact (default `docs/PURPOSE.md`).
 6. Leave unresolved purpose questions under **Open purpose questions**. Those questions block downstream work for the affected scope.
+7. **README hub.** If `## Modernization` exists, update only the Artifact index row **Purpose**. Do not create a Modernization section from this command; `/assess-modernization` does that. Do not edit Lane status.
 
 ## Hard rules
 

@@ -4,7 +4,7 @@ This document walks through the full story lifecycle from a raw idea to a shippe
 
 The lifecycle separates **agent actions** (commands run by an agent) from **artifacts** (durable outputs that become context for the next step). The human owns the decisions that bind work between steps.
 
-The nine gates below describe the standard greenfield path. Brownfield modernization adds an upstream assessment and recovery lane, then rejoins this lifecycle through recovered purpose/domain artifacts, migration planning, port stories, parity verification, QA, and documentation. See [MODERNIZATION.md](MODERNIZATION.md).
+The nine gates below describe the standard greenfield path. Brownfield modernization adds an upstream assessment and then slice-scoped recovery, then rejoins this lifecycle through recovered purpose/domain artifacts, migration planning, port stories, parity verification, QA, and documentation. See [MODERNIZATION.md](MODERNIZATION.md).
 
 For everything that happens *after* a story is complete — small follow-ups, hotfixes, audits, drift reconciliation — see [POST-STORY.md](POST-STORY.md).
 
@@ -125,7 +125,7 @@ Each stage names its primary inputs, the agent action, the artifact produced, th
 - **Human gate.** None — this is mechanical setup.
 - **Exit.** A repository ready to accept refined requirements.
 
-Skip this stage when working in an existing project that already has a README and `docs/` layout.
+Skip this stage when working in an existing project that already has a README and `docs/` layout. For a brownfield port, `/assess-modernization` creates the README if it is missing, including `## Modernization`, and leaves design sections out until `/design-application`. Greenfield init omits `## Modernization`.
 
 ### 1. `/define-purpose`
 
@@ -155,7 +155,7 @@ Skip this stage when working in an existing project that already has a README an
 
 - **Inputs.** Approved purpose, domain model, and refined requirements.
 - **Agent.** Architect.
-- **Artifact.** Updated project `README` design section (architecture, stack, API contract, environment variables, setup, UI structure) plus any architecture decision records needed for binding technical decisions.
+- **Artifact.** Updated project `README` design section (architecture, stack, API contract, environment variables, setup, UI structure) plus any architecture decision records needed for binding technical decisions. On a modernization repo, preserve `## Modernization` and the Artifact index; add design after the hub rather than replacing the file.
 - **Human gate.** **Gate 4: Approve design and architecture decision records.**
 - **Exit.** An approved design that the walking skeleton can prove before backlog planning.
 
@@ -211,7 +211,7 @@ Review focuses on the changed surface: reliability, security, API contracts, tes
 
 ### 10. `/verify-parity` (port stories only)
 
-- **Inputs.** A completed port story with `Phase P`, `## 8b. Parity Plan`, linked `BEH-NNN` artifacts, oracle references, tolerances, and defect-ledger decisions.
+- **Inputs.** A completed port story with `Phase P`, `## 8b. Parity Plan`, linked `XP-NNN` path details and test plans, oracle references, per-path comparison rules, and defect-ledger decisions.
 - **Agent.** QA.
 - **Artifact.** `docs/modernization/parity/{STORY-ID}-parity.md`, whose first non-comment line is `PARITY SUMMARY:`.
 - **Human gate.** Supports modernization **Gate M5: Accept parity evidence** before the normal QA-evidence gate.
@@ -246,7 +246,7 @@ Documentation updates are driven by the story source of truth. The documenter do
 
 | Mode | When to run | What it checks |
 |---|---|---|
-| `ready` | After `/plan-story` or `/plan-port-story`, before Gate 7 approval | Required sections, domain touchpoints, AC `Evidence:` lines, test plan coverage of every AC ID, model-fidelity `Z7`, port/adapter contract and integration test rows, Phase Y `(binding)` criteria; for port stories, no unresolved covered `E4` / `E5`, `Phase P`, `Covers BEH`, `8b. Parity Plan`, and `Z8` |
+| `ready` | After `/plan-story` or `/plan-port-story`, before Gate 7 approval | Required sections, domain touchpoints, AC `Evidence:` lines, test plan coverage of every AC ID, model-fidelity `Z7`, port/adapter contract and integration test rows, Phase Y `(binding)` criteria; for port stories, no unresolved covered `E4` / `E5`, slice prerequisites resolved, `Phase P`, `Covers XP`, `8b. Parity Plan`, and `Z8` |
 | `complete` | After `/document-story`, before Gate 9 approval | All criteria checked, Completion Metadata filled, review summary starts with `REVIEW SUMMARY:` and includes model-fidelity counts, QA result shows all PASS; for port stories, parity ref points to a passing parity report |
 | `followups` | After `/patch-story` or `/reconcile-story` appends ledger rows | Each follow-up row has sequential ID, date, allowed change class, files touched, verification (or justified `TBD`), **Change ref**, **Review ref**, and AC impact |
 | *(default)* | Any time | All checks applicable to the story's current status |
@@ -267,12 +267,13 @@ Output is a Story Validation Matrix with `PASS` / `FAIL` / `BLOCKED` per check.
 | `/plan-skeleton` | Purpose, domain model, design, architecture decision records | Walking-skeleton story | Gate 5 after implementation/review/QA |
 | `/plan-project` | Design, requirements, accepted skeleton | Backlog epics and story rows | Gate 6 |
 | `/plan-story` | Purpose, domain model, requirements, design, architecture decision records, backlog | `docs/features/{STORY-ID}-*.md` | Gate 7 |
-| `/plan-port-story` | Purpose, domain model, requirements, design, architecture decision records, migration plan, behavior catalog, oracle, defect ledger | `docs/features/{STORY-ID}-*.md` with `Phase P`, `8b. Parity Plan`, and `Z8` | Gate 7 plus modernization readiness |
+| `/plan-path-tests` | Path detail, requirements, oracle, defect ledger | `docs/modernization/test-plans/XP-NNN-tests.md` | — |
+| `/plan-port-story` | Purpose, domain model, requirements, design, architecture decision records, migration plan, path details, path test plans, decision register, oracle, defect ledger | `docs/features/{STORY-ID}-*.md` with slice prerequisites, `Phase P`, `8b. Parity Plan`, and `Z8` | Gate 7 plus modernization readiness |
 | `/validate-story ready` | Story document | Readiness validation (sections, domain touchpoints, AC evidence, test plan, model-fidelity gate, ports/adapters) | (supports Gate 7) |
 | `/validate-story followups` | Completed story with ledger rows | Follow-up ledger validation (`Change ref`, `Review ref`, change class) | (supports post-story lanes) |
 | `/implement-story` | Story spec and architecture decision records | Code, tests, updated story status | — |
 | `/review-story` | Story, purpose/domain artifacts, and changed surface | Review artifact (`Pass`/`Block`) including model fidelity | — |
-| `/verify-parity` | Port story, oracle, behavior artifacts, defect ledger | Parity report with `PARITY SUMMARY:` | M5 |
+| `/verify-parity` | Port story, path test plans, oracle, path details, defect ledger | Parity report with `PARITY SUMMARY:` | M5 |
 | `/qa-story` | Story criteria and evidence | Criterion evidence matrix | Gate 8 |
 | `/fix-from-qa` | Failed or blocked criteria | Targeted fix | — |
 | `/document-story` | Completed story, metadata, ledger | Documentation updates | Gate 9 |

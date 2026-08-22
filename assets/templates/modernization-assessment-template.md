@@ -1,8 +1,11 @@
 <!-- Modernization assessment contract:
-- Preserve headings and order.
-- Use configured evidence grades for all facts.
-- Use configured assessment statuses only: go, go-with-conditions, no-go.
-- If a section has no content yet, write `None yet.`.
+- This is the five-minute document. A reader should understand scope and risk without opening the inventories.
+- Preserve headings and order. Omit a section only when the INCLUDE WHEN comment says to.
+- Verdict uses configured statuses only: go, go-with-conditions, no-go.
+- Conditions and blockers name the first slice, not global unresolved counts.
+- Cite PATH / DEP / IMP / RISK / DEC IDs. Do not restate their tables.
+- One evidence grade per claim.
+- Current state lives in cells. No prose changelog.
 -->
 
 # Modernization Assessment
@@ -13,77 +16,75 @@
 **Date:** `{YYYY-MM-DD}`
 **Verdict:** `{go | go-with-conditions | no-go}`
 **Oracle tier:** `{T1 executable | T2 recorded | T3 documented-only}`
+**Owner:** Migration Strategist (`/assess-modernization`)
+
+## Summary
+
+{One paragraph: what the legacy system is, whether the port is feasible, oracle tier, the candidate first slice (`XP-NNN` IDs), and the conditions that bind *that* slice. End with where to look next (usually the migration plan or a DEC ID).}
 
 ---
 
-## 1. Executive summary
+## 1. Scope snapshot
 
-{One-page summary of feasibility, confidence, highest blockers, and required conditions.}
+| Item | Count / value | Where the detail lives |
+|------|---------------|------------------------|
+| Active execution paths | `{N}` | Path inventory |
+| Suspected-dead / unknown / retired | `{N}` | Path inventory appendix |
+| Dependencies | `{N}` (`no-route` `{N}`, `undecided` `{N}`) | Dependency inventory |
+| Highest-severity impedance | `{IMP-NNN or none}` | Impedance analysis |
+| Oracle tier | `{T1/T2/T3}` | Oracle strategy |
+| Candidate first slice | `{XP-NNN, …}` | Will be the first migration-plan row |
 
-## 2. Evidence consumed
+## 2. Feasibility verdict
 
-| Source | Type | Coverage | Evidence grade | Notes |
-|--------|------|----------|----------------|-------|
-| `{path}` | `{docs/code/release-notes/history/run output}` | `{scope}` | `{E1/E2/E3/E4/E5}` | `{notes}` |
+| Dimension | Result | Condition if not pass |
+|-----------|--------|------------------------|
+| Setup and runnability | `{pass/conditional/fail}` | `{condition or none}` |
+| Path inventory completeness | `{pass/conditional/fail}` | `{condition or none}` |
+| First-slice dependency routes | `{pass/conditional/fail}` | `{DEP-NNN / DEC-NNN that bind the first slice}` |
+| Impedance for first slice | `{pass/conditional/fail}` | `{IMP-NNN}` |
+| Oracle and parity | `{pass/conditional/fail}` | `{tier consequence}` |
+| Security containment | `{pass/conditional/fail}` | `{condition or none}` |
 
-## 3. Feasibility verdict
+Do not fail a dimension because *other* paths have unresolved dependencies.
 
-| Dimension | Result | Evidence | Decision / condition |
-|-----------|--------|----------|----------------------|
-| Setup and runnability | `{pass/conditional/fail}` | `{citation}` | `{condition}` |
-| Documentation adequacy | `{pass/conditional/fail}` | `{citation}` | `{condition}` |
-| Dependency viability | `{pass/conditional/fail}` | `{citation}` | `{condition}` |
-| Translation gap | `{pass/conditional/fail}` | `{citation}` | `{condition}` |
-| Oracle and parity | `{pass/conditional/fail}` | `{citation}` | `{condition}` |
-| Security containment | `{pass/conditional/fail}` | `{citation}` | `{condition}` |
-| Planning confidence | `{pass/conditional/fail}` | `{citation}` | `{condition}` |
+## 3. Risk register
 
-## 4. Risk register
+| ID | Risk | Likelihood | Impact | Evidence | Mitigation | Owner | Retire when |
+|----|------|------------|--------|----------|------------|-------|-------------|
+| RISK-NNN | `{risk}` | `{low/medium/high}` | `{low/medium/high}` | `{grade}` `{citation}` | `{mitigation}` | `{owner}` | `{condition}` |
 
-| ID | Risk | Likelihood | Impact | Evidence | Mitigation | Owner | Condition to lower/retire |
-|----|------|------------|--------|----------|------------|-------|---------------------------|
-| RISK-NNN | `{risk}` | `{low/medium/high}` | `{low/medium/high}` | `{grade + citation}` | `{mitigation}` | `{owner}` | `{condition}` |
+Keep only risks that affect the verdict or the first slice. Later-slice risks belong in that slice's prerequisite table.
 
-## 5. Obstacles and blockers
+## 4. Conditions to start the first slice
 
-| Obstacle | Severity | Evidence | Affected phase | Required decision |
-|----------|----------|----------|----------------|-------------------|
-| `{obsolete dependency / unstructured code / security isolation / missing docs}` | `{critical/high/medium/low}` | `{grade + citation}` | `{assessment/recovery/design/implementation/UAT}` | `{decision}` |
+- [ ] `{condition, citing DEP-NNN / DEC-NNN / RISK-NNN}`
 
-## 6. Walking-skeleton feasibility
+Global unresolved items that do not bind the first slice are not listed here.
+
+## 5. Walking-skeleton feasibility
 
 **Result:** `{normal skeleton viable | black-box first slice required | no executable slice yet}`
 
-- **Evidence:**
-- **Smallest useful executable path:**
-- **If black-box first slice is required, why:**
-- **Conditions to revisit skeleton planning:**
+- **Smallest useful executable path:** `{XP-NNN}`
+- **Why this result:** `{one to three sentences}`
+- **Revisit when:** `{condition}`
 
-## 7. Oracle classification
+## 6. Tensions
 
-| Tier | Selected? | Evidence | Consequence |
-|------|-----------|----------|-------------|
-| T1 executable | `{yes/no}` | `{citation}` | Legacy-vs-new parity can run repeatedly. |
-| T2 recorded | `{yes/no}` | `{citation}` | Use frozen fixture corpus; cannot assume repeated legacy execution. |
-| T3 documented-only | `{yes/no}` | `{citation}` | Parity is not independently provable; require user acceptance data. |
+Cite the canonical row. Do not restate the conflict.
 
-## 8. Conditions to proceed
+| Canonical ID | Kind | Required resolution |
+|--------------|------|---------------------|
+| `{XP-NNN / DEP-NNN / IMP-NNN / DEF-NNN}` | `{docs vs code / owner decision / no-route}` | `{question}` |
 
-- [ ] `{condition}`
+Write `None.` when the assessment introduces no new tension.
 
-## 9. Tensions / conflicts
+## Links
 
-| Conflict | Sources | Impact | Required resolution |
-|----------|---------|--------|---------------------|
-| `{docs vs code vs run output}` | `{citations}` | `{impact}` | `{question/decision}` |
-
-## 10. Links
-
-- Legacy map: `{legacyMapDoc}`
-- Intent ledger: `{intentLedgerDoc}`
-- Dependency ledger: `{dependencyLedgerDoc}`
-- Translation gaps: `{translationGapDoc}`
+- Path inventory: `{pathInventoryDoc}`
+- Dependency inventory: `{dependencyInventoryDoc}`
+- Dependency graph: `{dependencyGraphDoc}`
+- Impedance analysis: `{impedanceDoc}`
 - Oracle: `{oracleDoc}`
-- Defect ledger: `{defectLedgerDoc}`
-
-*Created: {YYYY-MM-DD} | Source stack: {sourceStack} | Target stack: {targetStack}*
+- Decision register: `{decisionRegisterDoc}`

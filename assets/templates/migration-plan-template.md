@@ -1,7 +1,11 @@
 <!-- Migration plan contract:
-- The accepted assessment, oracle tier, translation gaps, and defect ledger are binding inputs.
+- Staging, slice order, and per-slice prerequisites. Global inventories do not gate a slice.
+- Each slice row names only the DEP-NNN, DEC-NNN, and DEF-NNN IDs that bind that slice.
+- Check off resolved prerequisites in the slice row or port story, not in analysis snapshots.
+- Later slices may be inventory XP IDs until /trace-path has run for them.
 - Forecast confidence must be recalibrated after the first completed slice.
-- If a section has no content yet, write `None yet.`.
+- Current state lives in cells. No prose changelog.
+- Recommend ADRs; do not take over Architect-owned ADR files.
 -->
 
 # Migration Plan
@@ -11,52 +15,66 @@
 **Target stack:** `{targetStack}`
 **Strategy:** `{strangler | phased-rewrite | big-bang-parallel-run}`
 **Date:** `{YYYY-MM-DD}`
+**Owner:** Migration Strategist (`/plan-migration`)
+
+## Summary
+
+{One paragraph: chosen strategy, first slice and its prerequisites, oracle implication, and the next command (usually `/document-legacy` scoped to the first slice's XP IDs).}
 
 ---
 
 ## 1. Strategy decision
 
-| Strategy | Selected? | Why / why not | Evidence | ADR |
-|----------|-----------|---------------|----------|-----|
-| strangler | `{yes/no}` | `{reason}` | `{grade + citation}` | `{ADR-NNN/TBD}` |
-| phased-rewrite | `{yes/no}` | `{reason}` | `{grade + citation}` | `{ADR-NNN/TBD}` |
-| big-bang-parallel-run | `{yes/no}` | `{reason}` | `{grade + citation}` | `{ADR-NNN/TBD}` |
+| Strategy | Selected? | Why / why not | ADR |
+|----------|-----------|---------------|-----|
+| strangler | `{yes/no}` | `{reason}` | `{ADR-NNN/TBD/none}` |
+| phased-rewrite | `{yes/no}` | `{reason}` | `{ADR-NNN/TBD/none}` |
+| big-bang-parallel-run | `{yes/no}` | `{reason}` | `{ADR-NNN/TBD/none}` |
 
 ## 2. Binding assumptions
 
 | Assumption | Source | Risk if wrong | Validation |
 |------------|--------|---------------|------------|
-| `{assumption}` | `{assessment/ADR/REQ/BEH}` | `{risk}` | `{proof}` |
+| `{assumption}` | `{DEC-NNN / ADR-NNN / ASSESSMENT}` | `{risk}` | `{proof}` |
 
 ## 3. Slice plan
 
-| Slice | Objective | Covered BEH / Sn | Dependencies | Structure fidelity | Oracle evidence | Exit criteria | Forecast |
-|-------|-----------|------------------|--------------|--------------------|-----------------|---------------|----------|
-| `{STORY-ID}` | `{objective}` | `{BEH-NNN / S1}` | `{deps}` | `{preserve-then-refactor/refactor-now}` | `{FIX-NNN/T3 acceptance data}` | `{criteria}` | `{size/confidence}` |
+Each slice follows recover → refine → design → implement → UAT. A slice may start when **its** prerequisites are resolved, even if other slices still have open `undecided` dependencies.
 
-## 4. Architecture and ADR implications
+| Slice | Objective | XP IDs | Prerequisites | Structure fidelity | Oracle evidence | Exit criteria | Forecast |
+|-------|-----------|--------|---------------|--------------------|-----------------|---------------|----------|
+| `{STORY-ID or slice name}` | `{objective}` | `{XP-NNN}` | `{DEP-NNN / DEC-NNN / DEF-NNN + resolved/unresolved}` | `{preserve-then-refactor/refactor-now}` | `{FIX-NNN / T3 data / TBD until test plan}` | `{criteria}` | `{size/confidence}` |
 
-| Decision | ADR | Status | Affected slices | Notes |
-|----------|-----|--------|-----------------|-------|
-| `{target stack / process boundary / persistence / integration / cutover}` | `{ADR-NNN}` | `{Proposed/Accepted/TBD}` | `{STORY-ID}` | `{notes}` |
+Prerequisites list only IDs that bind this slice. Do not paste global blocker counts.
 
-## 5. Cutover and coexistence
+## 4. Per-slice ADD loop
 
-| Concern | Plan | Rollback | Evidence / owner |
-|---------|------|----------|------------------|
-| `{routing/data sync/batch window/manual fallback}` | `{plan}` | `{rollback}` | `{evidence/owner}` |
+| Slice | Recover | Refine | Design | Implement | UAT / parity |
+|-------|---------|--------|--------|-----------|--------------|
+| `{slice}` | `/trace-path` `{XP-NNN}` | `/refine-feature` | `{ADR / design delta or none}` | `/plan-port-story` then `/complete-port-story` | `/verify-parity` + human M5 |
 
-## 6. Data and parity strategy
+## 5. Recommended ADRs
 
-| Data / behavior | Legacy source | New source | Comparison | Tolerance | Defect policy |
-|-----------------|---------------|------------|------------|-----------|---------------|
-| `{BEH/data}` | `{source}` | `{source}` | `{method}` | `{rule}` | `{DEF-NNN/none}` |
+| Decision | Suggested ADR | Status | Affected slices |
+|----------|---------------|--------|-----------------|
+| `{target stack / process boundary / persistence / integration / cutover}` | `{ADR-NNN or title}` | `{recommended / Proposed / Accepted}` | `{slice}` |
+
+Architect writes or accepts ADR files. This table is a trigger list.
+
+<!-- INCLUDE WHEN cutover, coexistence, or rollback is a real project concern.
+     OMIT ENTIRELY for a library port with no live cutover. -->
+
+## 6. Cutover and coexistence
+
+| Concern | Plan | Rollback | Owner |
+|---------|------|----------|-------|
+| `{routing / data sync / batch window / manual fallback}` | `{plan}` | `{rollback}` | `{owner}` |
 
 ## 7. Forecast and recalibration
 
-| Milestone | Initial estimate | Confidence | Evidence | Recalibration trigger |
-|-----------|------------------|------------|----------|-----------------------|
-| `{milestone}` | `{estimate}` | `{low/medium/high}` | `{basis}` | `{first completed slice / parity defect rate}` |
+| Milestone | Initial estimate | Confidence | Recalibration trigger |
+|-----------|------------------|------------|-----------------------|
+| `{first slice / remaining inventory}` | `{estimate}` | `{low/medium/high}` | `{first completed slice / parity defect rate}` |
 
 ## 8. Deferred modernization debt
 
@@ -64,16 +82,12 @@
 |-----------|-------------------------|------------------|--------------|
 | `{legacy structure}` | `{reason}` | `{trigger}` | `{story/TBD}` |
 
-## 9. Open decisions
+Write `None.` when the first slices do not preserve debt on purpose.
 
-- [ ] `{decision}`
-
-## 10. Links
+## Links
 
 - Assessment: `{assessmentDoc}`
-- Translation gaps: `{translationGapDoc}`
+- Decision register: `{decisionRegisterDoc}`
+- Dependency graph: `{dependencyGraphDoc}`
 - Defect ledger: `{defectLedgerDoc}`
 - Oracle: `{oracleDoc}`
-- Design doc: `{designDoc}`
-
-*Created: {YYYY-MM-DD}*

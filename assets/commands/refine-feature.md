@@ -12,7 +12,7 @@ When raw requirements go straight into design, the architect often has to guess.
 
 ## What the architect will do
 
-1. Read every source the user points to (notes, tickets, transcripts, slide decks, pasted text). The user must point to them — the architect does not assume a path. If the configured purpose artifact exists, read it as intent context.
+1. Read every source the user points to (notes, tickets, transcripts, slide decks, pasted text, or modernization path details). The user must point to them — the architect does not assume a path. If the configured purpose artifact exists, read it as intent context. In a port, prefer `docs/modernization/paths/XP-NNN-*.md` over retelling global inventories.
 2. Read the configured requirements template (default `~/.cursor/templates/requirements-template.md`) for output structure.
 3. Extract goals, non-goals, personas, constraints, and candidate user scenarios from the source.
 4. Use `AskQuestion` to resolve every meaningful ambiguity. Acceptable resolution targets include:
@@ -43,6 +43,7 @@ When raw requirements go straight into design, the architect often has to guess.
 - `/refine-feature @notes/customer-call-2026-04-12.md` — refine from a single source file
 - `/refine-feature @docs/intake/feature-x/` — refine from a folder of source material
 - `/refine-feature @docs/intake/feature-x/ @{decisionsDir}/ADR-002-auth.md` — refine with an existing ADR as constraint context
+- `/refine-feature @docs/modernization/paths/XP-001-linspace.md` — refine a port slice from a path detail
 
 This command is available in chat with `/refine-feature`.
 It expects at least one argument pointing to source material.

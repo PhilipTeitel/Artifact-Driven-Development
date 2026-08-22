@@ -36,7 +36,7 @@ Prompts are ephemeral. They explain what someone wanted in the moment. A prompt 
 
 The result is software development where the AI is fast, but the work is still reviewable, traceable, and grounded in engineering discipline.
 
-The same model also supports brownfield modernization: porting an existing application to a new language, framework, architecture, or operating model. In that lane, the workflow first examines the legacy system, grades the evidence behind recovered behavior, records parity and defect decisions, and then rejoins the normal story lifecycle.
+The same model also supports brownfield modernization: porting an existing application to a new language, framework, architecture, or operating model. In that lane, the workflow first inventories executable paths and dependencies, grades recovered evidence, records decisions without rewriting the analysis, and then rejoins the normal story lifecycle one slice at a time.
 
 ---
 
@@ -85,20 +85,20 @@ See [BUILDING-BLOCKS.md](BUILDING-BLOCKS.md) for the deep dive and the compositi
 
 The lifecycle is a swim-lane flow across the human and the agents. Each agent owns a specific kind of judgment. The human owns the decisions that bind the work.
 
-The normal path starts from an idea and moves through purpose, requirements, domain, design, skeleton, backlog, and stories. A modernization path starts from a legacy application, adds assessment and recovery work, and then rejoins the same delivery workflow.
+The normal path starts from an idea and moves through purpose, requirements, domain, design, skeleton, backlog, and stories. A modernization path starts from a legacy application, adds a global assessment and then slice-scoped recovery, and rejoins the same delivery workflow. `/assess-modernization` creates the target repo `README` as a hub (what this port is, where the lane is, links to artifacts); later commands update only the cells they own.
 
 ```mermaid
 flowchart LR
     idea["Raw idea"] --> standardLifecycle["Standard lifecycle"]
     legacy["Legacy application"] --> assess["Assess modernization"]
-    assess --> recover["Recover behavior and domain"]
-    recover --> planMigration["Plan migration"]
-    planMigration --> portStories["Plan port stories"]
+    assess --> planMigration["Plan migration"]
+    planMigration --> recover["Recover current slice"]
+    recover --> portStories["Plan port stories"]
     standardLifecycle --> delivery["Implement, review, QA, document"]
     portStories --> delivery
 ```
 
-The detailed diagram below shows the standard lifecycle. See [MODERNIZATION.md](MODERNIZATION.md) for the brownfield assessment, recovery, parity, and migration-planning lane.
+The detailed diagram below shows the standard lifecycle. See [MODERNIZATION.md](MODERNIZATION.md) for the brownfield assessment, slice-scoped recovery, decision register, parity, and migration-planning lane.
 
 ```mermaid
 flowchart TD
@@ -205,7 +205,7 @@ The methodology rests on a few principles. All documentation points back to one 
 - **Story specs turn intent into implementation-ready instructions.** They are the central handoff artifact.
 - **Tests, model-fidelity review, QA evidence, and documentation close the loop.** They prove the intent was delivered and the code still mirrors the domain model.
 - **Legacy behavior is evidence, not automatically requirement.** Brownfield work grades each recovered fact by source and keeps conflicts visible until a human decision resolves them.
-- **Parity confidence cannot exceed the oracle tier.** If the legacy system cannot be executed, the workflow says so and limits parity claims to recorded or documented expectations.
+- **Parity confidence cannot exceed the oracle tier.** If the legacy system cannot be executed, the workflow says so and limits parity claims to recorded or documented expectations. Comparison rules are per execution path.
 
 See [TRACEABILITY.md](TRACEABILITY.md) for how each of these artifacts feeds the next, and what every story must make answerable.
 

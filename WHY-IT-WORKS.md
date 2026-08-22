@@ -41,7 +41,7 @@ Tests, changed files, the QA matrix, the review summary, the documentation diff 
 
 ### Evidence has a grade.
 
-Brownfield modernization fails when inferred facts are laundered into requirements. Evidence grades make provenance inspectable: `E1 verified`, `E2 documented`, `E3 code-derived`, `E4 inferred`, and `E5 unknown` do not carry the same authority. The model can recover and organize weak evidence, but it cannot silently promote weak evidence into implementation-ready truth.
+Brownfield modernization fails when inferred facts are laundered into requirements, and it also fails when global analysis is treated as a gate on every slice. Evidence grades make provenance inspectable: `E1 verified`, `E2 documented`, `E3 code-derived`, `E4 inferred`, and `E5 unknown` do not carry the same authority, and each claim carries exactly one of them. The model can recover and organize weak evidence, but it cannot silently promote weak evidence into implementation-ready truth. Analysis snapshots stay frozen; decisions live in the register, the defect ledger, the slice prerequisite table, and the story spec.
 
 ### Humans own the decisions that bind work.
 

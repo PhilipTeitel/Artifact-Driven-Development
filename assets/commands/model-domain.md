@@ -36,6 +36,7 @@ The user must point to the requirements or source material to model. The Modeler
 5. Ask the user to resolve modeling gaps that would affect design or test design.
 6. Write or update the configured domain model artifact.
 7. Leave unresolved modeling questions under **Open modeling questions**. Those questions block downstream work for the affected scope.
+8. **README hub.** If `## Modernization` exists, update only the Artifact index row **Domain model**. Do not create a Modernization section from this command. Do not edit Lane status.
 
 ## Hard rules
 

@@ -1,7 +1,10 @@
 <!-- Port story contract:
-- Based on the standard user-story template, with modernization-specific provenance and parity sections.
-- Every covered BEH-NNN must have evidence grade, citation, oracle fixture or acceptance-data source, and Phase P coverage.
-- Phase P is mandatory before Phase Y. Z8 is mandatory in Phase Z.
+- Based on the standard user-story template, with modernization provenance and parity sections.
+- Slice prerequisites are copied from the migration-plan row and checked off here. Do not edit analysis snapshots.
+- Every covered XP-NNN must have a path detail, a path test plan, singular evidence grades, and Phase P coverage — unless no fixture exists, in which case do not invent a parity criterion.
+- Comparison rules come from the path test plan, not a global default.
+- Phase P is mandatory before Phase Y when a fixture or acceptance-data source exists. Z8 is mandatory in Phase Z.
+- INCLUDE §5 only when the path exposes an HTTP/RPC/message API. INCLUDE §6 only when UI-facing. Omit entirely otherwise — do not write "None." placeholders for whole sections.
 -->
 
 # {STORY-ID}: {Story Title}
@@ -12,41 +15,56 @@
 **Status**: Open
 **Modernization slice:** `{strangler | phased-rewrite | big-bang-parallel-run}`
 **Structure fidelity:** `{preserve-then-refactor | refactor-now}`
+**Execution paths:** `{XP-NNN, …}`
 
 ---
 
 ## 1. Summary
 
-{What legacy capability this story ports and why this slice is next.}
+{One paragraph: which paths this story ports, why this slice is next, and the comparison rule that will prove it. Do not retell the global inventories.}
 
 ### 1a. Domain model touchpoints
 
 | Purpose / domain section | Terms / entities / fields / invariants touched | Evidence |
 |--------------------------|-----------------------------------------------|----------|
-| `{docs/PURPOSE.md or docs/DOMAIN.md section}` | `{items}` | `{grade + citation}` |
+| `{docs/PURPOSE.md or docs/DOMAIN.md section}` | `{items}` | `{grade}` `{citation}` |
 
 ### 1b. Legacy source touchpoints
 
-| Legacy artifact | Role in story | Evidence grade | Citation | Notes |
-|-----------------|---------------|----------------|----------|-------|
-| `{legacy path/doc/release note}` | `{behavior/source/oracle/defect}` | `{E1/E2/E3/E4/E5}` | `{path:line or section}` | `{notes}` |
+Taken from the path detail. One grade per row.
+
+| Legacy artifact | Role in story | Evidence grade | Citation |
+|-----------------|---------------|----------------|----------|
+| `{legacy path/doc}` | `{behavior/source/oracle/defect}` | `{E1\|E2\|E3\|E4\|E5}` | `{path:line or section}` |
 
 ## 2. Linked architecture decisions (ADRs)
 
 - `{decisionsDir}/ADR-NNN-slug.md` — `{decision}`
 
+Also cite `DEC-NNN` from the decision register when a porting choice (not a target-design choice) binds this story.
+
 ## 3. Definition of Ready (DoR)
 
 - [ ] Purpose and domain touchpoints are current.
-- [ ] Covered `BEH-NNN` artifacts have evidence grades and citations.
-- [ ] No covered behavior is `E4 inferred` or `E5 unknown` unless a user decision is recorded below.
-- [ ] Oracle tier and fixtures / acceptance data are documented.
-- [ ] Defect-ledger decisions are recorded for known mismatches.
+- [ ] Covered `XP-NNN` path details exist and use singular evidence grades.
+- [ ] Path test plans exist; comparison rules are per path.
+- [ ] No covered claim is `E4 inferred` or `E5 unknown` unless a `DEC-NNN` accepts it.
+- [ ] Oracle tier is compatible with the planned Phase P evidence.
+- [ ] Defect-ledger decisions are recorded for known mismatches on these paths.
+- [ ] Slice prerequisites below are resolved.
 - [ ] Linked ADRs are `Accepted` or this story is explicitly a spike.
+
+## 3b. Slice prerequisites
+
+Copied from the migration-plan row. Check off here. Do not edit the path inventory, dependency inventory, graph, or impedance analysis.
+
+| ID | Kind | What must be true | Status |
+|----|------|-------------------|--------|
+| `{DEP-NNN / DEC-NNN / DEF-NNN}` | `{dependency / decision / defect}` | `{the condition that unblocks implementation}` | `{unresolved / resolved}` |
 
 ## 4. Binding constraints (non-negotiable)
 
-- `{target stack, process boundary, persistence, dependency substitution, or parity tolerance constraint}`
+- `{target stack, process boundary, persistence, dependency substitution, or per-path comparison rule}`
 
 ## 4b. Ports & Adapters
 
@@ -54,17 +72,23 @@
 |------|---------|----------------|---------------|------------------|
 | `{Port}` | `{Adapter}` | `{boundary}` | `{test}` | `{test}` |
 
+Write a one-line "no integration boundary" note in this table's first row when none apply, then omit extra rows.
+
+<!-- INCLUDE WHEN this slice exposes an HTTP, RPC, or message API. OMIT ENTIRELY otherwise. -->
+
 ## 5. API Endpoints + Schemas
 
 | Endpoint / schema | Purpose | Request / input | Response / output | Covers |
 |-------------------|---------|-----------------|-------------------|--------|
-| `{route/schema/command}` | `{purpose}` | `{input}` | `{output}` | `{BEH-NNN/Sn}` |
+| `{route/schema/command}` | `{purpose}` | `{input}` | `{output}` | `{XP-NNN/Sn}` |
+
+<!-- INCLUDE WHEN this slice is UI-facing. OMIT ENTIRELY otherwise. -->
 
 ## 6. Frontend Flow
 
 ### 6a. User path
 
-{Screen or interaction path if applicable. Write `None.` if not UI-facing.}
+{Screen or interaction path.}
 
 ### 6b. State and error handling
 
@@ -72,7 +96,7 @@
 
 ### 6c. Legacy parity notes
 
-{Formatting, ordering, culture, numeric precision, or bug-compatible behavior that the UI must preserve.}
+{Formatting, ordering, culture, or bug-compatible UI behavior from the path test plan.}
 
 ## 7. File Touchpoints
 
@@ -95,17 +119,17 @@
 - [ ] **A1** — {Criterion title}
   - {Observable new-system behavior}
   - Evidence: `path/to/file.test.ts::test_name_A1(runner)`
-  - Covers: `{BEH-NNN}`, `{S1}`
+  - Covers: `{XP-NNN}`, `{S1}`
 
 ### Phase P: Parity
 
-{Mandatory for port stories. Every covered `BEH-NNN` must have at least one Phase P criterion. Each P criterion must cite an oracle fixture or acceptance-data source, tolerance / normalization rule, and defect-ledger decision when applicable.}
+Mandatory when a fixture or acceptance-data source exists for a covered path. Each P criterion cites the path test plan's oracle source, comparison rule, and defect decision. If the test plan says no fixture exists, do not write a P criterion that pretends one does.
 
-- [ ] **P1** — Legacy output for `{BEH-NNN}` matches the new implementation within `{tolerance}`
+- [ ] **P1** — Legacy output for `{XP-NNN}` matches the new implementation under `{comparison rule from the path test plan}`
   - Oracle: `{FIX-NNN or acceptance-data source}`
-  - Tolerance / normalization: `{numeric/text/order/time rule}`
+  - Comparison: `{exact / tolerance-based with bound / semantic}`
   - Defect decision: `{DEF-NNN reproduce-faithfully | fix-now | fix-later | none}`
-  - Evidence: `tests/parity/{story-id}.test.ts::parity_BEH_NNN_P1(runner)`
+  - Evidence: `tests/parity/{story-id}.test.ts::parity_XP_NNN_P1(runner)`
 
 ### Phase Y: Binding & stack compliance
 
@@ -126,27 +150,31 @@
 
 ## 8a. Test Plan
 
-| # | Level | File::test name | Covers AC | Covers Sn | Covers BEH | Notes |
-|---|-------|------------------|-----------|-----------|------------|-------|
-| 1 | unit | `path/to/file.test.ts::test_name_A1` | A1 | S1 | BEH-NNN | happy path |
-| 2 | parity | `tests/parity/{story-id}.test.ts::parity_BEH_NNN_P1` | P1 | S1 | BEH-NNN | oracle fixture `{FIX-NNN}` |
-| 3 | integration | `tests/integration/example-adapter.test.ts::real_adapter_Y1` | Y1 | S1 | BEH-NNN | real adapter, not mocked |
+| # | Level | File::test name | Covers AC | Covers Sn | Covers XP | Notes |
+|---|-------|------------------|-----------|-----------|-----------|-------|
+| 1 | unit | `path/to/file.test.ts::test_name_A1` | A1 | S1 | XP-NNN | happy path |
+| 2 | parity | `tests/parity/{story-id}.test.ts::parity_XP_NNN_P1` | P1 | S1 | XP-NNN | `{FIX-NNN}` + comparison rule from path test plan |
+| 3 | integration | `tests/integration/example-adapter.test.ts::real_adapter_Y1` | Y1 | S1 | XP-NNN | real adapter, not mocked |
 
 ## 8b. Parity Plan
 
-| BEH ID | Evidence grade | Oracle / fixture | Tolerance | Defect decision | Acceptance data gap |
-|--------|----------------|------------------|-----------|-----------------|---------------------|
-| BEH-NNN | `{E1/E2/E3/E4/E5}` | `{FIX-NNN / T3 data}` | `{rule}` | `{DEF-NNN/none}` | `{none/question}` |
+Copied from the path test plan. Do not invent a tighter or looser rule here.
+
+| XP ID | Evidence grade | Oracle / fixture | Comparison rule | Defect decision | Acceptance data gap |
+|-------|----------------|------------------|-----------------|-----------------|---------------------|
+| XP-NNN | `{E1\|E2\|E3\|E4\|E5}` | `{FIX-NNN / T3 data}` | `{rule and bound}` | `{DEF-NNN/none}` | `{none/question}` |
 
 ## 9. Risks & Tradeoffs
 
 | Risk | Impact | Mitigation | Evidence |
 |------|--------|------------|----------|
-| `{risk}` | `{impact}` | `{mitigation}` | `{grade + citation}` |
+| `{risk}` | `{impact}` | `{mitigation}` | `{grade}` `{citation}` |
+
+Cite RISK/IMP/DEC IDs rather than restating them.
 
 ## Implementation Order
 
-1. Create or enable parity fixture/test for `P1` and observe it fail for the expected reason.
+1. Create or enable the parity test for `P1` from the path test plan and observe it fail for the expected reason.
 2. Implement supporting types and ports.
 3. Implement adapters and integration evidence.
 4. Implement behavior.

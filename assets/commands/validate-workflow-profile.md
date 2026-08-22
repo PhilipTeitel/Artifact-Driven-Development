@@ -45,28 +45,32 @@ Validate that a copied or customized Cursor workflow profile is complete enough 
    - `paths.storyFilePattern`
    - `paths.modernizationDir`
    - `paths.assessmentDoc`
-   - `paths.legacyMapDoc`
-   - `paths.intentLedgerDoc`
-   - `paths.dependencyLedgerDoc`
-   - `paths.translationGapDoc`
+   - `paths.pathInventoryDoc`
+   - `paths.dependencyInventoryDoc`
+   - `paths.dependencyGraphDoc`
+   - `paths.impedanceDoc`
+   - `paths.decisionRegisterDoc`
    - `paths.defectLedgerDoc`
    - `paths.migrationPlanDoc`
    - `paths.oracleDoc`
-   - `paths.behaviorGlob`
-   - `paths.flowsDir`
+   - `paths.pathGlob`
+   - `paths.pathsDir`
+   - `paths.pathTestPlanGlob`
+   - `paths.pathTestPlansDir`
    - `paths.parityReportPattern`
-   - `templates.behaviorCatalog`
+   - `templates.executionPathInventory`
+   - `templates.executionPathDetail`
+   - `templates.dependencyInventory`
+   - `templates.dependencyGraph`
+   - `templates.impedanceAnalysis`
+   - `templates.pathTestPlan`
+   - `templates.decisionRegister`
    - `templates.defectLedger`
-   - `templates.dependencyLedger`
-   - `templates.intentLedger`
-   - `templates.legacyFlow`
-   - `templates.legacyMap`
    - `templates.migrationPlan`
    - `templates.modernizationAssessment`
    - `templates.oracle`
    - `templates.parityReport`
    - `templates.portStory`
-   - `templates.translationGap`
    - `templates.readme`
    - `templates.purpose`
    - `templates.domain`
@@ -114,9 +118,12 @@ Validate that a copied or customized Cursor workflow profile is complete enough 
    - `modernization.stagingStrategies` includes `strangler`, `phased-rewrite`, and `big-bang-parallel-run`
    - `modernization.structureFidelity` includes `preserve-then-refactor` and `refactor-now`
    - `modernization.defectPolicy` is set
-   - `modernization.parity.numericTolerance` and `modernization.parity.textNormalization` are set
-   - `templates.portStory` contains Phase P and Z8
+   - `modernization.dependencyDispositions` includes `available`, `reimplementable`, `undecided`, and `no-route`
+   - `modernization.parity.comparisonRules` is `per-path`
+   - `templates.portStory` contains Phase P, Z8, and a slice prerequisites section
    - `templates.parityReport` starts with `PARITY SUMMARY:`
+   - `templates.executionPathInventory` requires a one-paragraph summary
+   - `naming.executionPathPattern` is set
 9. Verify stack defaults:
    - `stack.packageManager`, `stack.buildCommand`, `stack.lintCommand`, and `stack.testCommand` are set
    - if `stack.typePolicy.disallowAny` is true, the profile also defines the shared type policy or explicitly documents why it does not apply

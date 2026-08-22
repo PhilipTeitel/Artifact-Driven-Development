@@ -16,14 +16,15 @@ Before executing the sequence, load the configured house rules, this command spe
 | `/document-story` | `agents.docsPm` |
 | `/validate-story` | `agents.qa` |
 
-When subagent delegation is available, run each phase in the configured role subagent and pass the story ID, active workflow profile, command spec, loaded agent definition, oracle doc, parity report path, and defect ledger as binding context. If subagent delegation is unavailable, continue in the current chat only after loading the same agent definition and state in the output which phases used this fallback.
+When subagent delegation is available, run each phase in the configured role subagent and pass the story ID, active workflow profile, command spec, loaded agent definition, oracle doc, path test plans, parity report path, and defect ledger as binding context. If subagent delegation is unavailable, continue in the current chat only after loading the same agent definition and state in the output which phases used this fallback.
 
 ## Preconditions
 
 - Story was created with `/plan-port-story`.
-- Story has Phase P criteria and Z8 unless explicitly marked as a spike or documentation-only story.
-- Covered behavior has no unresolved `E4` / `E5` provenance blockers.
-- Oracle and defect ledger are current for covered behaviors.
+- Slice prerequisites in the story are resolved.
+- Story has Phase P criteria and Z8 unless explicitly marked as a spike or documentation-only story, or the path test plan records that no oracle source exists.
+- Covered path-detail claims have no unresolved `E4` / `E5` provenance blockers without a `DEC-NNN`.
+- Oracle tier and defect ledger are current for covered paths.
 
 ## Sequence
 
@@ -35,6 +36,8 @@ When subagent delegation is available, run each phase in the configured role sub
 6. If QA fails or blocks, run `/fix-from-qa {STORY-ID}` and then repeat `/verify-parity` and `/qa-story` for affected criteria.
 7. Run `/document-story {STORY-ID}`.
 8. Run `/validate-story {STORY-ID} complete`.
+
+Hub updates during this sequence belong to the phase commands: `/verify-parity` updates the Parity reports index row; `/document-story` updates backlog Status only. Do not rewrite Lane status or other Artifact index rows from the orchestrator.
 
 ## Output
 

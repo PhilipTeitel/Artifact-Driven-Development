@@ -88,20 +88,21 @@ If the configured purpose or domain artifacts are missing and the story is not a
 
 ## Per-story parity rubric (REQUIRED for port stories)
 
-When a story contains `Phase P: Parity` or references `BEH-NNN`, evaluate the port against the configured oracle and defect ledger. Each failed check is a finding with the configured parity prefix (default `PAR-#`) and the appropriate severity.
+When a story contains `Phase P: Parity` or references `XP-NNN`, evaluate the port against the path test plan, oracle tier, and defect ledger. Each failed check is a finding with the configured parity prefix (default `PAR-#`) and the appropriate severity.
 
-1. **Phase P coverage.** Every behavior named in the story's legacy source touchpoints or parity plan must have at least one `P` criterion and one test-plan row covering it.
-   - Missing parity criterion or row -> `PAR-#` `severity: high`.
+1. **Phase P coverage.** Every path named in the story's legacy source touchpoints or parity plan must have at least one `P` criterion and one test-plan row covering it, unless the path test plan records that no oracle source exists.
+   - Missing parity criterion or row when a fixture exists -> `PAR-#` `severity: high`.
 
 2. **Oracle evidence.** Every `P` criterion must cite a concrete oracle fixture, recorded output, or acceptance-data source compatible with the configured oracle tier.
    - Claiming repeated parity evidence for a `T2` or `T3` oracle -> `PAR-#` `severity: high`.
-   - Missing fixture or unsupported oracle reference -> `PAR-#` `severity: critical` when the behavior is user-visible or business-critical.
+   - Missing fixture or unsupported oracle reference -> `PAR-#` `severity: critical` when the path is user-visible or business-critical.
 
-3. **Tolerance discipline.** Numeric, ordered, culture-sensitive, formatted-text, and time-dependent comparisons must name their tolerance or normalization rule.
-   - Unspecified tolerance for numeric or formatted output -> `PAR-#` `severity: high`.
+3. **Comparison discipline.** Numeric, ordered, culture-sensitive, formatted-text, and time-dependent comparisons must use the path test plan's rule. A global numeric default is not a substitute.
+   - Unspecified comparison rule for numeric or formatted output -> `PAR-#` `severity: high`.
 
-4. **Defect reconciliation.** Any mismatch must link to a `DEF-NNN` decision (`reproduce-faithfully`, `fix-now`, or `fix-later`).
+4. **Defect reconciliation.** Any mismatch must link to a `DEF-NNN` decision (`reproduce-faithfully`, `fix-now`, or `fix-later`) scoped to the `XP-NNN`.
    - Unreconciled mismatch -> `PAR-#` `severity: critical`.
+   - A criterion that asks for a system-wide answer the methodology says is per-path -> `PAR-#` `severity: high` (mis-posed).
 
 If the checks above pass and there are no other `PAR-#` issues, write `None.` under Parity.
 
@@ -109,14 +110,17 @@ If the checks above pass and there are no other `PAR-#` issues, write `None.` un
 
 When a story contains recovered legacy behavior, evaluate whether the evidence is strong enough to implement. Each failed check is a finding with the configured provenance prefix (default `PROV-#`) and the appropriate severity.
 
-1. **Evidence grade present.** Every covered `BEH-NNN`, domain field, invariant, and legacy flow cited by the story must include an evidence grade and source citation.
-   - Missing evidence grade or citation -> `PROV-#` `severity: high`.
+1. **Evidence grade present.** Every covered `XP-NNN` claim, domain field, and invariant cited by the story must include exactly one evidence grade and a source citation.
+   - Missing evidence grade, citation, or compound grades (`E1 / E3`) -> `PROV-#` `severity: high`.
 
-2. **Weak evidence resolved.** No implemented behavior may depend on `E4 inferred` or `E5 unknown` evidence unless the story records the user decision that accepted or resolved it.
-   - Unresolved `E4` / `E5` behavior in implementation scope -> `PROV-#` `severity: critical`.
+2. **Weak evidence resolved.** No implemented behavior may depend on `E4 inferred` or `E5 unknown` evidence unless a `DEC-NNN` accepts or resolves it.
+   - Unresolved `E4` / `E5` claim in implementation scope -> `PROV-#` `severity: critical`.
 
-3. **Documentation/code disagreement surfaced.** Known contradictions between documentation, executable behavior, and source code must appear in the story, assessment, defect ledger, or migration plan.
+3. **Documentation/code disagreement surfaced.** Known contradictions must appear in the owning artifact (usually the path detail) and be cited by ID. They must not be silently flattened.
    - Hidden contradiction affecting acceptance criteria or parity -> `PROV-#` `severity: high` or `critical` depending on user impact.
+
+4. **Slice prerequisites.** Unresolved IDs in the story's slice prerequisite table are not implementation-ready.
+   - Unresolved `DEP-NNN` / `DEC-NNN` / `DEF-NNN` in that table -> `PROV-#` `severity: high`.
 
 If the checks above pass and there are no other `PROV-#` issues, write `None.` under Provenance.
 

@@ -23,7 +23,7 @@ The single source of truth for the project's progress is the `README` document i
 ## Responsibilities
 
 - Update API docs / OpenAPI spec if endpoints changed
-- Update README / env vars / run commands when the project setup changes
+- Update README / env vars / run commands when the project setup changes. On a modernization repo, edit only **Backlog Items** Status (from the story spec) and Getting Started / Available Scripts / Environment Variables if the story changed setup. Do **not** edit `## Modernization`, Lane status, or Artifact index rows (`/verify-parity` owns the Parity reports row).
 - Convert an Architect plan into a checklist (if asked)
 - Produce status summaries by reading story documents in `docs/features/`
 

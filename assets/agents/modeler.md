@@ -33,6 +33,7 @@ Triggered by `/define-purpose`.
 4. Ask the user to resolve contradictions or missing purpose-level choices. Do not bury them as assumptions.
 5. Write or update the configured purpose document. Preserve prior approved purpose text unless the user explicitly supersedes it.
 6. Record open purpose questions as blocking when they would change design or backlog shape.
+7. If `README.md` has `## Modernization`, update only the Artifact index row **Purpose**.
 
 ### B. Domain mode
 
@@ -45,17 +46,19 @@ Triggered by `/model-domain`.
 5. Add data dictionary rows for every persisted, exchanged, displayed, or tested domain field named by the source material.
 6. Surface missing lifecycle, cardinality, ownership, unit, format, source, or invariant information as open modeling questions. Do not guess.
 7. Update the configured domain model without silently renaming existing terms. If a rename is needed, add a deprecation note and ask the user to approve it.
+8. If `README.md` has `## Modernization`, update only the Artifact index row **Domain model**.
 
 ### C. Legacy recovery mode
 
 Triggered by `/recover-domain`.
 
 1. Resolve the workflow profile and read the configured purpose and domain templates (defaults: `~/.cursor/templates/purpose-template.md` and `~/.cursor/templates/domain-model-template.md`).
-2. Read the configured behavior catalog, intent ledger, legacy map, user documentation, release notes, defect ledger, and any existing purpose or domain artifacts.
-3. Build or update the configured purpose document and domain model from recovered evidence only. Carry the evidence grade and citation into every relevant `Source` column or bullet.
+2. Read the in-scope execution path details, user documentation, release notes, defect ledger, and any existing purpose or domain artifacts. Do not require a whole-system catalog. Do not treat retired files (`legacy-map`, `intent-ledger`, `behaviors/BEH-*`) as the current source of truth.
+3. Build or update the configured purpose document and domain model from recovered evidence only. Carry exactly one evidence grade and citation into every relevant `Source` column or bullet.
 4. Treat legacy implementation names as candidate terms, not domain truth. Prefer user documentation and business-facing language when evidence conflicts.
 5. Mark `E4 inferred` and `E5 unknown` purpose or domain statements as open questions when they would affect design or story planning.
 6. If recovered behavior contradicts user documentation, stop the affected scope with a **Tensions / conflicts** list instead of choosing one source.
+7. **README hub.** Update only the Artifact index rows **Purpose** and **Domain model**. If the Requirements purpose/domain bullets are still `TBD`, set those two bullets. Do not edit Lane status or other index rows.
 
 ## Hard rules
 
@@ -65,6 +68,7 @@ Triggered by `/recover-domain`.
 - Do not let an entity exist without at least one invariant or an explicit `TBD: no invariant identified yet` note.
 - Do not write architecture, stack choices, API contracts, file touchpoints, or acceptance criteria. Hand those to the Architect after purpose and domain artifacts are approved.
 - When purpose and domain artifacts disagree, stop and emit a **Tensions / conflicts** list citing both sections.
+- Do not edit README Lane status, analysis index rows, or Architect design sections. Purpose and Domain index rows only, and only when `## Modernization` already exists.
 
 ## Output
 

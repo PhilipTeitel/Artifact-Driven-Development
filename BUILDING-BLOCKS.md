@@ -34,8 +34,8 @@ An agent is a durable role definition. It says what the model is allowed to thin
   - **[Auditor](assets/agents/auditor.md)** — provides review gates for stories, diffs, and full-repo audits.
   - **[QA](assets/agents/qa.md)** — verifies acceptance criteria against executable evidence.
   - **[Documenter](assets/agents/documenter.md)** — keeps project documentation aligned with the story source of truth.
-  - **[Archaeologist](assets/agents/archaeologist.md)** — recovers evidence-graded facts from legacy repositories, documentation, release notes, history, and executable behavior.
-  - **[Migration Strategist](assets/agents/migration-strategist.md)** — assesses modernization feasibility, translation gaps, staging, cutover, and parity risk.
+  - **[Archaeologist](assets/agents/archaeologist.md)** — recovers evidence-graded facts from legacy repositories, documentation, release notes, history, and executable behavior. Owns path inventory, dependency graph, path details, and the defect ledger.
+  - **[Migration Strategist](assets/agents/migration-strategist.md)** — assesses modernization feasibility, classifies dependencies, analyzes impedance, records decisions, and plans staging. Owns the assessment, dependency inventory, impedance analysis, decision register, and migration plan.
 
 An agent without a command is just a persona. It does nothing until a command tells it which step to perform.
 
@@ -53,7 +53,7 @@ A command is one workflow step under explicit control: the instructions the agen
   - **Implementation and verification.** [`/implement-story`](assets/commands/implement-story.md), [`/review-story`](assets/commands/review-story.md), [`/qa-story`](assets/commands/qa-story.md), [`/fix-from-qa`](assets/commands/fix-from-qa.md), [`/document-story`](assets/commands/document-story.md), [`/complete-story`](assets/commands/complete-story.md).
   - **Post-story routing.** [`/patch-story`](assets/commands/patch-story.md), [`/reconcile-story`](assets/commands/reconcile-story.md), [`/review-diff`](assets/commands/review-diff.md).
   - **Audit.** [`/map-repo`](assets/commands/map-repo.md), [`/audit-all`](assets/commands/audit-all.md), [`/triage-audit-findings`](assets/commands/triage-audit-findings.md), plus the category audits [`/audit-tooling`](assets/commands/audit-tooling.md), [`/audit-reliability`](assets/commands/audit-reliability.md), [`/audit-db`](assets/commands/audit-db.md), [`/audit-api-contracts`](assets/commands/audit-api-contracts.md), [`/audit-security`](assets/commands/audit-security.md), [`/audit-performance`](assets/commands/audit-performance.md), [`/audit-test-coverage`](assets/commands/audit-test-coverage.md).
-  - **Modernization.** [`/assess-modernization`](assets/commands/assess-modernization.md), [`/map-legacy`](assets/commands/map-legacy.md), [`/mine-history`](assets/commands/mine-history.md), [`/inventory-dependencies`](assets/commands/inventory-dependencies.md), [`/analyze-translation-gap`](assets/commands/analyze-translation-gap.md), [`/build-oracle`](assets/commands/build-oracle.md), [`/document-legacy`](assets/commands/document-legacy.md), [`/catalog-behavior`](assets/commands/catalog-behavior.md), [`/trace-flow`](assets/commands/trace-flow.md), [`/recover-domain`](assets/commands/recover-domain.md), [`/ledger-defects`](assets/commands/ledger-defects.md), [`/plan-migration`](assets/commands/plan-migration.md), [`/plan-port-story`](assets/commands/plan-port-story.md), [`/verify-parity`](assets/commands/verify-parity.md), [`/complete-port-story`](assets/commands/complete-port-story.md).
+  - **Modernization.** [`/assess-modernization`](assets/commands/assess-modernization.md), [`/inventory-paths`](assets/commands/inventory-paths.md), [`/inventory-dependencies`](assets/commands/inventory-dependencies.md), [`/map-dependency-graph`](assets/commands/map-dependency-graph.md), [`/analyze-impedance`](assets/commands/analyze-impedance.md), [`/build-oracle`](assets/commands/build-oracle.md), [`/record-decision`](assets/commands/record-decision.md), [`/document-legacy`](assets/commands/document-legacy.md), [`/trace-path`](assets/commands/trace-path.md), [`/recover-domain`](assets/commands/recover-domain.md), [`/ledger-defects`](assets/commands/ledger-defects.md), [`/plan-migration`](assets/commands/plan-migration.md), [`/plan-path-tests`](assets/commands/plan-path-tests.md), [`/plan-port-story`](assets/commands/plan-port-story.md), [`/verify-parity`](assets/commands/verify-parity.md), [`/complete-port-story`](assets/commands/complete-port-story.md). Compatibility aliases: [`/map-legacy`](assets/commands/map-legacy.md), [`/mine-history`](assets/commands/mine-history.md), [`/catalog-behavior`](assets/commands/catalog-behavior.md), [`/trace-flow`](assets/commands/trace-flow.md), [`/analyze-translation-gap`](assets/commands/analyze-translation-gap.md).
 
 Commands are also role-bound. The workflow profile maps each command to an agent definition, and a command must load that configured role contract before it runs. If the command and agent definition conflict, the workflow stops and reports the conflict instead of silently choosing one.
 
@@ -69,17 +69,17 @@ A template is a contract for what an artifact must contain.
 - **Inputs.** Required sections, required fields, machine-readable markers (for example, the `REVIEW SUMMARY:` line on a review artifact), and explicit placeholders for traceability links.
 - **Output.** A reusable artifact skeleton.
 - **Examples.**
-  - **[README / design hub template](assets/templates/readme-template.md)** — architecture, stack, key decisions, API contract, environment, setup, backlog.
+  - **[README / design hub template](assets/templates/readme-template.md)** — architecture, stack, key decisions, API contract, environment, setup, backlog; on the modernization-port lane, optional `## Modernization` (what this is, lane status, artifact index). Greenfield omits that section. Design headings stay out until `/design-application`.
   - **[Purpose template](assets/templates/purpose-template.md)** — thesis, job, north-star outcome, trade-off rule, anti-thesis, success signals.
   - **[Domain model template](assets/templates/domain-model-template.md)** — ubiquitous language, data dictionary, entities, relationships, invariants, lifecycles, and consistency boundaries.
   - **[Requirements template](assets/templates/requirements-template.md)** — goals, non-goals, personas, constraints, resolved and open questions, Gherkin scenarios.
   - **[architecture decision record template](assets/templates/adr-template.md)** — context, decision, alternatives considered, consequences.
   - **[Walking-skeleton template](assets/templates/walking-skeleton-template.md)** — one thin running end-to-end slice through the composition root and boundaries, with a reflection checkpoint.
   - **[User story template](assets/templates/user-story-template.md)** — linked architecture decision records, Definition of Ready, binding constraints, ports and adapters table (Section 4b), file touchpoints, acceptance criteria (including Phase Y binding and Phase Z quality gates), test plan with **Covers AC** and **Covers Sn** columns and test levels (`unit`, `contract`, `integration`, `e2e` / `ui`), implementation order, completion metadata, post-complete follow-up ledger with **Change ref** and **Review ref** columns.
-  - **[Port-story template](assets/templates/port-story-template.md)** — a modernization story shape based on the user-story template, adding `### 1b. Legacy source touchpoints`, `Phase P`, `## 8b. Parity Plan`, a **Covers BEH** test-plan column, and the `Z8` parity gate.
+  - **[Port-story template](assets/templates/port-story-template.md)** — a modernization story shape based on the user-story template, adding `### 1b. Legacy source touchpoints`, slice prerequisites, `Phase P`, `## 8b. Parity Plan`, a **Covers XP** test-plan column, and the `Z8` parity gate.
   - **[Story-review template](assets/templates/story-review-template.md)** — required actions, severity, machine-readable `REVIEW SUMMARY:` line.
   - **[Audit template](assets/templates/audit-template.md)** — findings by category with evidence citations.
-  - **Modernization templates.** [Modernization assessment](assets/templates/modernization-assessment-template.md), [legacy map](assets/templates/legacy-map-template.md), [intent ledger](assets/templates/intent-ledger-template.md), [dependency ledger](assets/templates/dependency-ledger-template.md), [translation gap analysis](assets/templates/translation-gap-template.md), [oracle strategy](assets/templates/oracle-template.md), [behavior catalog](assets/templates/behavior-catalog-template.md), [legacy flow](assets/templates/legacy-flow-template.md), [defect ledger](assets/templates/defect-ledger-template.md), [migration plan](assets/templates/migration-plan-template.md), and [parity report](assets/templates/parity-report-template.md).
+  - **Modernization templates.** [Modernization assessment](assets/templates/modernization-assessment-template.md), [execution path inventory](assets/templates/execution-path-inventory-template.md), [dependency inventory](assets/templates/dependency-inventory-template.md), [dependency graph](assets/templates/dependency-graph-template.md), [technology and impedance analysis](assets/templates/impedance-analysis-template.md), [execution path detail](assets/templates/execution-path-detail-template.md), [path test plan](assets/templates/path-test-plan-template.md), [decision register](assets/templates/decision-register-template.md), [oracle strategy](assets/templates/oracle-template.md), [defect ledger](assets/templates/defect-ledger-template.md), [migration plan](assets/templates/migration-plan-template.md), and [parity report](assets/templates/parity-report-template.md).
 
 A template is what prevents an artifact from drifting into a different shape every time it is produced.
 
@@ -113,17 +113,19 @@ An artifact is a durable, reviewable output of the workflow. It is defined by **
 | Completion metadata | Final review summary, QA result, docs handoff, completion ref | `/document-story`, `/validate-story complete` |
 | Post-complete follow-up ledger entry | One small follow-up tied to a completed story | `/patch-story` |
 | Audit findings | System map, category findings, triage decisions from periodic audits | `/map-repo`, `/audit-all`, category audits, `/triage-audit-findings` |
-| Modernization assessment | Feasibility verdict, risks, blockers, oracle tier, walking-skeleton feasibility | `/assess-modernization` |
-| Legacy map | Source stack, topology, entrypoints, data stores, interfaces, tests, risk hotspots | `/map-legacy` |
-| Intent ledger | Evidence-graded intent statements from documentation, releases, tickets, and history | `/mine-history` |
-| Dependency ledger | Legacy dependencies, support status, substitution choices, impedance mismatches, blockers | `/inventory-dependencies` |
-| Translation-gap analysis | Language, runtime, framework, data, numeric, build, deployment, and operational gaps | `/analyze-translation-gap` |
-| Oracle strategy | Oracle tier, execution environment, containment, fixtures, tolerances, determinism hazards | `/build-oracle` |
-| Behavior catalog | `BEH-NNN` user-visible behaviors with triggers, inputs, outputs, rules, evidence, and draft Gherkin | `/catalog-behavior` |
-| Legacy flow | One traced legacy behavior or entrypoint from ingress through logic, state, persistence, and egress | `/trace-flow` |
-| Defect ledger | `DEF-NNN` decisions to reproduce faithfully, fix now, or fix later | `/ledger-defects` |
-| Migration plan | Staging strategy, slice plan, structure fidelity, cutover, rollback, parity strategy, forecast | `/plan-migration` |
+| Modernization assessment | Feasibility verdict, first-slice conditions, oracle tier, walking-skeleton feasibility | `/assess-modernization` |
+| Execution path inventory | Every executable path with trigger, description, and active/suspected-dead/unknown status | `/inventory-paths` |
+| Dependency inventory | External dependencies with `available` / `reimplementable` / `undecided` / `no-route` dispositions | `/inventory-dependencies` |
+| Dependency graph | Which paths use which internal modules and `DEP-NNN` IDs | `/map-dependency-graph` |
+| Technology and impedance analysis | Source/target characteristics and `IMP-NNN` mismatches that change port/wrap/rewrite choices | `/analyze-impedance` |
+| Oracle strategy | Oracle tier, execution environment, containment | `/build-oracle` |
+| Execution path detail | Sequence, dependencies, data flow, and edge cases for one `XP-NNN` | `/trace-path` |
+| Decision register | Port, retire, rewrite, substitute, and comparison-policy decisions as `DEC-NNN` | `/record-decision` |
+| Defect ledger | `DEF-NNN` path-scoped decisions to reproduce faithfully, fix now, or fix later | `/ledger-defects` |
+| Migration plan | Staging strategy, slice plan, per-slice prerequisites, cutover, forecast | `/plan-migration` |
+| Path test plan | Per-path scenarios, oracle strategy, and comparison rules | `/plan-path-tests` |
 | Parity report | Per-port-story comparison of legacy expectation to new behavior, including `PAR-#` and `PROV-#` blockers | `/verify-parity` |
+| Modernization hub | What this repo is, where the lane is, and links to artifacts that exist — navigation, not a second analysis copy | `/assess-modernization` creates; each producing command updates only its index row |
 
 ### Implementation note: artifacts and files
 
@@ -132,7 +134,7 @@ The methodology defines artifacts as concepts. The current implementation bundle
 Three examples of bundling:
 
 - The **story spec file** (`docs/features/{STORY-ID}-*.md`) carries the story spec, the implementer's status and acceptance-criteria evidence, the QA evidence matrix, the completion metadata, and the post-complete follow-up ledger entries — every artifact tied to one story in one document so the trace stays in one place. A walking-skeleton story uses the same file pattern with a thinner scope.
-- The **project README** carries the application design and the backlog because both describe the same project.
+- The **project README** carries the application design and the backlog because both describe the same project. On a brownfield port it also carries the **modernization hub** (`## Modernization`): what the port is, lane status, and an index of links. Those cells have separate owners listed in the README template. The linked files remain canonical.
 - The **purpose and domain files** (`docs/PURPOSE.md` and `docs/DOMAIN.md`) stay separate because they are small, global source-of-truth artifacts that every later step reads.
 - The **story review file** carries one story review artifact; a diff review of the same shape lives under `docs/reviews/`.
 
@@ -157,7 +159,7 @@ Evidence is what makes "done" mean something specific.
 
 Evidence answers the question "how do we know?" An artifact without evidence is a claim. Evidence turns the claim into a check.
 
-Modernization adds a second evidence axis: **provenance**. Greenfield evidence proves an acceptance criterion passed. Brownfield provenance proves where a recovered fact came from and how much confidence it deserves. The default grades are `E1 verified`, `E2 documented`, `E3 code-derived`, `E4 inferred`, and `E5 unknown`. `E4` and `E5` do not become implementation-ready facts unless a human resolves or explicitly accepts the uncertainty.
+Modernization adds a second evidence axis: **provenance**. Greenfield evidence proves an acceptance criterion passed. Brownfield provenance proves where a recovered fact came from and how much confidence it deserves. The default grades are `E1 verified`, `E2 documented`, `E3 code-derived`, `E4 inferred`, and `E5 unknown`. Each claim carries exactly one grade — the weakest grade that applies to the actionable part. `E4` and `E5` do not become implementation-ready facts unless a human resolves or explicitly accepts the uncertainty for the scope those claims bind.
 
 ---
 
@@ -169,7 +171,7 @@ A gate is where work stops until someone — human or agent — decides whether 
 - **Examples.**
   - **Agent gates.** Review `Pass` or `Block`, including model-fidelity `MODEL-#` findings. QA `PASS`, `FAIL`, or `BLOCKED` per criterion. `validate-story ready`, `validate-story complete`, and `validate-story followups`.
   - **Human gates.** The nine approvals in the [README](README.md) swimlane: purpose, refined requirements, domain model, design and architecture decision records, walking skeleton, backlog, story spec, QA evidence, documentation.
-  - **Modernization gates.** M1 assessment verdict, M2 recovered documentation, M3 defect decisions, M4 migration plan, and M5 parity evidence. Parity adds `PAR-#` and `PROV-#` review findings, `PASS` / `FAIL` / `BLOCKED` verification rows, and the port-story `Z8` quality gate.
+  - **Modernization gates.** M1 assessment verdict, M2 recovered path documentation for the current slice, M3 defect decisions for that slice, M4 migration plan, and M5 parity evidence. Parity adds `PAR-#` and `PROV-#` review findings, `PASS` / `FAIL` / `BLOCKED` verification rows, and the port-story `Z8` quality gate.
 
 Gates exist because skipping them has been observed to cost more later. A gate that becomes a formality has stopped doing its job.
 
@@ -204,21 +206,24 @@ The composition matrix shows which command produces or updates which artifact, w
 | `/audit-all` | Auditor | Audit findings across all categories | Audit findings |
 | `/audit-{category}` | Auditor | Category findings (`tooling`, `reliability`, `db`, `api-contracts`, `security`, `performance`, `test-coverage`) | Audit findings |
 | `/triage-audit-findings` | Auditor | Audit triage decisions | Audit findings |
-| `/map-legacy` | Archaeologist | Legacy map | `docs/modernization/legacy-map.md` |
-| `/mine-history` | Archaeologist | Intent ledger | `docs/modernization/intent-ledger.md` |
-| `/inventory-dependencies` | Migration Strategist | Dependency ledger | `docs/modernization/dependency-ledger.md` |
-| `/analyze-translation-gap` | Migration Strategist | Translation-gap analysis | `docs/modernization/translation-gaps.md` |
-| `/build-oracle` | Implementer | Oracle strategy and fixtures | `docs/modernization/oracle.md`; fixture or harness files when built |
-| `/assess-modernization` | Migration Strategist | Modernization assessment | `docs/modernization/ASSESSMENT.md` |
-| `/catalog-behavior` | Archaeologist | Behavior catalog entry | `docs/modernization/behaviors/BEH-NNN-*.md` |
-| `/trace-flow` | Archaeologist | Legacy flow document | `docs/modernization/flows/` |
+| `/inventory-paths` | Archaeologist | Execution path inventory | `docs/modernization/execution-path-inventory.md` |
+| `/inventory-dependencies` | Migration Strategist | Dependency inventory | `docs/modernization/dependency-inventory.md` |
+| `/map-dependency-graph` | Archaeologist | Dependency graph | `docs/modernization/dependency-graph.md` |
+| `/analyze-impedance` | Migration Strategist | Technology and impedance analysis | `docs/modernization/impedance-analysis.md` |
+| `/build-oracle` | Implementer | Oracle strategy and harness/fixture files | `docs/modernization/oracle.md`; fixture or harness files when built |
+| `/assess-modernization` | Migration Strategist | Modernization assessment; README hub created or updated | `docs/modernization/ASSESSMENT.md`; project README `## Modernization` |
+| `/record-decision` | Migration Strategist (records); human (decides) | Decision register | `docs/modernization/decision-register.md` |
+| `/trace-path` | Archaeologist | Execution path detail | `docs/modernization/paths/XP-NNN-*.md` |
 | `/recover-domain` | Modeler | Recovered purpose and domain model | `docs/PURPOSE.md`; `docs/DOMAIN.md` |
-| `/ledger-defects` | Archaeologist | Defect ledger | `docs/modernization/defect-ledger.md` |
-| `/document-legacy` | Archaeologist and Modeler | Legacy recovery artifacts | Behavior catalog, flow docs, purpose, domain model, defect ledger |
-| `/plan-migration` | Migration Strategist | Migration plan; architecture decision records as needed | `docs/modernization/migration-plan.md`; `docs/decisions/ADR-NNN-*.md` |
+| `/ledger-defects` | Archaeologist (records); human (decides) | Defect ledger | `docs/modernization/defect-ledger.md` |
+| `/document-legacy` | Archaeologist and Modeler | Coordinates slice-scoped recovery | Path details, purpose, domain model, defect ledger |
+| `/plan-migration` | Migration Strategist | Migration plan; recommended ADRs | `docs/modernization/migration-plan.md` |
+| `/plan-path-tests` | Architect | Path test plan | `docs/modernization/test-plans/XP-NNN-tests.md` |
 | `/plan-port-story` | Architect | Port story spec | `docs/features/{STORY-ID}-*.md` |
 | `/verify-parity` | QA | Parity report | `docs/modernization/parity/{STORY-ID}-parity.md` |
 | `/complete-port-story` | Implementer, Auditor, QA, Docs-PM | Code, tests, review, parity report, QA evidence, documentation, validation | Codebase; story spec; story review; parity report; project docs |
+
+Each producing modernization command also updates **only its README Artifact index row** when `## Modernization` exists. `/assess-modernization`, `/record-decision`, and `/plan-migration` also update **What this is** / **Lane status**. The hub is navigation; the linked file is canonical.
 
 Read this matrix as: *the agent brings concern; the command brings control (instructions and constraints); the template shapes the file the artifact lands in; the artifact itself is the durable conceptual output.* Each axis moves independently. Change the template and the file layout changes; the artifacts do not. Change the command and where the artifact lands may change; the artifact does not. Change the agent and the judgment behind the artifact changes; everything else stays.
 

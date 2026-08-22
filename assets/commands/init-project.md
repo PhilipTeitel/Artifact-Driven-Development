@@ -9,9 +9,12 @@ Actions:
 1. **Create the configured design doc from the standard template:**
    - Copy the configured design doc template (default `~/.cursor/templates/readme-template.md`) to your project root as the configured design doc (default `README.md`).
    - **You (human) may edit only:** the project title, the short description, and optionally the Table of Contents. Do **not** fill in any section from "High-Level Architecture" through "Backlog Items"—those are filled by the architect when designing and planning.
+   - **Greenfield:** omit `## Modernization` entirely.
+   - **Brownfield / port:** prefer `/assess-modernization` to create the README. That command includes `## Modernization` and leaves design sections out until `/design-application`. If you run init-project first anyway, still omit `## Modernization` here and let assessment insert it.
 2. **Create the documentation directory structure:**
    - Create the configured features, requirements, decisions, and reviews directories as needed (defaults: `docs/features`, `docs/requirements`, `docs/decisions`, and `docs/reviews`). Story documents live in the configured features directory.
    - Leave the configured purpose and domain artifact paths ready for `/define-purpose` and `/model-domain` (defaults: `docs/PURPOSE.md` and `docs/DOMAIN.md`). Do not fill them during mechanical initialization.
+   - Do not create `docs/modernization/` during greenfield init. `/assess-modernization` creates it.
 
 3. *(Optional)* Add any other standard files (e.g. `.env.example`, `package.json`) per your team convention.
 

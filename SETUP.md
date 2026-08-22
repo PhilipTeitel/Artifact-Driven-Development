@@ -130,18 +130,19 @@ In Cursor chat, the workflow slash commands should be available, including:
 /review-story
 /qa-story
 /document-story
-/map-legacy
-/mine-history
+/inventory-paths
 /inventory-dependencies
-/analyze-translation-gap
+/map-dependency-graph
+/analyze-impedance
 /build-oracle
 /assess-modernization
-/catalog-behavior
-/trace-flow
+/record-decision
+/trace-path
 /recover-domain
 /ledger-defects
 /document-legacy
 /plan-migration
+/plan-path-tests
 /plan-port-story
 /verify-parity
 /complete-port-story
@@ -161,12 +162,12 @@ Open the target application repository in Cursor. The default workflow writes pr
 
 - `docs/PURPOSE.md` for the product purpose / thesis
 - `docs/DOMAIN.md` for the ubiquitous language, data dictionary, and conceptual model
-- `README.md` for the design hub
+- `README.md` for the design hub, and on the modernization-port lane the modernization navigation hub (`## Modernization`) created by `/assess-modernization`
 - `docs/requirements/` for refined requirements
 - `docs/decisions/` for ADRs
 - `docs/features/` for story specs and story reviews
 - `docs/reviews/` for diff reviews
-- `docs/modernization/` for modernization assessments, recovered legacy evidence, migration plans, and parity reports
+- `docs/modernization/` for assessments, path inventory and details, dependency inventory and graph, impedance analysis, decision register, defect ledger, migration plans, path test plans, and parity reports
 - `audit-findings.md` for repository audit findings
 
 A typical new feature flow is:
@@ -189,13 +190,14 @@ A typical modernization flow is:
 
 ```text
 /assess-modernization /path/to/legacy-repo target: <target stack>
-/document-legacy @docs/modernization/ASSESSMENT.md
-/refine-feature @docs/modernization/behaviors/BEH-001-short-slug.md
-/recover-domain @docs/modernization/behaviors/
-/plan-migration @docs/modernization/ASSESSMENT.md @docs/requirements/
+/plan-migration @docs/modernization/ASSESSMENT.md
+/document-legacy XP-001
+/refine-feature @docs/modernization/paths/XP-001-short-slug.md
+/recover-domain @docs/modernization/paths/
+/plan-path-tests XP-001
 /design-application @docs/requirements/REQ-001-short-slug.md
 /plan-project @docs/modernization/migration-plan.md
-/plan-port-story STORY-ID BEH-001
+/plan-port-story STORY-ID XP-001
 /complete-port-story STORY-ID
 ```
 

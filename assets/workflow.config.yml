@@ -33,18 +33,19 @@ agents:
   qa: ~/.cursor/agents/qa.md
 
 templates:
-  behaviorCatalog: ~/.cursor/templates/behavior-catalog-template.md
+  executionPathInventory: ~/.cursor/templates/execution-path-inventory-template.md
+  executionPathDetail: ~/.cursor/templates/execution-path-detail-template.md
+  dependencyInventory: ~/.cursor/templates/dependency-inventory-template.md
+  dependencyGraph: ~/.cursor/templates/dependency-graph-template.md
+  impedanceAnalysis: ~/.cursor/templates/impedance-analysis-template.md
+  pathTestPlan: ~/.cursor/templates/path-test-plan-template.md
+  decisionRegister: ~/.cursor/templates/decision-register-template.md
   defectLedger: ~/.cursor/templates/defect-ledger-template.md
-  dependencyLedger: ~/.cursor/templates/dependency-ledger-template.md
-  intentLedger: ~/.cursor/templates/intent-ledger-template.md
-  legacyFlow: ~/.cursor/templates/legacy-flow-template.md
-  legacyMap: ~/.cursor/templates/legacy-map-template.md
   migrationPlan: ~/.cursor/templates/migration-plan-template.md
   modernizationAssessment: ~/.cursor/templates/modernization-assessment-template.md
   oracle: ~/.cursor/templates/oracle-template.md
   parityReport: ~/.cursor/templates/parity-report-template.md
   portStory: ~/.cursor/templates/port-story-template.md
-  translationGap: ~/.cursor/templates/translation-gap-template.md
   readme: ~/.cursor/templates/readme-template.md
   purpose: ~/.cursor/templates/purpose-template.md
   domain: ~/.cursor/templates/domain-model-template.md
@@ -58,15 +59,18 @@ templates:
 paths:
   modernizationDir: docs/modernization
   assessmentDoc: docs/modernization/ASSESSMENT.md
-  legacyMapDoc: docs/modernization/legacy-map.md
-  intentLedgerDoc: docs/modernization/intent-ledger.md
-  dependencyLedgerDoc: docs/modernization/dependency-ledger.md
-  translationGapDoc: docs/modernization/translation-gaps.md
+  pathInventoryDoc: docs/modernization/execution-path-inventory.md
+  dependencyInventoryDoc: docs/modernization/dependency-inventory.md
+  dependencyGraphDoc: docs/modernization/dependency-graph.md
+  impedanceDoc: docs/modernization/impedance-analysis.md
+  decisionRegisterDoc: docs/modernization/decision-register.md
   defectLedgerDoc: docs/modernization/defect-ledger.md
   migrationPlanDoc: docs/modernization/migration-plan.md
   oracleDoc: docs/modernization/oracle.md
-  behaviorGlob: docs/modernization/behaviors/BEH-NNN-*.md
-  flowsDir: docs/modernization/flows
+  pathGlob: docs/modernization/paths/XP-NNN-*.md
+  pathsDir: docs/modernization/paths
+  pathTestPlanGlob: docs/modernization/test-plans/XP-NNN-tests.md
+  pathTestPlansDir: docs/modernization/test-plans
   parityReportPattern: docs/modernization/parity/{STORY-ID}-parity.md
   designDoc: README.md
   purposeDoc: docs/PURPOSE.md
@@ -88,8 +92,8 @@ workflow:
       commands: [define-purpose, refine-feature, model-domain, design-application, plan-skeleton, plan-project, plan-story, complete-story]
       alternatives: []
     modernizationPort:
-      description: Brownfield modernization or language/framework port requiring assessment, recovered documentation, target design, parity evidence, and cutover planning.
-      commands: [assess-modernization, document-legacy, refine-feature, recover-domain, plan-migration, design-application, plan-project, plan-port-story, complete-port-story]
+      description: Brownfield modernization or language/framework port requiring assessment, recovered path documentation, target design, parity evidence, and cutover planning.
+      commands: [assess-modernization, record-decision, plan-migration, document-legacy, refine-feature, recover-domain, plan-path-tests, design-application, plan-project, plan-port-story, complete-port-story]
     storyFollowup:
       description: Small behavior fix, debugging result, UI polish, copy adjustment, or local refinement tied to a completed story.
       commands: [patch-story, review-story, qa-story, document-story]
@@ -119,15 +123,14 @@ workflow:
     - audit-tooling
     - triage-audit-findings
   modernizationAssessSequence:
-    - map-legacy
-    - mine-history
+    - inventory-paths
     - inventory-dependencies
-    - analyze-translation-gap
+    - map-dependency-graph
+    - analyze-impedance
     - build-oracle
     - assess-modernization
   legacyRecoverySequence:
-    - catalog-behavior
-    - trace-flow
+    - trace-path
     - recover-domain
     - ledger-defects
     - document-legacy
@@ -213,8 +216,10 @@ modernization:
   stagingStrategies: [strangler, phased-rewrite, big-bang-parallel-run]
   structureFidelity: [preserve-then-refactor, refactor-now]
   defectPolicy: reproduce-then-backlog
+  dependencyDispositions: [available, reimplementable, undecided, no-route]
   parity:
-    numericTolerance:
+    comparisonRules: per-path
+    numericToleranceHint:
       relative: 0.000001
       absolute: 0.000001
     textNormalization:
@@ -238,9 +243,11 @@ stack:
     examples: [Pino, Winston, structlog, slog]
 
 naming:
-  behaviorPattern: BEH-NNN-short-slug.md
+  executionPathPattern: XP-NNN-short-slug.md
+  pathTestPlanPattern: XP-NNN-tests.md
   defectPattern: DEF-NNN-short-slug.md
-  gapPattern: GAP-NNN-short-slug.md
+  decisionPattern: DEC-NNN
+  impedancePattern: IMP-NNN-short-slug.md
   riskPattern: RISK-NNN-short-slug.md
   requirementPattern: REQ-NNN-short-slug.md
   adrPattern: ADR-NNN-short-slug.md

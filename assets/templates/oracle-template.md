@@ -1,6 +1,6 @@
 <!-- Oracle contract:
 - Classify the legacy oracle tier. That is this document's job.
-- Per-path fixtures and comparison rules live in path test plans, not here.
+- Per-path fixtures and comparison rules live on the covering `REQ-NNN` (section 4b), not here.
 - T3 documented-only cannot claim independent parity.
 - After the probe, treat tier and environment as a snapshot unless a new probe is run (vN+1).
 - Omit unused environment rows. Do not write N/A.
@@ -17,7 +17,7 @@
 
 ## Summary
 
-{One paragraph: which tier applies, whether containment is required, and what that means for the first slice's parity claims. Point to path test plans for fixtures and comparison rules.}
+{One paragraph: which tier applies, whether containment is required, and what that means for the first slice's parity claims. Point to REQ section 4b for fixtures and comparison rules.}
 
 ---
 
@@ -54,13 +54,13 @@ Write `None.` when the probe found no containment requirement.
 |--------|------------------------------|---------|
 | `{timestamp / RNG / locale / order / uninitialized memory}` | `{one line}` | `{control or unknown}` |
 
-Path-specific hazards belong in that path's test plan.
+Path-specific hazards belong in that path's REQ comparison rule.
 
 ## 5. Harness location
 
 | Kind | Path | Notes |
 |------|------|-------|
-| `{probe notes / harness / fixture root}` | `{path or none}` | `{build-oracle build writes files; test plans name FIX IDs}` |
+| `{probe notes / harness / fixture root}` | `{path or none}` | `{build-oracle build writes files; REQ 4b names FIX IDs}` |
 
 ## 6. Open oracle questions
 
@@ -69,5 +69,5 @@ Path-specific hazards belong in that path's test plan.
 ## Links
 
 - Assessment: `{assessmentDoc}`
-- Path test plans: `{pathTestPlanGlob}`
-- Parity reports: `{parityReportPattern}`
+- Requirements (comparison rules): `{requirementsDir}`
+- Path details: `{pathsDir}`

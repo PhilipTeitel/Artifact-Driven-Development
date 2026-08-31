@@ -99,5 +99,5 @@ Write `None.` when there are no errata.
 
 - Path inventory: `{pathInventoryDoc}`
 - Dependency graph: `{dependencyGraphDoc}`
-- Path test plan: `{pathTestPlanDoc}`
+- Related REQ: `{reqDoc or TBD}`
 - Defect ledger: `{defectLedgerDoc}`

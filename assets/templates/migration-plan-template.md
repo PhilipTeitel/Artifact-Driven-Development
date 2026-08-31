@@ -1,7 +1,7 @@
 <!-- Migration plan contract:
 - Staging, slice order, and per-slice prerequisites. Global inventories do not gate a slice.
 - Each slice row names only the DEP-NNN, DEC-NNN, and DEF-NNN IDs that bind that slice.
-- Check off resolved prerequisites in the slice row or port story, not in analysis snapshots.
+- Check off resolved prerequisites in the slice row or the ADD story, not in analysis snapshots.
 - Later slices may be inventory XP IDs until /trace-path has run for them.
 - Forecast confidence must be recalibrated after the first completed slice.
 - Current state lives in cells. No prose changelog.
@@ -39,19 +39,19 @@
 
 ## 3. Slice plan
 
-Each slice follows recover → refine → design → implement → UAT. A slice may start when **its** prerequisites are resolved, even if other slices still have open `undecided` dependencies.
+Each slice follows recover → refine → (design when the accumulating REQ set warrants it) → plan → implement → QA. A slice may start when **its** prerequisites are resolved, even if other slices still have open `undecided` dependencies.
 
 | Slice | Objective | XP IDs | Prerequisites | Structure fidelity | Oracle evidence | Exit criteria | Forecast |
 |-------|-----------|--------|---------------|--------------------|-----------------|---------------|----------|
-| `{STORY-ID or slice name}` | `{objective}` | `{XP-NNN}` | `{DEP-NNN / DEC-NNN / DEF-NNN + resolved/unresolved}` | `{preserve-then-refactor/refactor-now}` | `{FIX-NNN / T3 data / TBD until test plan}` | `{criteria}` | `{size/confidence}` |
+| `{STORY-ID or slice name}` | `{objective}` | `{XP-NNN}` | `{DEP-NNN / DEC-NNN / DEF-NNN + resolved/unresolved}` | `{preserve-then-refactor/refactor-now}` | `{FIX-NNN / T3 data / TBD until REQ 4b}` | `{criteria}` | `{size/confidence}` |
 
 Prerequisites list only IDs that bind this slice. Do not paste global blocker counts.
 
 ## 4. Per-slice ADD loop
 
-| Slice | Recover | Refine | Design | Implement | UAT / parity |
-|-------|---------|--------|--------|-----------|--------------|
-| `{slice}` | `/trace-path` `{XP-NNN}` | `/refine-feature` | `{ADR / design delta or none}` | `/plan-port-story` then `/complete-port-story` | `/verify-parity` + human M5 |
+| Slice | Recover | Refine | Design | Implement | QA |
+|-------|---------|--------|--------|-----------|-----|
+| `{slice}` | `/trace-path` `{XP-NNN}` | `/refine-feature` → `REQ-NNN` | `{/design-application delta, or none if design already covers this REQ}` | `/plan-story` then `/complete-story` | Gate 8, including `parity` rows |
 
 ## 5. Recommended ADRs
 

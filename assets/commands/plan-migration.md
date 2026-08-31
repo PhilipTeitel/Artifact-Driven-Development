@@ -20,7 +20,7 @@ Write the result to the configured migration plan document (default `docs/modern
 3. Choose a staging strategy from the configured strategies (`strangler`, `phased-rewrite`, `big-bang-parallel-run`) or stop if none fits.
 4. Define slices in dependency order from the graph. Each slice lists `XP-NNN` IDs and a prerequisite table of only the `DEP-NNN`, `DEC-NNN`, and `DEF-NNN` IDs that bind **that** slice.
 5. Do not gate a slice on global unresolved counts. A path with no `no-route` dependency and no open `DEC-NNN` in its row may be first.
-6. Record the per-slice loop: recover → refine → design → implement → UAT.
+6. Record the per-slice loop: recover → refine (`REQ-NNN`) → design (holistic, when the accumulating REQ set warrants it) → `/plan-story` → `/complete-story`.
 7. Recommend ADRs for target stack, process boundaries, persistence, dependency substitutions, integration model, and cutover.
 8. Document cutover/rollback only when the project has a live cutover. Omit that section for a library port with none.
 9. **README hub.** Update the Artifact index row **Migration plan**. Set **Lane status** to `Phase: Planning`, `Gate: M4 pending` (or `M4 accepted` if the user already approved in-session), first/current slice from the plan, and Next command (usually `/document-legacy` scoped to that slice). Do not rewrite analysis index rows or design sections.

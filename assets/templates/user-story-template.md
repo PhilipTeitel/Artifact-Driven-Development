@@ -24,6 +24,16 @@
 | `docs/PURPOSE.md#thesis` | {purpose thesis / anti-thesis / trade-off rule} | {one line} |
 | `docs/DOMAIN.md#...` | `{Term}`, `{Entity.attribute}`, `{Boundary}` | {one line} |
 
+<!-- INCLUDE WHEN a linked REQ has section 4b Legacy provenance. OMIT ENTIRELY otherwise. REQ is canonical; copy the rows this story implements. -->
+
+### 1b. Legacy provenance
+
+Copied from the linked `REQ-NNN` section 4b. Do not invent grades, comparison rules, or defect decisions here.
+
+| Sn | XP-NNN | Evidence | DEC-NNN | DEF-NNN | Comparison rule | Oracle source |
+|----|--------|----------|---------|---------|-----------------|---------------|
+| S1 | `{XP-NNN}` | `{E1\|E2\|E3\|E4\|E5}` `{citation}` | `{DEC-NNN or none}` | `{DEF-NNN or none}` | `{from REQ}` | `{FIX-NNN / acceptance data / none}` |
+
 ---
 
 ## 2. Linked architecture decisions (ADRs)
@@ -50,6 +60,16 @@
 - [ ] For every adapter in Section 4b, Section 8a contains both a **contract test against the port** and an **integration test against the real backing service** (no mock of the boundary the adapter owns), and Phase Y has a `(binding)` criterion citing the integration test file
 - [ ] Every Gherkin scenario ID from the linked refined requirements in the configured requirements directory (default `docs/requirements/REQ-NNN-*.md`) is mapped to at least one acceptance test row in Section 8a — or the story explicitly states why a given scenario ID is out of scope here
 - [ ] Phase Y includes at least one criterion with **non-mock** evidence where wrong-stack substitution is a risk
+- [ ] If linked REQ files include **4b. Legacy provenance**: Section 1b is copied from those rows; no covered claim is `E4 inferred` or `E5 unknown` without a `DEC-NNN`; each oracle-backed `XP-NNN` has a comparison rule in the REQ and a `parity` test row in Section 8a (or the REQ says oracle source is `none`)
+- [ ] If this story implements recovered `Sn` IDs, the migration-plan prerequisite IDs that bind those `XP-NNN` (`DEP-NNN`, `DEC-NNN`, `DEF-NNN`) are listed under **Slice prerequisites** below and marked resolved
+
+<!-- INCLUDE WHEN this story implements recovered Sn IDs from a modernization REQ. OMIT ENTIRELY otherwise. Copied from the migration-plan row for those XP IDs. Check off here; do not edit analysis snapshots. -->
+
+### Slice prerequisites
+
+| ID | Kind | What must be true | Status |
+|----|------|-------------------|--------|
+| `{DEP-NNN / DEC-NNN / DEF-NNN}` | `{dependency / decision / defect}` | `{the condition that unblocks implementation}` | `{unresolved / resolved}` |
 
 ---
 
@@ -208,9 +228,12 @@ Test levels (use the smallest level that proves the behavior end-to-end at that 
 - `unit` — a single function/class with no I/O
 - `contract` — exercises a port with a generic test suite that any adapter for that port must pass
 - `integration` — exercises an adapter against the **real** backing service or a hermetic fixture for it (no mocks of the boundary under test)
+- `parity` — compares new behavior to the legacy oracle, fixture, or acceptance data named by the linked REQ section 4b, using that path's comparison rule
 - `e2e` / `ui` — full-stack or browser-driven flow
 
-Hexagonal rule (per the configured methodology profile): every port in Section 4b needs at least one configured contract test row; every adapter needs at least one configured integration test row. Defaults are `contract` and `integration`.}
+Hexagonal rule (per the configured methodology profile): every port in Section 4b needs at least one configured contract test row; every adapter needs at least one configured integration test row. Defaults are `contract` and `integration`.
+
+When Section 1b is present, add a **Covers XP** column and at least one `parity` row per oracle-backed `XP-NNN`. Comparison rules come from the REQ, not a global default. If the REQ says oracle source is `none`, do not invent a parity row.}
 
 | # | Level | File::test name | Covers AC | Covers Sn | Notes |
 |---|-------|------------------|-----------|-----------|-------|
@@ -231,7 +254,8 @@ Hexagonal rule (per the configured methodology profile): every port in Section 4
 ## Implementation Order
 
 {Numbered list of steps in the recommended sequence for the Implementer.
-Each step should reference a specific file and map to one or more acceptance criteria.}
+Each step should reference a specific file and map to one or more acceptance criteria.
+When Section 8a contains `parity` rows, those characterization tests are the first failing tests — before other production-code work for the covered `Sn`.}
 
 1. `path/to/file` — {what to do} (covers A1, A2)
 2. ...

@@ -2,7 +2,7 @@
 
 Orchestrates slice-scoped recovery after a modernization assessment is accepted or conditionally accepted. Before acting, resolve the workflow profile and use its command directory, modernization paths, path glob, purpose path, domain path, defect ledger path, evidence grades, and legacy recovery sequence.
 
-Recovery is per slice. Do not catalog the entire legacy system before the first port story.
+Recovery is per slice. Do not catalog the entire legacy system before the first recovered requirement.
 
 ## Command-Agent Binding And Delegation
 
@@ -35,7 +35,7 @@ When subagent delegation is available, run each phase in the configured role sub
 3. Run `/trace-path` for each in-scope path (or one grouped detail when they are the same operation).
 4. Run `/recover-domain` using those path details and user documentation.
 5. Run `/ledger-defects` for mismatches those paths surface. Refuse mis-posed system-wide defects.
-6. Recommend `/refine-feature` against the ready path details, then `/plan-path-tests`.
+6. Recommend `/refine-feature` against the ready path details. Comparison rules belong on that REQ. Next is `/design-application` or `/plan-project`, then `/plan-story`.
 7. Confirm README Artifact index rows for Path details, Purpose/Domain, and Defect ledger were updated by those phases. Do not rewrite **Lane status** (Migration Strategist) or Architect design sections.
 
 ## Output

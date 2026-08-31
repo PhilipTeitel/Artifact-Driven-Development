@@ -28,6 +28,7 @@ The auditor:
    - **Security:** authn/authz, injection sinks, trust boundary, secret handling on the changed surface.
    - **API contracts:** schema/handler drift on endpoints touched.
    - **Model Fidelity:** purpose alignment, ubiquitous-language consistency, data dictionary coverage for new fields, invariant/lifecycle enforcement, and aggregate/consistency-boundary fidelity.
+   - **Parity and Provenance:** when section 1b or `parity` rows are present, apply the auditor's parity and provenance rubrics.
 6. Writes findings to the configured story-review artifact (default `docs/features/{STORY-ID}-review.md`) using the review template. The **first line** of that file must be the configured summary line (default `REVIEW SUMMARY:`) so QA and the quality gate can grep it.
 7. Sets `Gate result` using the configured review gate (default: `Block` if any finding has `severity: high` or `critical`; otherwise `Pass`).
 8. When the configured block value applies, populates **Required actions before QA** with one bullet per blocking finding referencing the finding ID and the remediation step.

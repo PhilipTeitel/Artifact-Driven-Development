@@ -35,7 +35,7 @@ Triggered by `/review-story {STORY-ID}` or `/review-diff [base] [target]`. You w
 - Run only the configured per-story review categories (defaults: **Test Coverage**, **Reliability**, **Security**, **API Contracts**, **Model Fidelity**). Skip other audit categories unless the story explicitly touched those areas.
 - Apply the per-story test-coverage rubric (below).
 - Apply the per-story model-fidelity rubric (below) when the configured purpose or domain artifacts exist or the story references domain concepts.
-- For port stories, apply the parity and provenance rubrics below even if no code changed outside the story's planned files.
+- For stories with section 1b or `parity` test rows, apply the parity and provenance rubrics below even if no code changed outside the story's planned files.
 - For `/review-diff`, scope is the diff itself; "out-of-plan" does not apply.
 
 ## Per-story test-coverage rubric (REQUIRED in mode B)
@@ -86,18 +86,18 @@ When in per-story review mode, your `Model Fidelity` findings MUST evaluate the 
 
 If the configured purpose or domain artifacts are missing and the story is not a skeleton/bootstrap story that explicitly creates them, mark the model-fidelity section `BLOCKED` with a `MODEL-#` finding instead of inferring intent from requirements alone.
 
-## Per-story parity rubric (REQUIRED for port stories)
+## Per-story parity rubric (REQUIRED when the story has `parity` test rows or section 1b)
 
-When a story contains `Phase P: Parity` or references `XP-NNN`, evaluate the port against the path test plan, oracle tier, and defect ledger. Each failed check is a finding with the configured parity prefix (default `PAR-#`) and the appropriate severity.
+When a story implements recovered `Sn` IDs, evaluate the port against the linked REQ section 4b, oracle tier, and defect ledger. Each failed check is a finding with the configured parity prefix (default `PAR-#`) and the appropriate severity.
 
-1. **Phase P coverage.** Every path named in the story's legacy source touchpoints or parity plan must have at least one `P` criterion and one test-plan row covering it, unless the path test plan records that no oracle source exists.
-   - Missing parity criterion or row when a fixture exists -> `PAR-#` `severity: high`.
+1. **Parity coverage.** Every oracle-backed `XP-NNN` in section 1b must have at least one `parity` test-plan row covering it, unless the REQ says oracle source is `none`.
+   - Missing parity row when a fixture exists -> `PAR-#` `severity: high`.
 
-2. **Oracle evidence.** Every `P` criterion must cite a concrete oracle fixture, recorded output, or acceptance-data source compatible with the configured oracle tier.
+2. **Oracle evidence.** Every `parity` row must cite a concrete oracle fixture, recorded output, or acceptance-data source compatible with the configured oracle tier.
    - Claiming repeated parity evidence for a `T2` or `T3` oracle -> `PAR-#` `severity: high`.
    - Missing fixture or unsupported oracle reference -> `PAR-#` `severity: critical` when the path is user-visible or business-critical.
 
-3. **Comparison discipline.** Numeric, ordered, culture-sensitive, formatted-text, and time-dependent comparisons must use the path test plan's rule. A global numeric default is not a substitute.
+3. **Comparison discipline.** Numeric, ordered, culture-sensitive, formatted-text, and time-dependent comparisons must use the REQ's rule. A global numeric default is not a substitute.
    - Unspecified comparison rule for numeric or formatted output -> `PAR-#` `severity: high`.
 
 4. **Defect reconciliation.** Any mismatch must link to a `DEF-NNN` decision (`reproduce-faithfully`, `fix-now`, or `fix-later`) scoped to the `XP-NNN`.
@@ -106,7 +106,7 @@ When a story contains `Phase P: Parity` or references `XP-NNN`, evaluate the por
 
 If the checks above pass and there are no other `PAR-#` issues, write `None.` under Parity.
 
-## Per-story provenance rubric (REQUIRED for port stories)
+## Per-story provenance rubric (REQUIRED when the story has section 1b)
 
 When a story contains recovered legacy behavior, evaluate whether the evidence is strong enough to implement. Each failed check is a finding with the configured provenance prefix (default `PROV-#`) and the appropriate severity.
 

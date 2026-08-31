@@ -9,8 +9,9 @@ This directs the QA agent to validate the given user story's acceptance criteria
 1. Find the story document using the configured story glob (default `docs/features/{STORY-ID}-*.md`).
 2. Read the entire story document, including all acceptance criteria and `Evidence:` lines.
 3. For each criterion ID (A1, A2, B1, ..., Z1), verify the cited evidence reference and run only the checks needed to confirm pass/fail.
-4. Output a Criteria Evidence Matrix with one row per criterion: ID, result using configured QA values (defaults: `PASS`/`FAIL`/`BLOCKED`), evidence reference, verification command, and proof.
-5. Output summary counts for the configured QA result values and list any remediation needed for failed or blocked criteria.
+4. When Section 8a contains `parity` rows, verify those criteria against the linked REQ section 4b comparison rule and oracle source. Record the result in the same evidence matrix. Do not write a separate parity report.
+5. Output a Criteria Evidence Matrix with one row per criterion: ID, result using configured QA values (defaults: `PASS`/`FAIL`/`BLOCKED`), evidence reference, verification command, and proof.
+6. Output summary counts for the configured QA result values and list any remediation needed for failed or blocked criteria.
 
 If you cannot find the story document, stop and tell the user — do not infer results.
 

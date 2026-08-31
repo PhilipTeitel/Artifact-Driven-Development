@@ -11,7 +11,7 @@ This directs the Docs-PM to review the given story and update all related docume
 3. Report the current status: story ID, title, status, fraction of acceptance criteria completed (e.g. "7/10 criteria done"), and count of follow-up ledger entries.
 4. Update any project documentation affected by the story or its follow-up ledger:
    - Configured design doc (default `README.md`) — **Backlog Items** Status for this story (derived from the story spec); Getting Started, Available Scripts, or Environment Variables only if the story changed setup
-   - Do **not** edit `## Modernization`, Lane status, or Artifact index rows except as already covered by `/verify-parity` for the Parity reports row
+   - Do **not** edit `## Modernization`, Lane status, or Artifact index rows
    - API docs / OpenAPI spec — if endpoints were added or modified
    - Runbooks or guides — if operational procedures changed
 5. If follow-up ledger rows list a docs impact, verify the referenced docs were updated or explain why no docs change is required.

@@ -4,6 +4,7 @@ Refined-requirements contract:
 - Save it under the configured requirements directory using the configured requirement naming pattern (default `docs/requirements/REQ-NNN-short-slug.md`). Use sequential three-digit `NNN` unless the profile overrides the pattern.
 - Do not delete or renumber existing REQ files; append the next number.
 - Every Gherkin scenario must have an ID matching the configured scenario ID pattern (default `Sn`). The architect references those IDs from story Test Plans so each scenario traces to a concrete test.
+- When refined from modernization path details, include **4b. Legacy provenance**. Unresolved `E4`/`E5` without a `DEC-NNN` stay in Open questions.
 - Unresolved questions are listed under `Open questions` — they are blocking. Do not write design or stories until they are resolved (architect should stop and re-ask).
 -->
 
@@ -57,9 +58,21 @@ Then  ...
 
 {Add as many scenarios as needed. Cover happy path, the most important edge cases, and the most likely failure modes the user described or that the source material implies.}
 
+<!-- INCLUDE WHEN this REQ was refined from modernization path details. OMIT ENTIRELY for greenfield. -->
+
+## 4b. Legacy provenance
+
+{This is the handoff from modernization into ADD. `/plan-story` cites this REQ. It does not re-own path details, the decision register, or the defect ledger.}
+
+| Sn | XP-NNN | Evidence | DEC-NNN | DEF-NNN | Comparison rule | Oracle source |
+|----|--------|----------|---------|---------|-----------------|---------------|
+| S1 | `{XP-NNN}` | `{E1\|E2\|E3\|E4\|E5}` `{citation}` | `{DEC-NNN or none}` | `{DEF-NNN or none}` | `{exact \| tolerance-based with bound \| semantic \| none}` | `{FIX-NNN / acceptance data / none}` |
+
+One evidence grade per row. Unresolved `E4 inferred` or `E5 unknown` without a `DEC-NNN` stays in **Open questions** and keeps Status off `Ready for Design`. Comparison is per path: do not write a system-wide numeric default. If no fixture or acceptance-data source exists, say `none` and do not invent a parity scenario.
+
 ## 5. Constraints
 
-{Hard constraints from the source material: regulatory, performance, security, platform, integration, deadlines. These often translate into ADRs.}
+{Hard constraints from the source material: regulatory, performance, security, platform, integration, deadlines. These often translate into ADRs. When section 4b is present, restate each path's comparison rule here as a constraint so later stories inherit it without opening path-detail files.}
 
 - ...
 
@@ -90,6 +103,8 @@ Then  ...
 - Source material: see header
 - Related REQ files: {REQ-NNN ...}
 - Related ADRs (if any already exist): {ADR-NNN ...}
+- Path details (modernization): {XP-NNN files or omit}
+- Decision register / defect ledger / oracle / migration plan (modernization): {paths or omit}
 
 ---
 

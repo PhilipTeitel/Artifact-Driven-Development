@@ -34,7 +34,7 @@ Write the result under the configured paths directory (default `docs/modernizati
 ## Outputs
 
 - One configured path-detail file (or one file for a tight group).
-- Summary of weakest grade, open questions, `DEF-NNN` citations, and suggested next command (`/recover-domain` or `/ledger-defects` or `/plan-path-tests`).
+- Summary of weakest grade, open questions, `DEF-NNN` citations, and suggested next command (`/recover-domain` or `/ledger-defects` or `/refine-feature`).
 
 ## Examples
 

@@ -58,7 +58,7 @@ Before choosing a lane, classify the change (per the standing change-routing rul
 | `docs-only` | Documentation-only update | `/patch-story` or direct doc edit; `/review-diff` when setup, API contracts, or ops behavior are affected |
 | `hotfix-diff` | Unplanned fix or branch diff that does not map cleanly to one story | `/review-diff` |
 | `full-story` | New capability, binding constraint change, port/adapter change, API contract change, or work that invalidates original acceptance criteria | Full lifecycle (`/plan-story` → …) |
-| `modernization-port` | Brownfield modernization, language/framework port, or replacement of a legacy application | Modernization lane (`/assess-modernization` → `/document-legacy` → `/plan-migration` → `/plan-port-story` → `/complete-port-story`) |
+| `modernization-port` | Brownfield modernization, language/framework port, or replacement of a legacy application | Modernization lane (`/assess-modernization` → `/document-legacy` → `/plan-migration` → `/refine-feature` → `/plan-story` → `/complete-story`) |
 
 ---
 

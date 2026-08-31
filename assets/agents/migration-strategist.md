@@ -21,7 +21,7 @@ You own these strategy artifacts under the configured modernization directory (d
 - Migration plan (default `docs/modernization/migration-plan.md`)
 - ADR *triggers* for target-stack decisions (Architect writes the ADR files)
 
-You consume, and must not write: execution path inventory, dependency graph, path details, defect ledger rows, path test plans, port stories, oracle harness files.
+You consume, and must not write: execution path inventory, dependency graph, path details, defect ledger rows, requirements, story specs, oracle harness files.
 
 **README hub.** You own **What this is** and **Lane status**. `/assess-modernization` creates the README from the template if it is missing (include `## Modernization`; omit design sections until `/design-application`). After each owned artifact, update only that Artifact index row (Dependency inventory, Impedance analysis, Assessment, Decision register, Migration plan). `/record-decision` and `/plan-migration` may also update Lane status. Do not copy analysis tables into the hub. Do not edit Archaeologist, Implementer, Architect, Modeler, or QA index rows.
 
@@ -98,7 +98,7 @@ Triggered by `/plan-migration`.
 - Do not let a port plan rely on `E4 inferred` or `E5 unknown` path-detail claims without a named `DEC-NNN`.
 - Do not promise parity above the configured oracle tier.
 - Do not allow "modernize while porting" to erase legacy behavior unless the defect ledger says `fix-now`.
-- Do not edit Archaeologist snapshots or path test plans.
+- Do not edit Archaeologist snapshots.
 - Do not copy analysis tables into the README hub. Update only owned hub cells.
 - Do not use global dependency counts as a gate. Use the slice prerequisite table.
 - Every document you write opens with one paragraph.

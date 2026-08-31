@@ -23,7 +23,7 @@ These rules bind every modernization command, template, and agent.
 
 **C. Decisions are mutable and live in one place.** The decision register, defect ledger, migration plan, ADRs, and story specs describe *what we will do*. Current state belongs in the cell. History belongs in version control. Do not add prose preambles that narrate how a cell used to read.
 
-**D. Slice prerequisites gate delivery.** Each slice (and its port story) carries a short prerequisite table naming the specific `DEP-NNN`, `DEC-NNN`, and `DEF-NNN` IDs that bind it. A global count such as "16 of 33 dependency routes are unresolved" never blocks a slice that does not use those routes.
+**D. Slice prerequisites gate delivery.** Each slice (and the ADD story that implements its recovered `Sn` IDs) carries a short prerequisite table naming the specific `DEP-NNN`, `DEC-NNN`, and `DEF-NNN` IDs that bind it. A global count such as "16 of 33 dependency routes are unresolved" never blocks a slice that does not use those routes.
 
 **E. Templates are conditional.** Omit sections that do not apply to the discovered source or target stack. Do not fill them with "not applicable" rows. Reserve, retired, and suspected-dead items belong in an appendix, not interleaved with active work.
 
@@ -47,7 +47,9 @@ flowchart TD
         acceptRecovery{"M2 accept recovered path docs"}
         decideDefects{"M3 record defect decisions"}
         approveMigration{"M4 approve migration plan"}
-        acceptParity{"M5 accept parity evidence"}
+        approveReqs{"Gate 2 approve requirements"}
+        approveDesign{"Gate 4 approve design and ADRs"}
+        acceptQa{"Gate 8 accept QA evidence"}
     end
 
     subgraph AssessmentPhase [Assessment — global, once]
@@ -75,20 +77,22 @@ flowchart TD
         defectLedger[/"Defect ledger"/]
     end
 
-    subgraph Planning [Planning]
+    subgraph Handoff [ADD handoff]
         recordDec["/record-decision"]
         planMig["/plan-migration"]
-        planTests["/plan-path-tests"]
-        planPort["/plan-port-story"]
+        refine["/refine-feature"]
         decReg[/"Decision register"/]
         migPlan[/"Migration plan"/]
-        testPlan[/"Path test plan"/]
-        portStory[/"Port story"/]
+        reqs[/"REQ-NNN with provenance"/]
+        design["/design-application"]
+        planProj["/plan-project"]
+        planStory["/plan-story"]
+        story[/"Story spec"/]
     end
 
     subgraph Delivery [Standard lifecycle tail]
-        completePort["/complete-port-story"]
-        parityReport[/"Parity report"/]
+        complete["/complete-story"]
+        qaMatrix[/"QA evidence matrix"/]
     end
 
     legacyApp --> inventoryPaths --> pathInv --> assess
@@ -106,19 +110,20 @@ flowchart TD
     pathDetail --> recoverDomain --> purposeDoc
     recoverDomain --> domainDoc
     pathDetail --> ledgerDefects --> defectLedger --> decideDefects
-    pathDetail --> planTests --> testPlan
-    decideDefects --> planPort
-    testPlan --> planPort
-    migPlan --> planPort --> portStory --> completePort --> parityReport --> acceptParity
+    pathDetail --> refine --> reqs --> approveReqs
+    decideDefects --> refine
+    approveReqs --> design --> approveDesign
+    migPlan --> planProj
+    approveDesign --> planProj --> planStory --> story --> complete --> qaMatrix --> acceptQa
 ```
 
 The modernization lane has three phases:
 
 1. **Assessment** decides whether the port is feasible and what conditions must be true before *any* slice starts. Its artifacts are global and short.
 2. **Recovery** is slice-scoped. It traces only the execution paths in the next slice, recovers purpose/domain terms those paths require, and ledgers defects that bind those paths.
-3. **Migration planning and port delivery** stages the work, records decisions, plans per-path tests, implements parity-first, and verifies the new system against the legacy oracle.
+3. **Handoff into ADD.** `/refine-feature` writes ordinary `REQ-NNN` files whose scenarios carry legacy provenance. `/plan-migration` sequences slices. From there, design, backlog, stories, implementation, review, QA, and documentation are the standard lifecycle.
 
-The per-slice ADD loop is: **recover → refine → design → implement → UAT**. Global analysis feeds that loop. It does not replace it.
+The per-slice ADD loop is: **recover → refine → design → implement → QA**. Global analysis feeds that loop. It does not replace it. Design is holistic over the accumulating requirements set; it is not invented inside a one-path port story.
 
 The configured design doc (default `README.md`) is the repo hub. `/assess-modernization` creates it if it is missing, including a `## Modernization` section: what this port is, lane status, and an index of links. That section is omitted on greenfield projects. Design sections (architecture, stack, getting started, and so on) stay out of the file until `/design-application`. Each modernization command updates only the hub cells it owns — see [the README template](assets/templates/readme-template.md).
 
@@ -138,14 +143,14 @@ The configured design doc (default `README.md`) is the repo hub. `/assess-modern
 | Defect ledger | Archaeologist records; human decides | `/ledger-defects` | `docs/modernization/defect-ledger.md` | Decision (M3) |
 | Decision register | Migration Strategist records; human decides | `/record-decision` | `docs/modernization/decision-register.md` | Decision |
 | Migration plan | Migration Strategist | `/plan-migration` | `docs/modernization/migration-plan.md` | Decision (M4) |
-| Path test plan | Architect plans; QA verifies via parity | `/plan-path-tests` | `docs/modernization/test-plans/XP-NNN-tests.md` | Decision |
-| Port story spec | Architect | `/plan-port-story` | `docs/features/{STORY-ID}-*.md` | Decision |
-| Parity report | QA | `/verify-parity` | `docs/modernization/parity/{STORY-ID}-parity.md` | Evidence (M5) |
+| Refined requirements | Architect | `/refine-feature` | `docs/requirements/REQ-NNN-*.md` | Decision (Gate 2); the ADD handoff |
+| Story spec | Architect | `/plan-story` | `docs/features/{STORY-ID}-*.md` | Decision (Gate 7) |
+| QA evidence matrix | QA | `/qa-story` | Story spec QA section | Evidence (Gate 8; includes `parity` rows) |
 | Modernization hub (bundled in README) | Split by section — see the README template | `/assess-modernization` creates; each producing command updates its index row | Configured design doc `## Modernization` | Navigation |
 
 The Archaeologist builds the dependency *graph* (which paths use which modules and dependencies). The Migration Strategist *uses* that graph in the assessment and migration plan. Sequencing analysis does not get written back into the graph.
 
-Path test plans are written by the Architect. QA does not edit them; `/verify-parity` checks the story's Phase P criteria against the plan's oracle and comparison rules.
+Comparison rules live on the covering `REQ-NNN`. QA verifies `parity` test rows in the ordinary evidence matrix. There is no separate path-test-plan file, port-story template, or parity report.
 
 ---
 
@@ -160,7 +165,7 @@ Analysis artifacts use this header contract:
 After Snapshot:
 
 - **Do not** edit a cell to record a later decision, status, or "we decided this is fine."
-- **Do** record the decision in the decision register, defect ledger, migration-plan slice row, or story spec, citing the analysis ID.
+- **Do** record the decision in the decision register, defect ledger, covering `REQ-NNN`, migration-plan slice row, or story spec, citing the analysis ID.
 - **Do** append `## Errata` when a factual error is found (wrong path, wrong citation). An erratum names the row ID, the correction, the evidence, and the date.
 - **Do** produce `vN+1` when new evidence changes the snapshot's substance. Git is the history of vN.
 
@@ -170,7 +175,7 @@ Decision artifacts stay mutable. Their tables show current state. Do not keep a 
 
 ## Modernization Gates
 
-The greenfield workflow has nine human gates. Modernization adds five more. M1 and M4 are project-level. M2 and M3 are re-entered for each slice. M5 is per port story.
+The greenfield workflow has nine human gates. Modernization adds four more. M1 and M4 are project-level. M2 and M3 are re-entered for each slice. Parity evidence is Gate 8: when a story has `parity` test rows, those criteria are part of the QA matrix.
 
 | Gate | What is being decided | What the human is looking for |
 |---|---|---|
@@ -178,9 +183,8 @@ The greenfield workflow has nine human gates. Modernization adds five more. M1 a
 | M2. Accept recovered documentation | Is the *current slice's* path-detail evidence strong enough to plan against? | In-scope `XP-NNN` details at `Ready for Requirements`; singular evidence grades; no unaccepted `E4 inferred` or `E5 unknown` claims in that slice. Other slices may still be inventory-only. |
 | M3. Record defect decisions | Should suspicious legacy behavior in *this slice* be reproduced, fixed now, or fixed later? | Each in-scope `DEF-NNN` names one or more `XP-NNN` IDs and has one decision: `reproduce-faithfully`, `fix-now`, or `fix-later`. A defect that asks a system-wide question the methodology says has no system-wide answer is mis-posed: decompose it or close it. |
 | M4. Approve migration plan | Is this the right staging, cutover, and structure-fidelity strategy? | Chosen strategy (`strangler`, `phased-rewrite`, or `big-bang-parallel-run`); slice order; each slice's prerequisite table; covered `XP-NNN` / `Sn`; oracle evidence; ADR implications; rollback; forecast confidence. Later slices may be inventory IDs until their recovery runs. |
-| M5. Accept parity evidence | Did this port story match the accepted legacy expectation? | A parity report with `PARITY SUMMARY:`; no blocking `PAR-#` or `PROV-#` findings; mismatches reconciled through the defect ledger; comparison rules taken from the path test plan, not a global default. |
 
-These gates do not replace the greenfield gates. They add the decisions that only brownfield work needs.
+These gates do not replace the greenfield gates. They add the decisions that only brownfield work needs. After M2/M3, `/refine-feature` produces the REQ that Gate 2 already knows how to approve.
 
 ---
 
@@ -245,7 +249,7 @@ Dispositions are snapshot classifications. A later substitution choice is a `DEC
 - **Inputs.** Legacy repository, setup docs.
 - **Agent.** Implementer, with oracle-tier constraints from the Migration Strategist.
 - **Artifact.** `docs/modernization/oracle.md`.
-- **Exit.** The legacy oracle is classified as `T1 executable`, `T2 recorded`, or `T3 documented-only`. Containment, determinism, and environment facts that affect the *tier* are recorded. Per-path fixtures and comparison rules do not live here; they live in path test plans.
+- **Exit.** The legacy oracle is classified as `T1 executable`, `T2 recorded`, or `T3 documented-only`. Containment, determinism, and environment facts that affect the *tier* are recorded. Per-path fixtures and comparison rules do not live here; they live on the covering `REQ-NNN` (section 4b).
 
 ### `/assess-modernization`
 
@@ -273,7 +277,7 @@ Do not catalog the entire legacy system before the first slice. The path invento
 - **Agent.** Archaeologist.
 - **Artifact.** `docs/modernization/paths/XP-NNN-*.md`.
 - **Human gate.** Supports **M2** for the current slice.
-- **Exit.** Sequence of operations, internal and external dependencies, data flow, edge cases and error handling as the code actually behaves, and one evidence grade per claim. This document feeds the port story's `§1b Legacy source touchpoints` and the path test plan. It does not include target design, slice status, or decision preambles.
+- **Exit.** Sequence of operations, internal and external dependencies, data flow, edge cases and error handling as the code actually behaves, and one evidence grade per claim. This document feeds `/refine-feature`. It does not include target design, slice status, or decision preambles.
 
 Related paths may share one detail document when they are the same operation with different triggers. Unrelated paths do not.
 
@@ -301,20 +305,20 @@ Open defect decisions for *other* slices do not block this slice.
 - **Agent.** Orchestrates Archaeologist and Modeler.
 - **Artifacts.** Path details, purpose, domain model, defect ledger rows for that scope.
 - **Human gate.** **M2** and **M3** for the scoped slice.
-- **Exit.** Recovered artifacts are ready to feed `/refine-feature`, `/plan-path-tests`, and `/plan-port-story` for that slice.
+- **Exit.** Recovered artifacts are ready to feed `/refine-feature` for that slice. The REQ is the handoff into ADD.
 
 ---
 
-## Phase 3: Migration Planning And Port Delivery
+## Phase 3: Handoff Into ADD
 
-Planning answers: *How should the migration be sliced, what must stay faithful, what can be changed, and how will parity be proved for this path?*
+Planning answers: *How should the migration be sliced, and how does recovered evidence become ordinary requirements, design, and stories?*
 
 ### `/record-decision`
 
 - **Inputs.** The question, the human's answer, the evidence, and the `XP-NNN` / `DEP-NNN` / `IMP-NNN` / `DEF-NNN` IDs it affects.
 - **Agent.** Migration Strategist records; the human decides.
 - **Artifact.** `docs/modernization/decision-register.md`.
-- **Exit.** Every porting decision — port, retire, rewrite, substitute, reproduce vs fix as policy, comparison policy — has a `DEC-NNN` row: question, answer, evidence, date, affected IDs. "What did we decide about X?" has one location. Do not restate the answer in analysis ledgers.
+- **Exit.** Every porting decision — port, retire, rewrite, substitute, reproduce vs fix as policy, comparison policy — has a `DEC-NNN` row: question, answer, evidence, date, affected IDs. "What did we decide about X?" has one location. Do not restate the answer in analysis ledgers. A `DEC` that binds target design still needs an ADR, written by the Architect.
 
 ### `/plan-migration`
 
@@ -322,40 +326,33 @@ Planning answers: *How should the migration be sliced, what must stay faithful, 
 - **Agent.** Migration Strategist.
 - **Artifact.** `docs/modernization/migration-plan.md`. Recommend ADRs; do not take over the Architect's ADR files.
 - **Human gate.** **M4: Approve migration plan.**
-- **Exit.** A staging strategy, slice plan, and per-slice prerequisite table. A slice may be listed as inventory `XP-NNN` IDs before those paths are detailed. Each slice names only the `DEP-NNN`, `DEC-NNN`, and `DEF-NNN` IDs that bind *that* slice. Recalibrate forecast after the first completed port slice.
+- **Exit.** A staging strategy, slice plan, and per-slice prerequisite table. A slice may be listed as inventory `XP-NNN` IDs before those paths are detailed. Each slice names only the `DEP-NNN`, `DEC-NNN`, and `DEF-NNN` IDs that bind *that* slice. Recalibrate forecast after the first completed slice.
 
-The per-slice loop in the plan is recover → refine → design → implement → UAT. Check off a resolved prerequisite in the slice row or port story, not in the global inventory.
+The per-slice loop in the plan is recover → refine → design → implement → QA. Check off a resolved prerequisite in the slice row or the ADD story, not in the global inventory. `/plan-project` consumes this plan as sequencing, not as a second backlog.
 
-### `/plan-path-tests`
+### `/refine-feature`
 
-- **Inputs.** One `XP-NNN` path detail, linked `REQ-NNN` / `Sn` when present, oracle tier, defect decisions that bind the path.
+- **Inputs.** In-scope path details, defect decisions, decision register, oracle tier, user docs.
 - **Agent.** Architect.
-- **Artifact.** `docs/modernization/test-plans/XP-NNN-tests.md`.
-- **Exit.** Happy-path, edge, and error scenarios; oracle strategy for *this* path; comparison rules (`exact`, `tolerance-based` with the actual bound, or `semantic`). Comparison is decided per path. A profile hint is not a gate. This artifact is what Phase P and `## 8b. Parity Plan` are built from.
+- **Artifact.** `docs/requirements/REQ-NNN-*.md` with section **4b. Legacy provenance**.
+- **Human gate.** Standard **Gate 2: Approve refined requirements.**
+- **Exit.** Ordinary Gherkin `Sn` scenarios whose provenance table names `XP-NNN`, one evidence grade, binding `DEC-NNN` / `DEF-NNN`, the comparison rule, and the oracle source. Unresolved `E4` / `E5` without a `DEC-NNN` stay in Open questions. Suggested ADR triggers that bind target design are listed for `/design-application`. This is the handoff. Do not write a path test plan or port story.
 
-### `/plan-port-story`
+### `/design-application` and `/plan-project`
 
-- **Inputs.** Story ID, migration-plan slice, in-scope `XP-NNN` details and test plans, linked `REQ-NNN` / `Sn`, oracle doc, defect ledger, decision register, purpose, domain model, ADRs, design doc.
+- **Inputs.** Accumulating `REQ-NNN` files, recovered purpose/domain, migration plan, recommended ADR triggers.
 - **Agent.** Architect.
-- **Artifact.** `docs/features/{STORY-ID}-*.md` using the port-story template.
-- **Human gate.** Standard **Gate 7: Approve story spec**, with modernization readiness checks.
-- **Exit.** An implementation-ready port story with `### 1b. Legacy source touchpoints`, a **Slice prerequisites** table copied from the migration-plan row, `Phase P`, `## 8b. Parity Plan`, a `Covers XP` test-plan column, and `Z8`. The story may check off prerequisites. It may not edit analysis snapshots.
+- **Artifacts.** README design sections, ADRs, backlog epics/stories ordered from the migration plan.
+- **Human gates.** **Gate 4** and **Gate 6**.
+- **Exit.** Holistic target design over the requirements set that exists so far. Later slices add REQ files and may produce a design delta; they do not invent a parallel architecture inside a one-path story.
 
-### `/complete-port-story`
+### `/plan-story` and `/complete-story`
 
-- **Inputs.** Approved port story, path test plans, oracle doc, defect ledger, and no unresolved `E4` / `E5` claim in covered scope without a recorded `DEC-NNN`.
-- **Agents.** Implementer, Auditor, QA, Docs-PM.
-- **Artifacts.** Code, tests, story review, parity report, QA matrix, documentation updates, validation result.
-- **Human gate.** **M5: Accept parity evidence**, followed by the normal **Gate 8** QA evidence and **Gate 9** documentation approval.
-- **Exit.** Port story completed with parity evidence, QA evidence, documentation, and completion metadata.
-
-### `/verify-parity`
-
-- **Inputs.** Port story `Phase P`, `## 8b. Parity Plan`, path test plan comparison rules, linked `XP-NNN`, oracle refs, defect decisions.
-- **Agent.** QA.
-- **Artifact.** `docs/modernization/parity/{STORY-ID}-parity.md`.
-- **Human gate.** Supports **M5**.
-- **Exit.** A parity report whose first non-comment line is `PARITY SUMMARY:` and whose matrix records `PASS`, `FAIL`, or `BLOCKED` for the story's parity claims. Binding comparison rules come from the path test plan. Do not apply a global numeric default because a path-level rule is missing — mark `BLOCKED` and return to `/plan-path-tests`.
+- **Inputs.** Approved backlog row, linked `REQ-NNN` (including section 4b when present), purpose, domain, ADRs, design, migration-plan prerequisites for the covered `XP-NNN`.
+- **Agent.** Architect plans; Implementer, Auditor, QA, and Docs-PM complete.
+- **Artifact.** Ordinary `docs/features/{STORY-ID}-*.md` using the user-story template. When the REQ has provenance, the story copies section 1b, slice prerequisites, and `parity` test rows.
+- **Human gates.** **Gate 7**, then **Gate 8** (QA matrix, including `parity` rows) and **Gate 9**.
+- **Exit.** The story is implementation-ready without a second template. Characterization tests go red first when Section 8a has `parity` rows. `/qa-story` records oracle comparison in the same evidence matrix. There is no `/plan-port-story`, `/complete-port-story`, or `/verify-parity` delivery path.
 
 ---
 
@@ -394,7 +391,7 @@ Parity is only as strong as the oracle behind it.
 
 The workflow forbids claiming parity confidence above the oracle tier. A `T3 documented-only` project can still be migrated, but the artifacts must say that parity depends on documented or user-accepted expectations.
 
-Comparison rules are per execution path. The workflow profile may hint at a numeric or text default. That hint never gates a slice and never substitutes for a missing path test-plan rule.
+Comparison rules are per execution path. They live on the covering `REQ-NNN` (section 4b and Constraints). The workflow profile may hint at a numeric or text default. That hint never gates a slice and never substitutes for a missing path-level rule.
 
 ---
 
@@ -435,19 +432,26 @@ Every defect names the execution path it affects. Owner policy questions that ar
 
 ## Where The Lane Rejoins The Standard Lifecycle
 
-The modernization lane is an alternate entry point, not a different delivery system.
+The modernization lane is an alternate entry point, not a different delivery system. Recovery and porting policy stay upstream. Requirements are the join.
+
+The trace after handoff is the ADD trace:
+
+```
+commit / story spec → REQ-NNN / Sn → DEC-NNN, DEF-NNN, XP-NNN, evidence grade, oracle
+```
 
 - `/recover-domain` satisfies the purpose and domain-model work from recovered evidence rather than from a raw idea.
-- `/refine-feature` consumes path details (and user docs) and writes normal `REQ-NNN` / `Sn` scenarios.
-- `/design-application` and `/plan-project` keep their normal responsibilities.
-- The walking skeleton remains preferred when feasible. If `ASSESSMENT.md` says no useful skeleton can run yet, the first port slice may be a black-box proof slice instead.
-- `/plan-path-tests` then `/plan-port-story` replace `/plan-story` for migration slices.
-- `/complete-port-story` is the normal implementation/review/QA/document/validate tail with `/verify-parity` inserted between review and QA.
-- Standard Gate 8 and Gate 9 remain unchanged: QA evidence and documentation still close the story.
+- `/refine-feature` consumes path details (and user docs) and writes normal `REQ-NNN` / `Sn` scenarios **with section 4b provenance**. That file is the handoff. Comparison rules, oracle sources, and `XP`/`DEC`/`DEF` citations live there.
+- `/design-application` and `/plan-project` keep their normal responsibilities. Design is holistic over the accumulating REQ set. The migration plan orders epics; it is not a second backlog.
+- The walking skeleton remains preferred when feasible. If `ASSESSMENT.md` says no useful skeleton can run yet, the first slice may be a black-box proof **story** instead.
+- `/plan-story` and `/complete-story` are the delivery path. When the linked REQ has provenance, the story copies section 1b, slice prerequisites, and `parity` test rows. There is no port-story template.
+- Standard Gate 8 and Gate 9 close the story. Oracle comparison is a `parity` test level inside the QA matrix, not a fifth modernization gate.
 
-A slice owner should be able to work from: the migration-plan row (including prerequisites), the in-scope path details, the path test plans, the cited `DEC-NNN` / `DEF-NNN` rows, and the port story. They should not need to re-read the global inventories except as reference.
+A slice owner should be able to work from: the migration-plan row (including prerequisites), the in-scope path details as reference, the covering `REQ-NNN`, the cited `DEC-NNN` / `DEF-NNN` rows, and the ordinary story spec. They should not need to re-read the global inventories except as reference.
 
-In short: modernization changes how intent is recovered and how parity is proved. It does not remove the artifact trail from purpose to shipped evidence.
+A `DEC` that binds target design (named dependency, persistence, process boundary, integration, cutover) is incomplete until the Architect writes the ADR. Later net-new features look in `docs/decisions/` and `docs/requirements/`, not in `docs/modernization/`.
+
+In short: modernization changes how intent is recovered and how parity is proved. It does not remove the artifact trail from purpose to shipped evidence, and it does not run a parallel planning and implementation process.
 
 ---
 
@@ -462,8 +466,12 @@ These commands remain as aliases so existing installs do not fail silently. They
 | `/catalog-behavior` | `/trace-path` |
 | `/trace-flow` | `/trace-path` |
 | `/analyze-translation-gap` | `/analyze-impedance` |
+| `/plan-path-tests` | `/refine-feature` (comparison rules on the REQ; do not write test-plan files) |
+| `/plan-port-story` | `/plan-story` |
+| `/complete-port-story` | `/complete-story` |
+| `/verify-parity` | `/qa-story` (parity rows in the QA matrix; do not write a parity report) |
 
-`BEH-NNN` from earlier iterations is superseded by `XP-NNN`. `GAP-NNN` is superseded by `IMP-NNN`.
+`BEH-NNN` from earlier iterations is superseded by `XP-NNN`. `GAP-NNN` is superseded by `IMP-NNN`. Path test plans, port-story templates, and parity reports are superseded by `REQ-NNN` section 4b plus the ordinary user-story template.
 
 ---
 

@@ -45,18 +45,17 @@ For each acceptance criterion in the story, determine whether it passes based on
 - If the review artifact is missing, lacks `MODEL-critical` / `MODEL-high` counts, or reports any high or critical `MODEL-#` finding, mark the criterion **FAIL** or **BLOCKED** and cite the review gap.
 - Do not infer model fidelity directly from requirements or tests. QA verifies the Auditor's model-fidelity gate result.
 
-## Parity mode
+## Parity criteria
 
-When invoked by `/verify-parity` or when a story contains `Phase P: Parity`, verify the port against the configured oracle:
+When the story's Section 8a contains `parity` rows, or linked REQ files include section 4b:
 
-- Read the story's `8b. Parity plan`, covered `XP-NNN` path details, path test plans, configured oracle doc (tier), parity report template, and defect ledger.
-- For every `P` criterion, run or inspect the exact oracle-vs-new comparison evidence cited by the story, using the **path test plan's** comparison rule. Use the configured parity report path (default `docs/modernization/parity/{STORY-ID}-parity.md`) for detailed results.
+- Read story section 1b, the linked REQ comparison rules, configured oracle doc (tier), named fixtures, and defect ledger.
+- For every criterion covered by a `parity` row, run or inspect the oracle-vs-new comparison evidence using the **REQ's** comparison rule. Record the result in the ordinary Criteria Evidence Matrix. Do not write a separate parity report.
 - Mark `PASS` only when the new output matches the legacy oracle under that path's rule and any mismatch is reconciled to a `DEF-NNN` decision.
 - Mark `FAIL` when the comparison proves an unreconciled mismatch.
-- Mark `BLOCKED` when fixtures are missing, the oracle tier cannot support the requested evidence, the path test plan has no comparison rule, or provenance is `E4` / `E5` without a `DEC-NNN`. Do not apply a global numeric default.
+- Mark `BLOCKED` when fixtures are missing, the oracle tier cannot support the requested evidence, the REQ has no comparison rule for an oracle-backed path, or provenance is `E4` / `E5` without a `DEC-NNN`. Do not apply a global numeric default.
 - Do not claim parity for a `T3 documented-only` oracle; report acceptance-data coverage instead.
-- Do not edit path test plans or analysis snapshots.
-- **README hub.** After writing the parity report, update only the Artifact index row **Parity reports** (count of files). Do not edit Lane status, backlog, or other index rows.
+- Do not edit analysis snapshots or requirements.
 
 ## Evidence and command rules
 

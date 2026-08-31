@@ -57,7 +57,7 @@ Every arrow into the story spec is a piece of context the implementer is allowed
 
 Each box in the diagram is a distinct artifact — defined by what it carries, not by where it is recorded. The current implementation bundles related artifacts into a small number of files for trace co-location: the story spec, story acceptance evidence, QA evidence matrix, completion metadata, and post-complete follow-up ledger entries all ride in the same `docs/features/{STORY-ID}-*.md` document because keeping the trace co-located makes it readable. They are still separate artifacts with separate owners. See [BUILDING-BLOCKS.md](BUILDING-BLOCKS.md) for the artifact set and the composition matrix.
 
-Modernization adds provenance to the left side of the trace. A port story should be traceable not only back to purpose, domain, requirements, and ADRs, but also back to the execution-path citation or oracle fixture that justified the recovered behavior.
+Modernization adds provenance to the left side of the trace. Recovered behavior becomes an ordinary `REQ-NNN`. A story should be traceable not only back to purpose, domain, requirements, and ADRs, but also — through that REQ's section 4b — back to the execution-path citation, `DEC-NNN`, `DEF-NNN`, evidence grade, and oracle fixture that justified the recovered behavior.
 
 ```mermaid
 flowchart LR
@@ -72,12 +72,11 @@ flowchart LR
     oracle["Oracle<br/>T1, T2, or T3"]
     recoveredPurpose["Recovered Purpose"]
     recoveredDomain["Recovered Domain"]
-    requirements["Requirements<br/>REQ-NNN and Sn"]
-    testPlan["Path Test Plan"]
+    requirements["Requirements<br/>REQ-NNN and Sn<br/>section 4b provenance"]
+    adr["ADRs"]
     migrationPlan["Migration Plan"]
-    portStory["Port Story<br/>Phase P and Z8"]
-    parityReport["Parity Report<br/>PARITY SUMMARY"]
-    qaEvidence["QA Evidence Matrix"]
+    story["Story spec"]
+    qaEvidence["QA Evidence Matrix<br/>including parity rows"]
     docsUpdate["Documentation Update"]
 
     legacySources --> pathInv
@@ -93,25 +92,21 @@ flowchart LR
     recoveredPurpose --> requirements
     recoveredDomain --> requirements
     pathDetail --> requirements
-    requirements --> testPlan
-    pathDetail --> testPlan
-    oracle --> testPlan
-    defectLedger --> testPlan
+    defectLedger --> requirements
+    decReg --> requirements
+    oracle --> requirements
     pathInv --> migrationPlan
     depGraph --> migrationPlan
     decReg --> migrationPlan
-    oracle --> migrationPlan
-    migrationPlan --> portStory
-    pathDetail --> portStory
-    testPlan --> portStory
-    defectLedger --> portStory
-    decReg --> portStory
-    portStory --> parityReport
-    parityReport --> qaEvidence
+    requirements --> adr
+    requirements --> story
+    adr --> story
+    migrationPlan --> story
+    story --> qaEvidence
     qaEvidence --> docsUpdate
 ```
 
-This is why evidence grades matter. A citation marked `E1 verified` and a claim marked `E4 inferred` are not interchangeable, even if both appear in a polished artifact. Each claim carries exactly one grade. Global inventories inform; the slice prerequisite table on the port story is what gates implementation.
+This is why evidence grades matter. A citation marked `E1 verified` and a claim marked `E4 inferred` are not interchangeable, even if both appear in a polished artifact. Each claim carries exactly one grade. Global inventories inform; the REQ provenance table and the story's slice prerequisite table are what gate implementation.
 
 ---
 
@@ -127,10 +122,9 @@ A well-formed story should make every one of these questions answerable without 
 - **Which architecture decision records or design constraints bind the implementation?** Linked architecture decision records and named binding constraints (Section 4), each mapped to a Phase Y `(binding)` criterion ID.
 - **Which ports and adapters are in play?** Section 4b lists every port and adapter the story creates or modifies — port file, adapter implementation, and real backing service or fixture — or states explicitly that no integration boundaries are touched.
 - **Which acceptance criteria define completion?** The criteria list, each with a stable ID (`A1`, `A2`..., `Y1`, `Z1`...) using markdown task syntax (`- [ ] **A1** — ...`) and exactly one `Evidence:` line per criterion.
-- **Which tests or checks prove each criterion?** Section 8a Test Plan rows mapping criteria to test paths, with test level (`unit`, `contract`, `integration`, `e2e` / `ui`) and **Covers AC** / **Covers Sn** columns filled. Every port needs at least one `contract` row; every adapter needs at least one `integration` row against the real backing service (no mock of the boundary the adapter owns). Phase Y `(binding)` criteria cite the integration tests for adapters.
-- **For port stories, which legacy path is being preserved or intentionally changed?** Section 1b links the `XP-NNN` path details and evidence grades that justify the story scope. Section 3b lists slice prerequisites (`DEP-NNN`, `DEC-NNN`, `DEF-NNN`) copied from the migration plan.
-- **For port stories, what oracle proves parity?** Section 8b copies the path test plan's oracle source, comparison rule, and any acceptance data gaps. A `T3 documented-only` oracle must not be described as executable parity. A missing per-path comparison rule is not filled by a global default.
-- **For port stories, which defect decisions apply?** The story links any `DEF-NNN` rows that name these paths and say whether suspicious behavior is reproduced faithfully, fixed now, or fixed later.
+- **Which tests or checks prove each criterion?** Section 8a Test Plan rows mapping criteria to test paths, with test level (`unit`, `contract`, `integration`, `parity`, `e2e` / `ui`) and **Covers AC** / **Covers Sn** columns filled. Every port needs at least one `contract` row; every adapter needs at least one `integration` row against the real backing service (no mock of the boundary the adapter owns). Phase Y `(binding)` criteria cite the integration tests for adapters.
+- **Which recovered legacy path does this story implement?** When the linked REQ has section 4b, story section 1b copies `XP-NNN`, evidence grade, `DEC-NNN`, `DEF-NNN`, comparison rule, and oracle source. Slice prerequisites (`DEP-NNN`, `DEC-NNN`, `DEF-NNN`) come from the migration-plan row for those paths. REQ is canonical.
+- **How is parity proved?** `parity` test rows in Section 8a, verified by `/qa-story` in the ordinary evidence matrix, using the REQ comparison rule. A `T3 documented-only` oracle must not be described as executable parity. A missing per-path comparison rule is not filled by a global default.
 - **Which files changed?** The file touchpoints (planned) and the changed files (actual).
 - **Which gates passed?** The review artifact reference (including Phase Z6: zero `high` or `critical` `TEST-#`, `SEC-#`, `REL-#`, or `API-#` findings from `/review-story`, and Phase Z7: zero `high` or `critical` `MODEL-#` findings) and the QA matrix reference.
 - **Which documentation surfaces were updated?** The documentation diff, or an explicit note that no surface needed to change.
@@ -158,7 +152,7 @@ The README's closing principles are not slogans. Each one names a specific artif
 | Story specs turn intent into implementation-ready instructions | `docs/features/{STORY-ID}-*.md`, produced by `/plan-story`; validated by `/validate-story ready` |
 | Tests, model-fidelity review, QA evidence, and documentation close the loop | The test plan (with **Covers AC** and **Covers Sn**), story-review artifact including `MODEL-#` counts, QA matrix, and documentation diff — all referenced from the story's completion metadata; post-complete follow-ups recorded in the ledger with **Change ref** and **Review ref** |
 | Legacy behavior is evidence, not automatically requirement | `docs/modernization/paths/XP-NNN-*.md`, path inventory, and defect ledger, each with singular evidence grades and citations |
-| Parity confidence cannot exceed the oracle tier | `docs/modernization/oracle.md`, path test plans, port-story `Phase P`, `Z8`, and `docs/modernization/parity/{STORY-ID}-parity.md` |
+| Parity confidence cannot exceed the oracle tier | `docs/modernization/oracle.md`, REQ section 4b, story `parity` test rows, and the QA evidence matrix |
 
 A principle without an artifact is a hope. Anchoring each one to a specific file is what turns the methodology from intent into discipline.
 
@@ -170,7 +164,7 @@ Four rules keep the trace from quietly breaking.
 
 ### Single source of truth per concern
 
-Each concern has exactly one canonical file. Purpose lives in `docs/PURPOSE.md`. Domain language and data meaning live in `docs/DOMAIN.md`. Requirements live in `docs/requirements/`. Decisions live in architecture decision records and, for porting choices, the decision register. Design lives in the `README` design section. Story scope lives in the story document. Path facts live in the path detail. Dependency dispositions live in the dependency inventory until a `DEC-NNN` supersedes them for planning. Documentation lives in the surfaces it describes. The README `## Modernization` section is a **navigation hub**, not a second copy of those files: if a hub row disagrees with the linked artifact, the artifact wins (fix the row unless you own a still-Draft file). If two canonical files appear to disagree, work stops and a conflict is surfaced — the workflow does not pick the easier path, and it does not rewrite the analysis snapshot to hide the disagreement.
+Each concern has exactly one canonical file. Purpose lives in `docs/PURPOSE.md`. Domain language and data meaning live in `docs/DOMAIN.md`. Requirements live in `docs/requirements/`. Decisions live in architecture decision records and, for porting choices, the decision register. Design lives in the `README` design section. Story scope lives in the story document. Path facts live in the path detail. Dependency dispositions live in the dependency inventory until a `DEC-NNN` supersedes them for planning. Comparison rules for recovered paths live on the covering REQ. Documentation lives in the surfaces it describes. The README `## Modernization` section is a **navigation hub**, not a second copy of those files: if a hub row disagrees with the linked artifact, the artifact wins (fix the row unless you own a still-Draft file). If two canonical files appear to disagree, work stops and a conflict is surfaced — the workflow does not pick the easier path, and it does not rewrite the analysis snapshot to hide the disagreement.
 
 ### No silent model drift
 
@@ -184,7 +178,7 @@ This rule exists because the most common failure mode in AI-assisted development
 
 ### No silent behavior improvement
 
-In modernization work, an agent may not decide that legacy behavior should be cleaned up during the port. If behavior appears wrong, the defect ledger records the human decision: `reproduce-faithfully`, `fix-now`, or `fix-later`. The auditor and QA enforce this with `PAR-#` and `PROV-#` findings, `Phase P` parity criteria, and the `Z8` gate in port stories.
+In modernization work, an agent may not decide that legacy behavior should be cleaned up during the port. If behavior appears wrong, the defect ledger records the human decision: `reproduce-faithfully`, `fix-now`, or `fix-later`. The auditor and QA enforce this with `PAR-#` and `PROV-#` findings and `parity` test rows.
 
 ### Story status discipline
 
@@ -201,6 +195,6 @@ After a story is `Complete`, small verified changes do not reopen the story. The
 ## Read next
 
 - [PROCESS.md](PROCESS.md) — when in the lifecycle each artifact is produced.
-- [MODERNIZATION.md](MODERNIZATION.md) — how legacy evidence, oracle tiers, defect decisions, and parity reports extend the trace.
+- [MODERNIZATION.md](MODERNIZATION.md) — how legacy evidence, oracle tiers, defect decisions, and REQ provenance extend the trace.
 - [BUILDING-BLOCKS.md](BUILDING-BLOCKS.md) — the composition matrix that names the agent, command, and template behind each artifact.
 - [POST-STORY.md](POST-STORY.md) — how the trace is preserved for follow-ups, patches, and diffs without forcing every change through a full story.

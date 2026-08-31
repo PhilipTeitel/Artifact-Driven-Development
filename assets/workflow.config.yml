@@ -38,14 +38,11 @@ templates:
   dependencyInventory: ~/.cursor/templates/dependency-inventory-template.md
   dependencyGraph: ~/.cursor/templates/dependency-graph-template.md
   impedanceAnalysis: ~/.cursor/templates/impedance-analysis-template.md
-  pathTestPlan: ~/.cursor/templates/path-test-plan-template.md
   decisionRegister: ~/.cursor/templates/decision-register-template.md
   defectLedger: ~/.cursor/templates/defect-ledger-template.md
   migrationPlan: ~/.cursor/templates/migration-plan-template.md
   modernizationAssessment: ~/.cursor/templates/modernization-assessment-template.md
   oracle: ~/.cursor/templates/oracle-template.md
-  parityReport: ~/.cursor/templates/parity-report-template.md
-  portStory: ~/.cursor/templates/port-story-template.md
   readme: ~/.cursor/templates/readme-template.md
   purpose: ~/.cursor/templates/purpose-template.md
   domain: ~/.cursor/templates/domain-model-template.md
@@ -69,9 +66,6 @@ paths:
   oracleDoc: docs/modernization/oracle.md
   pathGlob: docs/modernization/paths/XP-NNN-*.md
   pathsDir: docs/modernization/paths
-  pathTestPlanGlob: docs/modernization/test-plans/XP-NNN-tests.md
-  pathTestPlansDir: docs/modernization/test-plans
-  parityReportPattern: docs/modernization/parity/{STORY-ID}-parity.md
   designDoc: README.md
   purposeDoc: docs/PURPOSE.md
   domainDoc: docs/DOMAIN.md
@@ -93,7 +87,7 @@ workflow:
       alternatives: []
     modernizationPort:
       description: Brownfield modernization or language/framework port requiring assessment, recovered path documentation, target design, parity evidence, and cutover planning.
-      commands: [assess-modernization, record-decision, plan-migration, document-legacy, refine-feature, recover-domain, plan-path-tests, design-application, plan-project, plan-port-story, complete-port-story]
+      commands: [assess-modernization, record-decision, plan-migration, document-legacy, refine-feature, recover-domain, design-application, plan-project, plan-story, complete-story]
     storyFollowup:
       description: Small behavior fix, debugging result, UI polish, copy adjustment, or local refinement tied to a completed story.
       commands: [patch-story, review-story, qa-story, document-story]
@@ -134,13 +128,6 @@ workflow:
     - recover-domain
     - ledger-defects
     - document-legacy
-  completePortStorySequence:
-    - implement-story
-    - review-story
-    - verify-parity
-    - qa-story
-    - document-story
-    - validate-story
 
 methodology:
   sourceOfTruth: strict
@@ -154,7 +141,6 @@ methodology:
   provenanceTraceability: required
   parityEvidence: required
   walkingSkeleton: required
-  parityPhase: Phase P
   bindingPhase: Phase Y
   qualityPhase: Phase Z
   portTestTypes: [contract, integration]
@@ -244,7 +230,6 @@ stack:
 
 naming:
   executionPathPattern: XP-NNN-short-slug.md
-  pathTestPlanPattern: XP-NNN-tests.md
   defectPattern: DEF-NNN-short-slug.md
   decisionPattern: DEC-NNN
   impedancePattern: IMP-NNN-short-slug.md

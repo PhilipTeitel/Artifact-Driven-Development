@@ -8,6 +8,8 @@ This **directs the architect** to create the epics and stories needed to build t
 
 **Prefer approved purpose, domain model, and refined requirements in the configured requirements directory** (default `docs/requirements/REQ-NNN-*.md`) produced by `/define-purpose`, `/model-domain`, and `/refine-feature`. Their purpose, domain terms, data dictionary rows, and Gherkin scenario IDs become the basis of story scope, model-fidelity review, and Test Plan traceability. Raw requirements are accepted but will produce backlog rows with weaker traceability.
 
+When a migration plan exists, read it as **sequencing only**. Order epics and stories to match slice prerequisites. Do not create a parallel port-story backlog. Recovered `Sn` IDs from REQ section 4b become ordinary story rows.
+
 ## Default behavior (backlog only)
 
 - **Only** create or update the **Backlog Items** section and the **Requirements** section in the configured design doc. Append new requirement file entries to the Requirements section — do not remove prior entries.

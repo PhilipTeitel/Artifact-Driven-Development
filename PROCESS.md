@@ -4,7 +4,7 @@ This document walks through the full story lifecycle from a raw idea to a shippe
 
 The lifecycle separates **agent actions** (commands run by an agent) from **artifacts** (durable outputs that become context for the next step). The human owns the decisions that bind work between steps.
 
-The nine gates below describe the standard greenfield path. Brownfield modernization adds an upstream assessment and then slice-scoped recovery, then rejoins this lifecycle through recovered purpose/domain artifacts, migration planning, port stories, parity verification, QA, and documentation. See [MODERNIZATION.md](MODERNIZATION.md).
+The nine gates below describe the standard greenfield path. Brownfield modernization adds an upstream assessment and then slice-scoped recovery, then rejoins this lifecycle through recovered purpose/domain artifacts, `REQ-NNN` files with legacy provenance, migration sequencing, ordinary stories, and QA evidence that may include `parity` rows. See [MODERNIZATION.md](MODERNIZATION.md).
 
 For everything that happens *after* a story is complete — small follow-ups, hotfixes, audits, drift reconciliation — see [POST-STORY.md](POST-STORY.md).
 
@@ -89,7 +89,7 @@ flowchart TD
     approveDocs --> validateComplete --> completionMeta --> done
 ```
 
-The happy path can be run one command at a time. The skeleton and story tails — implement, review, QA, document, validate — can also be orchestrated with `/complete-story` after `/plan-skeleton` or `/plan-story` has produced an approved story document. For port stories, `/complete-port-story` runs the same tail with `/verify-parity` inserted between review and QA.
+The happy path can be run one command at a time. The skeleton and story tails — implement, review, QA, document, validate — can also be orchestrated with `/complete-story` after `/plan-skeleton` or `/plan-story` has produced an approved story document. Stories that implement recovered `Sn` IDs use the same tail; `/qa-story` verifies `parity` rows in the ordinary evidence matrix.
 
 ---
 
@@ -207,29 +207,21 @@ The implementer follows the planned implementation order, uses red-first tests b
 - **Human gate.** None directly. A `Block` returns to the implementer with required actions. A `Pass` allows the story to move to QA.
 - **Exit.** Review artifact with a `Pass` result.
 
-Review focuses on the changed surface: reliability, security, API contracts, test coverage, and model fidelity. It is not a substitute for QA, and it is not a substitute for the human's QA-evidence gate.
+Review focuses on the changed surface: reliability, security, API contracts, test coverage, and model fidelity. When the story has section 1b or `parity` rows, review also reports `PAR-#` and `PROV-#` findings. It is not a substitute for QA, and it is not a substitute for the human's QA-evidence gate.
 
-### 10. `/verify-parity` (port stories only)
+### 10. `/qa-story`
 
-- **Inputs.** A completed port story with `Phase P`, `## 8b. Parity Plan`, linked `XP-NNN` path details and test plans, oracle references, per-path comparison rules, and defect-ledger decisions.
+- **Inputs.** Story acceptance criteria and executable evidence. When Section 8a has `parity` rows, also the linked REQ section 4b comparison rules, oracle tier, named fixtures, and defect decisions.
 - **Agent.** QA.
-- **Artifact.** `docs/modernization/parity/{STORY-ID}-parity.md`, whose first non-comment line is `PARITY SUMMARY:`.
-- **Human gate.** Supports modernization **Gate M5: Accept parity evidence** before the normal QA-evidence gate.
-- **Exit.** Parity result is `PASS`, or every `FAIL` / `BLOCKED` row is routed to repair, defect-ledger decision, or provenance resolution.
-
-Port stories treat parity-first as the red-first specialization. `Phase P` criteria must cite oracle fixtures, tolerances, and defect-ledger decisions before implementation is considered complete.
-
-### 11. `/qa-story`
-
-- **Inputs.** Story acceptance criteria and executable evidence.
-- **Agent.** QA.
-- **Artifact.** A criterion evidence matrix with `PASS`, `FAIL`, or `BLOCKED` for every criterion, citing the test path or other evidence that proves the result.
+- **Artifact.** A criterion evidence matrix with `PASS`, `FAIL`, or `BLOCKED` for every criterion, citing the test path or other evidence that proves the result. Oracle comparison is recorded here; there is no separate parity report.
 - **Human gate.** **Gate 8: Accept QA evidence** — only after the matrix is all PASS.
 - **Exit.** Accepted QA matrix.
 
 Any `FAIL` or `BLOCKED` loops through `/fix-from-qa`, where the implementer fixes only the failed or blocked criteria and returns to QA. QA does not infer completion from code alone.
 
-### 12. `/document-story`
+When a story implements recovered `Sn` IDs, parity-first is the red-first specialization during `/implement-story`: characterization tests against the REQ's oracle source go red before other production-code work for those scenarios.
+
+### 11. `/document-story`
 
 - **Inputs.** Completed story, accepted QA matrix, completion metadata, follow-up ledger.
 - **Agent.** Documenter.
@@ -246,8 +238,8 @@ Documentation updates are driven by the story source of truth. The documenter do
 
 | Mode | When to run | What it checks |
 |---|---|---|
-| `ready` | After `/plan-story` or `/plan-port-story`, before Gate 7 approval | Required sections, domain touchpoints, AC `Evidence:` lines, test plan coverage of every AC ID, model-fidelity `Z7`, port/adapter contract and integration test rows, Phase Y `(binding)` criteria; for port stories, no unresolved covered `E4` / `E5`, slice prerequisites resolved, `Phase P`, `Covers XP`, `8b. Parity Plan`, and `Z8` |
-| `complete` | After `/document-story`, before Gate 9 approval | All criteria checked, Completion Metadata filled, review summary starts with `REVIEW SUMMARY:` and includes model-fidelity counts, QA result shows all PASS; for port stories, parity ref points to a passing parity report |
+| `ready` | After `/plan-story`, before Gate 7 approval | Required sections, domain touchpoints, AC `Evidence:` lines, test plan coverage of every AC ID, model-fidelity `Z7`, port/adapter contract and integration test rows, Phase Y `(binding)` criteria; when linked REQ has section 4b, no unresolved covered `E4` / `E5`, slice prerequisites resolved, `parity` rows for oracle-backed `XP-NNN` |
+| `complete` | After `/document-story`, before Gate 9 approval | All criteria checked, Completion Metadata filled, review summary starts with `REVIEW SUMMARY:` and includes model-fidelity counts, QA result shows all PASS including any `parity` rows |
 | `followups` | After `/patch-story` or `/reconcile-story` appends ledger rows | Each follow-up row has sequential ID, date, allowed change class, files touched, verification (or justified `TBD`), **Change ref**, **Review ref**, and AC impact |
 | *(default)* | Any time | All checks applicable to the story's current status |
 
@@ -261,20 +253,17 @@ Output is a Story Validation Matrix with `PASS` / `FAIL` / `BLOCKED` per check.
 |---|---|---|---|
 | `/init-project` | Empty repo | Scaffolded README and `docs/` layout | — |
 | `/define-purpose` | Raw idea or notes | `docs/PURPOSE.md` | Gate 1 |
-| `/refine-feature` | Purpose + raw notes | `docs/requirements/REQ-NNN-*.md` | Gate 2 |
+| `/refine-feature` | Purpose + raw notes or path details | `docs/requirements/REQ-NNN-*.md` (section 4b when recovered from `XP-NNN`) | Gate 2 |
 | `/model-domain` | Purpose + requirements | `docs/DOMAIN.md` | Gate 3 |
 | `/design-application` | Purpose, domain model, refined requirements | Design section and architecture decision records | Gate 4 |
 | `/plan-skeleton` | Purpose, domain model, design, architecture decision records | Walking-skeleton story | Gate 5 after implementation/review/QA |
-| `/plan-project` | Design, requirements, accepted skeleton | Backlog epics and story rows | Gate 6 |
-| `/plan-story` | Purpose, domain model, requirements, design, architecture decision records, backlog | `docs/features/{STORY-ID}-*.md` | Gate 7 |
-| `/plan-path-tests` | Path detail, requirements, oracle, defect ledger | `docs/modernization/test-plans/XP-NNN-tests.md` | — |
-| `/plan-port-story` | Purpose, domain model, requirements, design, architecture decision records, migration plan, path details, path test plans, decision register, oracle, defect ledger | `docs/features/{STORY-ID}-*.md` with slice prerequisites, `Phase P`, `8b. Parity Plan`, and `Z8` | Gate 7 plus modernization readiness |
-| `/validate-story ready` | Story document | Readiness validation (sections, domain touchpoints, AC evidence, test plan, model-fidelity gate, ports/adapters) | (supports Gate 7) |
+| `/plan-project` | Design, requirements, accepted skeleton; migration plan when present | Backlog epics and story rows | Gate 6 |
+| `/plan-story` | Purpose, domain model, requirements, design, architecture decision records, backlog; when REQ has section 4b, also migration plan, path details, decision register, oracle, defect ledger | `docs/features/{STORY-ID}-*.md` | Gate 7 |
+| `/validate-story ready` | Story document | Readiness validation (sections, domain touchpoints, AC evidence, test plan, model-fidelity gate, ports/adapters; provenance when 1b is present) | (supports Gate 7) |
 | `/validate-story followups` | Completed story with ledger rows | Follow-up ledger validation (`Change ref`, `Review ref`, change class) | (supports post-story lanes) |
 | `/implement-story` | Story spec and architecture decision records | Code, tests, updated story status | — |
-| `/review-story` | Story, purpose/domain artifacts, and changed surface | Review artifact (`Pass`/`Block`) including model fidelity | — |
-| `/verify-parity` | Port story, path test plans, oracle, path details, defect ledger | Parity report with `PARITY SUMMARY:` | M5 |
-| `/qa-story` | Story criteria and evidence | Criterion evidence matrix | Gate 8 |
+| `/review-story` | Story, purpose/domain artifacts, and changed surface | Review artifact (`Pass`/`Block`) including model fidelity; `PAR-#` / `PROV-#` when provenance is present | — |
+| `/qa-story` | Story criteria and evidence | Criterion evidence matrix, including `parity` rows | Gate 8 |
 | `/fix-from-qa` | Failed or blocked criteria | Targeted fix | — |
 | `/document-story` | Completed story, metadata, ledger | Documentation updates | Gate 9 |
 | `/validate-story complete` | Completed story | Completion validation | (supports Gate 9) |

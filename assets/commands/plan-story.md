@@ -16,6 +16,15 @@ Before writing, read the configured story template and follow it exactly. Every 
 
 **Scenario traceability (per configured methodology + `/refine-feature`):** if the story is linked to refined requirements in the configured requirements directory, every Gherkin scenario ID this story implements must appear in the **Covers Sn** column of at least one Section 8a row, and the test name should reference the scenario ID. If a particular scenario is intentionally out of scope for this story, the Summary section must state so and why.
 
+**Modernization provenance (when linked REQ files include section 4b):** this is still `/plan-story` and still uses the user-story template. Do not switch to a port-story template.
+- Copy the relevant 4b rows into Section 1b. REQ remains canonical.
+- Copy the migration-plan prerequisite IDs that bind those `XP-NNN` into **Slice prerequisites**. Checkoff happens in the story. Do not edit analysis snapshots.
+- Refuse to mark the story ready when a listed prerequisite is unresolved, a covered claim is `E4` / `E5` without a `DEC-NNN`, or an oracle-backed path has no comparison rule in the REQ.
+- Add `parity` test rows covering those `Sn` / `XP-NNN` IDs. Use the REQ comparison rule. If oracle source is `none`, do not invent a parity row.
+- If a cited `DEC-NNN` binds target design (persistence, named dependency, process boundary, integration, cutover) and no **Accepted** ADR exists, create or stop for that ADR. Cite both `DEC-NNN` and `ADR-NNN`.
+- Do not silently improve legacy behavior; cite `DEF-NNN` from the REQ.
+- Update the Artifact index row **Stories** when `## Modernization` exists (point at `docs/features/` or "see Backlog"). Do not edit Lane status or analysis index rows.
+
 The result must have everything the Implementer needs to complete the story without asking clarifying questions.
 
 Create a link to the generated file in the configured design doc's mention for the given user story in the appropriate epic's table. For instance, if the story is named `{STORY-ID}`:

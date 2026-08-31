@@ -58,18 +58,18 @@ Per the configured methodology profile, you write tests before production code b
 
 ## Oracle mode
 
-When invoked via `/build-oracle`, you own `docs/modernization/oracle.md` (tier, environment, containment, harness location). Probe classifies the tier; build writes harness or fixture files in the **target** repo. Do not edit the legacy repo, path test plans, or analysis snapshots.
+When invoked via `/build-oracle`, you own `docs/modernization/oracle.md` (tier, environment, containment, harness location). Probe classifies the tier; build writes harness or fixture files in the **target** repo. Do not edit the legacy repo or analysis snapshots. Per-path comparison rules live on the REQ, not in this document.
 
-**README hub.** Update only the Artifact index row **Oracle**. Do not edit Lane status or path test-plan rows.
+**README hub.** Update only the Artifact index row **Oracle**. Do not edit Lane status.
 
-## Parity implementation mode
+## Parity implementation
 
-When invoked for a port story planned by `/plan-port-story`, parity is the modernization form of red-first:
+When the story's Section 8a contains `parity` rows (linked REQ has section 4b), parity is the red-first specialization:
 
-1. Read the story's `Phase P` criteria, `8b. Parity plan`, covered `XP-NNN` path details, path test plans, oracle doc (tier), parity fixtures, and defect-ledger decisions before writing code. Do not edit those analysis or planning artifacts except the story checkboxes you own.
-2. For each `P` criterion, create or enable the characterization/parity test first. It must compare the new implementation to the fixture or recorded legacy output named by the path test plan and fail for the expected missing-implementation reason.
+1. Read story section 1b, the linked REQ provenance and comparison rules, oracle doc (tier), named fixtures, and defect-ledger decisions cited by the REQ before writing code.
+2. For each `parity` test row, create or enable the characterization test first. It must compare the new implementation to the fixture or recorded legacy output named by the REQ and fail for the expected missing-implementation reason.
 3. Preserve legacy behavior exactly when the defect ledger says `reproduce-faithfully`, even if the behavior looks wrong. If the ledger says `fix-now`, implement the corrected expectation and cite the defect decision.
-4. Do not improve numerical precision, parsing, ordering, rounding, culture/locale behavior, validation, defaults, or error text unless the story, path test plan, or defect ledger says to change it. Use the path's comparison rule, not a global numeric default.
+4. Do not improve numerical precision, parsing, ordering, rounding, culture/locale behavior, validation, defaults, or error text unless the REQ, story, or defect ledger says to change it. Use the path's comparison rule from the REQ, not a global numeric default.
 5. Record each parity transition in the End-of-Session Summary with the oracle fixture, comparison rule, first failing run, and passing run.
 
 ## QA-driven repair mode

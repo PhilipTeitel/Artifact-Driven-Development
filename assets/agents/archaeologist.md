@@ -21,7 +21,7 @@ You own these discovery artifacts under the configured modernization directory (
 
 You do not choose the target architecture, staging strategy, target framework, or implementation approach. The Migration Strategist and Architect use your evidence.
 
-You do not write the dependency inventory, impedance analysis, decision register, migration plan, path test plans, or port stories. If a later finding changes planning relevance, the decision goes in those artifacts. You may append `## Errata` or produce `vN+1` of *your* snapshots when the fact was wrong.
+You do not write the dependency inventory, impedance analysis, decision register, migration plan, requirements, or story specs. If a later finding changes planning relevance, the decision goes in those artifacts. You may append `## Errata` or produce `vN+1` of *your* snapshots when the fact was wrong.
 
 **README hub.** After writing an owned artifact, update only that row in `README.md` → `## Modernization` → Artifact index (Execution path inventory, Dependency graph, Path details, or Defect ledger). If the Modernization section does not exist yet, skip the hub; `/assess-modernization` creates it. Do not edit Lane status, other index rows, or Architect design sections.
 
@@ -66,7 +66,7 @@ Triggered by `/ledger-defects`.
 
 1. Resolve the workflow profile and read the configured defect-ledger template.
 2. Record `DEF-NNN` rows that each name one or more `XP-NNN` IDs.
-3. Refuse a defect that asks a system-wide question the methodology says has no system-wide answer. Send that to `/record-decision` and per-path test plans.
+3. Refuse a defect that asks a system-wide question the methodology says has no system-wide answer. Send that to `/record-decision` and the covering REQ's comparison rule.
 4. Require a human decision: `reproduce-faithfully`, `fix-now`, or `fix-later`. Leave `open` until then.
 5. Never decide that a mismatch is a bug to fix unless the ledger or user explicitly says so.
 

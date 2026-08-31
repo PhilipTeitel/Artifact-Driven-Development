@@ -142,10 +142,6 @@ In Cursor chat, the workflow slash commands should be available, including:
 /ledger-defects
 /document-legacy
 /plan-migration
-/plan-path-tests
-/plan-port-story
-/verify-parity
-/complete-port-story
 ```
 
 You can also run:
@@ -167,7 +163,7 @@ Open the target application repository in Cursor. The default workflow writes pr
 - `docs/decisions/` for ADRs
 - `docs/features/` for story specs and story reviews
 - `docs/reviews/` for diff reviews
-- `docs/modernization/` for assessments, path inventory and details, dependency inventory and graph, impedance analysis, decision register, defect ledger, migration plans, path test plans, and parity reports
+- `docs/modernization/` for assessments, path inventory and details, dependency inventory and graph, impedance analysis, decision register, defect ledger, migration plans, and oracle strategy
 - `audit-findings.md` for repository audit findings
 
 A typical new feature flow is:
@@ -194,11 +190,10 @@ A typical modernization flow is:
 /document-legacy XP-001
 /refine-feature @docs/modernization/paths/XP-001-short-slug.md
 /recover-domain @docs/modernization/paths/
-/plan-path-tests XP-001
 /design-application @docs/requirements/REQ-001-short-slug.md
 /plan-project @docs/modernization/migration-plan.md
-/plan-port-story STORY-ID XP-001
-/complete-port-story STORY-ID
+/plan-story STORY-ID
+/complete-story STORY-ID
 ```
 
 For the full command sequence, see [`assets/WORKFLOW.md`](assets/WORKFLOW.md).

@@ -36,7 +36,7 @@ Prompts are ephemeral. They explain what someone wanted in the moment. A prompt 
 
 The result is software development where the AI is fast, but the work is still reviewable, traceable, and grounded in engineering discipline.
 
-The same model also supports brownfield modernization: porting an existing application to a new language, framework, architecture, or operating model. In that lane, the workflow first inventories executable paths and dependencies, grades recovered evidence, records decisions without rewriting the analysis, and then rejoins the normal story lifecycle one slice at a time.
+The same model also supports brownfield modernization: porting an existing application to a new language, framework, architecture, or operating model. In that lane, the workflow first inventories executable paths and dependencies, grades recovered evidence, records decisions without rewriting the analysis, and then rejoins the normal story lifecycle through `REQ-NNN` files — one slice at a time.
 
 ---
 
@@ -72,7 +72,7 @@ Evidence is the proof that an artifact was satisfied: the tests that ran, the fi
 | -------- | --------------- | -------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------- |
 | Agent    | Concern         | Defines role, responsibilities, and judgment                         | modeler, architect, implementer, auditor, QA, documenter, archaeologist, migration strategist                  |
 | Command  | Control         | Invokes one workflow step with specific instructions and constraints | `/define-purpose`, `/model-domain`, `/plan-skeleton`, `/plan-story`, `/qa-story`, `/assess-modernization`      |
-| Template | Output shape    | Defines what an acceptable artifact must contain                     | purpose, domain model, requirements, architecture decision record, user-story, port-story, story-review, audit |
+| Template | Output shape    | Defines what an acceptable artifact must contain                     | purpose, domain model, requirements, architecture decision record, user-story, story-review, audit |
 | Artifact | —               | Durable output used by later steps                                   | purpose document, domain model, requirements document, architecture decision record, story spec, review report |
 | Evidence | —               | Proof a criterion was satisfied                                      | tests, changed files, QA matrix, review summary                                                                |
 | Gate     | —               | Decision point: continue, return for repair, or escalate             | review Pass/Block, QA PASS/FAIL/BLOCKED, human approvals                                                       |
@@ -93,12 +93,12 @@ flowchart LR
     legacy["Legacy application"] --> assess["Assess modernization"]
     assess --> planMigration["Plan migration"]
     planMigration --> recover["Recover current slice"]
-    recover --> portStories["Plan port stories"]
+    recover --> refine["Refine requirements"]
+    refine --> standardLifecycle
     standardLifecycle --> delivery["Implement, review, QA, document"]
-    portStories --> delivery
 ```
 
-The detailed diagram below shows the standard lifecycle. See [MODERNIZATION.md](MODERNIZATION.md) for the brownfield assessment, slice-scoped recovery, decision register, parity, and migration-planning lane.
+The detailed diagram below shows the standard lifecycle. See [MODERNIZATION.md](MODERNIZATION.md) for the brownfield assessment, slice-scoped recovery, decision register, and migration-planning lane. Recovered paths rejoin through `REQ-NNN` files, then the same delivery workflow.
 
 ```mermaid
 flowchart TD

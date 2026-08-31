@@ -24,7 +24,7 @@
 |----|-------------------|-------------|----------|----------|------------|-------------|
 | DEF-NNN | `{description of THIS path's behavior}` | `{XP-NNN}` | `{E1\|E2\|E3\|E4\|E5}` `{citation}` | `{open \| reproduce-faithfully \| fix-now \| fix-later}` | `{impact}` | `{STORY-ID / DEC-NNN / TBD}` |
 
-If a requested defect is "what is the global numeric tolerance?", do not file it. Record `DEC-NNN` that comparison is per path, and put the bound in that path's test plan.
+If a requested defect is "what is the global numeric tolerance?", do not file it. Record `DEC-NNN` that comparison is per path, and put the bound on that path's REQ (section 4b / Constraints).
 
 ## 2. Reproduce faithfully
 

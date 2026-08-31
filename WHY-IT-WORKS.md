@@ -41,7 +41,7 @@ Tests, changed files, the QA matrix, the review summary, the documentation diff 
 
 ### Evidence has a grade.
 
-Brownfield modernization fails when inferred facts are laundered into requirements, and it also fails when global analysis is treated as a gate on every slice. Evidence grades make provenance inspectable: `E1 verified`, `E2 documented`, `E3 code-derived`, `E4 inferred`, and `E5 unknown` do not carry the same authority, and each claim carries exactly one of them. The model can recover and organize weak evidence, but it cannot silently promote weak evidence into implementation-ready truth. Analysis snapshots stay frozen; decisions live in the register, the defect ledger, the slice prerequisite table, and the story spec.
+Brownfield modernization fails when inferred facts are laundered into requirements, and it also fails when global analysis is treated as a gate on every slice. Evidence grades make provenance inspectable: `E1 verified`, `E2 documented`, `E3 code-derived`, `E4 inferred`, and `E5 unknown` do not carry the same authority, and each claim carries exactly one of them. The model can recover and organize weak evidence, but it cannot silently promote weak evidence into implementation-ready truth. Analysis snapshots stay frozen; decisions live in the register, the defect ledger, the covering `REQ-NNN`, the slice prerequisite table, and the story spec.
 
 ### Humans own the decisions that bind work.
 
@@ -75,7 +75,7 @@ A team using this methodology well should be able to answer, for any shipped sto
 - Which documentation surfaces were updated?
 - Who approved each gate?
 - What post-complete follow-ups happened, with what **Change ref** and **Review ref**?
-- For a port story, which legacy citation, evidence grade, oracle tier, fixture, tolerance, and defect decision justified the parity claim?
+- For a story that implements recovered `Sn` IDs, which legacy citation, evidence grade, oracle tier, fixture, tolerance, and defect decision justified the parity claim?
 
 If those answers are all in the story document and its linked artifacts, the methodology is doing its job. If any of them requires reading the model's chat transcript, something earlier broke and the trace needs to be repaired — often via `/reconcile-story` — before more work is layered on top.
 

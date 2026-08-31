@@ -1,16 +1,16 @@
 # build-oracle
 
-Probe or build the legacy oracle used to compare the port against legacy behavior. Before acting, resolve the workflow profile and use its configured oracle path, oracle template, evidence grades, legacy repo path, and path test-plan glob.
+Probe or build the legacy oracle used to compare the port against legacy behavior. Before acting, resolve the workflow profile and use its configured oracle path, oracle template, evidence grades, and legacy repo path.
 
 **Command-agent binding:** This command is role-bound to `agents.implementer`. Before executing any step, load the configured Implementer agent definition and follow it as binding role context.
 
-This command has two modes: `probe` and `build`. `probe` classifies whether the legacy app can be executed safely. `build` creates harness or recorded fixture files in the target repo; it must not modify the legacy repo. Per-path comparison rules and FIX IDs live in path test plans. This document owns the tier and environment.
+This command has two modes: `probe` and `build`. `probe` classifies whether the legacy app can be executed safely. `build` creates harness or recorded fixture files in the target repo; it must not modify the legacy repo. Per-path comparison rules and FIX IDs live on the covering `REQ-NNN`. This document owns the tier and environment.
 
 ## Inputs
 
 - Mode: `probe` or `build`.
 - Legacy repo path and any required setup documentation.
-- Optional `XP-NNN` IDs whose test plans already named FIX IDs (build mode).
+- Optional `XP-NNN` IDs whose covering REQ already named FIX IDs (build mode).
 
 ## Steps
 
@@ -20,11 +20,11 @@ This command has two modes: `probe` and `build`. `probe` classifies whether the 
    - Identify containment requirements, obsolete dependencies, security isolation, data needs, secrets, and determinism hazards that affect the **tier**.
    - Classify the oracle tier as `T1 executable`, `T2 recorded`, or `T3 documented-only`.
 3. In `build` mode:
-   - Create or update target-repo harness or fixture files named by the relevant path test plans.
-   - Do not edit the path test plan, path detail, or oracle comparison policy. If a named fixture cannot be produced, stop and report the gap.
+   - Create or update target-repo harness or fixture files named by the covering REQ section 4b.
+   - Do not edit the REQ comparison policy, path detail, or analysis snapshots. If a named fixture cannot be produced, stop and report the gap.
    - Do not treat a workflow-profile numeric hint as a binding comparison rule.
 4. Write or update the configured oracle document (tier, environment, containment, harness location). Do not grow a global fixture catalog.
-5. **README hub.** If `## Modernization` exists, update only the Artifact index row **Oracle**. Do not edit Lane status (Migration Strategist) or path test-plan rows. Do not create the section.
+5. **README hub.** If `## Modernization` exists, update only the Artifact index row **Oracle**. Do not edit Lane status (Migration Strategist). Do not create the section.
 
 ## Hard rules
 

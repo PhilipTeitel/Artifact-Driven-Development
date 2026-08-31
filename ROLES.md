@@ -31,8 +31,8 @@ The archaeologist operates at the front of a brownfield modernization. Its job i
 - **Primary inputs.** Legacy repositories, user documentation, release notes, changelogs, commit history, support notes, screenshots, observed runs, and oracle outputs.
 - **Primary outputs.** `docs/modernization/execution-path-inventory.md`, `docs/modernization/dependency-graph.md`, `docs/modernization/paths/XP-NNN-*.md`, and `docs/modernization/defect-ledger.md`.
 - **Commands.** `/inventory-paths`, `/map-dependency-graph`, `/trace-path`, `/ledger-defects`, `/document-legacy`.
-- **Does not.** Choose the target architecture, staging strategy, target framework, implementation approach, or whether a suspicious legacy behavior should be fixed. Does not write the dependency inventory, impedance analysis, decision register, migration plan, or path test plans. Does not edit snapshot cells to record later decisions — appends Errata or produces `vN+1` when a fact was wrong. Does not edit README Lane status or other agents' Artifact index rows.
-- **Hands off to.** Migration Strategist for feasibility and planning, Modeler for recovered purpose/domain work, Architect for requirements, path test plans, and port-story planning.
+- **Does not.** Choose the target architecture, staging strategy, target framework, implementation approach, or whether a suspicious legacy behavior should be fixed. Does not write the dependency inventory, impedance analysis, decision register, migration plan, requirements, or story specs. Does not edit snapshot cells to record later decisions — appends Errata or produces `vN+1` when a fact was wrong. Does not edit README Lane status or other agents' Artifact index rows.
+- **Hands off to.** Migration Strategist for feasibility and planning, Modeler for recovered purpose/domain work, Architect for requirements, design, and story planning.
 
 Every recovered claim needs exactly one evidence grade and a citation. `E4 inferred` and `E5 unknown` facts remain blockers for the scope they bind until resolved or explicitly accepted. Path details are slice-scoped: do not catalog the whole system before the first slice.
 
@@ -46,10 +46,10 @@ The migration strategist operates before target implementation planning. Its job
 - **Primary inputs.** Path inventory, dependency graph, path details when present, oracle classification, recovered purpose/domain/requirements, defect ledger, target-stack notes, and project constraints.
 - **Primary outputs.** `docs/modernization/ASSESSMENT.md`, `docs/modernization/dependency-inventory.md`, `docs/modernization/impedance-analysis.md`, `docs/modernization/decision-register.md`, `docs/modernization/migration-plan.md`, and recommended ADRs.
 - **Commands.** `/inventory-dependencies`, `/analyze-impedance`, `/assess-modernization`, `/record-decision`, `/plan-migration`.
-- **Does not.** Recover raw behavior facts from code, write implementation code, write path test plans, take over Architect-owned ADR files, or soften unresolved feasibility risks. Does not edit Archaeologist snapshots. Does not use `blocked` as a dependency disposition — `undecided` and `no-route` are distinct. Does not gate a slice on global unresolved counts.
-- **Hands off to.** Human decision gates for assessment and migration-plan approval, then Architect for design, path test plans, and port-story planning.
+- **Does not.** Recover raw behavior facts from code, write implementation code, write requirements or story specs, take over Architect-owned ADR files, or soften unresolved feasibility risks. Does not edit Archaeologist snapshots. Does not use `blocked` as a dependency disposition — `undecided` and `no-route` are distinct. Does not gate a slice on global unresolved counts.
+- **Hands off to.** Human decision gates for assessment and migration-plan approval, then Architect for requirements, design, and story planning.
 
-The migration strategist never promises parity above the oracle tier. A `T3 documented-only` oracle can support documented expectations, not independently provable legacy-vs-new comparison. Comparison rules are per path; they are not a global assessment gate.
+The migration strategist never promises parity above the oracle tier. A `T3 documented-only` oracle can support documented expectations, not independently provable legacy-vs-new comparison. Comparison rules are per path and live on the covering REQ; they are not a global assessment gate.
 
 ---
 
@@ -57,10 +57,10 @@ The migration strategist never promises parity above the oracle tier. A `T3 docu
 
 The architect operates before implementation begins. Its job is to turn ambiguity into something an implementer can act on without guessing.
 
-- **Owns.** Refined requirements, application design, architecture decision records, walking-skeleton story, backlog, story specs, port-story specs, path test plans, and the README Artifact index rows **Path test plans** and **Port stories**. Preserves an existing `## Modernization` section when adding design.
-- **Primary inputs.** Approved purpose, approved domain model, raw notes, tickets, transcripts, prior requirements, prior architecture decision records, the project's existing design, and for modernization work the migration plan, path details, path test plans, oracle doc, defect ledger, decision register, and impedance analysis.
-- **Primary outputs.** requirements, design sections in the README, new architecture decision records, walking-skeleton story, backlog rows, `docs/modernization/test-plans/XP-NNN-tests.md`, and `docs/features/{STORY-ID}-*.md` story or port-story specs.
-- **Commands.** `/refine-feature`, `/design-application`, `/plan-skeleton`, `/plan-project`, `/plan-story`, `/plan-path-tests`, `/plan-port-story`, `/validate-story ready`.
+- **Owns.** Refined requirements, application design, architecture decision records, walking-skeleton story, backlog, story specs, and the README Artifact index rows **Requirements** and **Stories**. Preserves an existing `## Modernization` section when adding design.
+- **Primary inputs.** Approved purpose, approved domain model, raw notes, tickets, transcripts, prior requirements, prior architecture decision records, the project's existing design, and for modernization work the migration plan, path details, oracle doc, defect ledger, decision register, and impedance analysis.
+- **Primary outputs.** requirements, design sections in the README, new architecture decision records, walking-skeleton story, backlog rows, and `docs/features/{STORY-ID}-*.md` story specs.
+- **Commands.** `/refine-feature`, `/design-application`, `/plan-skeleton`, `/plan-project`, `/plan-story`, `/validate-story ready`.
 - **Does not.** Implement code. Make a binding technical decision without writing it down as an architecture decision record. Re-open completed stories to retrofit new scope. Edit Archaeologist or Migration Strategist analysis snapshots.
 - **Hands off to.** Implementer, once a story spec is approved and validated as ready.
 
@@ -73,7 +73,7 @@ When the architect uncovers a decision that will bind future work — persistenc
 The implementer operates against an approved story spec. Its job is to turn that spec into working, tested code without renegotiating the spec.
 
 - **Owns.** Code changes, tests, the story document's status and criteria checkboxes, and the README Artifact index row **Oracle** when running `/build-oracle`.
-- **Primary inputs.** The approved story spec and its linked architecture decision records, plus the existing code. For port stories, also the path test plan, oracle doc, parity plan, defect ledger, and accepted legacy evidence.
+- **Primary inputs.** The approved story spec and its linked architecture decision records, plus the existing code. When the story has section 1b, also the linked REQ provenance, oracle doc, and defect ledger.
 - **Primary outputs.** Production code, tests, and an updated story document. Status moves `Open` → `In Progress` → `Complete`; acceptance criteria boxes move `[ ]` → `[x]` as each one passes.
 - **Commands.** `/implement-story`, `/fix-from-qa`, `/patch-story` (including `/validate-story followups` after ledger append), `/build-oracle`.
 - **Does not.** Reinterpret requirements. Substitute named dependencies, persistence choices, or transport. Silently change the design. Mark the story complete with unchecked criteria.
@@ -81,7 +81,7 @@ The implementer operates against an approved story spec. Its job is to turn that
 
 The implementer uses red-first tests by default for each acceptance criterion. Exceptions are explicit, one-line, and noted in the end-of-session summary; "trivial" is not an acceptable exception.
 
-For port stories, parity-first is the red-first specialization. Phase P criteria and characterization tests come first, and they cite oracle fixtures, the path test plan's comparison rule, and defect-ledger decisions before implementation changes are made.
+When a story's test plan has `parity` rows, parity-first is the red-first specialization. Characterization tests come first, and they cite oracle fixtures, the REQ comparison rule, and defect-ledger decisions before implementation changes are made.
 
 If implementation reveals that the plan is wrong, the implementer escalates back to architect rather than hiding the change in code.
 
@@ -92,13 +92,13 @@ If implementation reveals that the plan is wrong, the implementer escalates back
 The auditor provides the review gates. Its job is to look at the changed surface — not the original story — and find the classes of mistake that QA does not.
 
 - **Owns.** Story review artifacts, diff review artifacts, repository map, and audit findings.
-- **Primary inputs.** The story document, configured purpose/domain artifacts, and the changed files; or a git diff range; or the full repository for a periodic audit. For port stories, also the path details, path test plans, oracle doc, defect ledger, and parity plan.
+- **Primary inputs.** The story document, configured purpose/domain artifacts, and the changed files; or a git diff range; or the full repository for a periodic audit. When the story has section 1b, also the linked REQ provenance, oracle doc, and defect ledger.
 - **Primary outputs.** `docs/features/{STORY-ID}-review.md` with a machine-readable `REVIEW SUMMARY:` line and a `Pass` or `Block` result; or `docs/reviews/*.md`; or `audit-findings.md`.
 - **Commands.** `/review-story`, `/review-diff`, `/reconcile-story`, `/map-repo`, `/audit-all`, `/triage-audit-findings`, and the seven category audits.
 - **Does not.** Verify acceptance criteria — that is QA's job. Re-design the work — that is the architect's job. Fix the code — that is the implementer's job. The auditor identifies; others repair.
 - **Hands off to.** Implementer (on `Block`) or QA (on `Pass`) for per-story review; back to architect or implementer for audit findings.
 
-Per-story review focuses on the changed surface for reliability, security, API contract, test coverage, and model-fidelity issues. Port-story review also reports parity and provenance issues as `PAR-#` and `PROV-#` findings. Full-repo audits are periodic health checks, not part of normal story completion.
+Per-story review focuses on the changed surface for reliability, security, API contract, test coverage, and model-fidelity issues. Stories that implement recovered `Sn` IDs also report parity and provenance issues as `PAR-#` and `PROV-#` findings. Full-repo audits are periodic health checks, not part of normal story completion.
 
 ---
 
@@ -106,14 +106,14 @@ Per-story review focuses on the changed surface for reliability, security, API c
 
 QA verifies that the story's acceptance criteria are actually satisfied by executable evidence.
 
-- **Owns.** The criterion evidence matrix and, for port stories, the parity report plus the README Artifact index row **Parity reports**.
-- **Primary inputs.** The story's acceptance criteria and the tests, changed files, and other evidence cited by the implementer. For port stories, also the Phase P criteria, parity plan, path test plans, oracle doc, path details, and defect ledger.
-- **Primary outputs.** A matrix with `PASS`, `FAIL`, or `BLOCKED` for every criterion, each row citing the specific evidence that supports its result. For port stories, QA also produces the parity report.
-- **Commands.** `/qa-story`, `/verify-parity`.
-- **Does not.** Infer completion from code alone. Skip a criterion because the implementation "looks fine." Fix failed criteria — that is the implementer's job via `/fix-from-qa`. Edit path test plans or analysis snapshots. Edit README sections other than the Parity reports index row.
+- **Owns.** The criterion evidence matrix.
+- **Primary inputs.** The story's acceptance criteria and the tests, changed files, and other evidence cited by the implementer. When the story has `parity` rows, also the linked REQ comparison rules, oracle doc, and defect ledger.
+- **Primary outputs.** A matrix with `PASS`, `FAIL`, or `BLOCKED` for every criterion, each row citing the specific evidence that supports its result.
+- **Commands.** `/qa-story`.
+- **Does not.** Infer completion from code alone. Skip a criterion because the implementation "looks fine." Fix failed criteria — that is the implementer's job via `/fix-from-qa`. Edit analysis snapshots or requirements. Edit README modernization hub cells.
 - **Hands off to.** Implementer (for any `FAIL` or `BLOCKED` row) or Documenter (when all rows are `PASS` and the human has accepted the evidence).
 
-QA exists as a separate role from review because the two ask different questions. Review asks "is this code safe and sound?" QA asks "did this code do the thing the story said it would?" For a port story, QA also asks "does the new behavior match the accepted legacy expectation, within the oracle tier and the path test plan's comparison rule?"
+QA exists as a separate role from review because the two ask different questions. Review asks "is this code safe and sound?" QA asks "did this code do the thing the story said it would?" When a story implements recovered `Sn` IDs, QA also asks "does the new behavior match the accepted legacy expectation, within the oracle tier and the REQ's comparison rule?"
 
 ---
 

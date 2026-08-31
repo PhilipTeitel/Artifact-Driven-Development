@@ -24,7 +24,7 @@ Write the result to the configured impedance analysis document (default `docs/mo
 
 ## Hard rules
 
-- Do not claim a clean analogue without naming how it would be verified (the path test plan will own the rule).
+- Do not claim a clean analogue without naming how it would be verified (the covering REQ will own the comparison rule).
 - Treat numeric precision, formatting, culture, ordering, and undefined-behavior reliance as per-path concerns. Do not invent a global tolerance.
 - After `Status: Snapshot`, append Errata or produce `vN+1`.
 - If target stack is missing, write `TBD` and list the blocked analysis questions as open `DEC-NNN` candidates.

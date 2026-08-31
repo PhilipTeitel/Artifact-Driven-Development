@@ -53,7 +53,7 @@ A command is one workflow step under explicit control: the instructions the agen
   - **Implementation and verification.** [`/implement-story`](assets/commands/implement-story.md), [`/review-story`](assets/commands/review-story.md), [`/qa-story`](assets/commands/qa-story.md), [`/fix-from-qa`](assets/commands/fix-from-qa.md), [`/document-story`](assets/commands/document-story.md), [`/complete-story`](assets/commands/complete-story.md).
   - **Post-story routing.** [`/patch-story`](assets/commands/patch-story.md), [`/reconcile-story`](assets/commands/reconcile-story.md), [`/review-diff`](assets/commands/review-diff.md).
   - **Audit.** [`/map-repo`](assets/commands/map-repo.md), [`/audit-all`](assets/commands/audit-all.md), [`/triage-audit-findings`](assets/commands/triage-audit-findings.md), plus the category audits [`/audit-tooling`](assets/commands/audit-tooling.md), [`/audit-reliability`](assets/commands/audit-reliability.md), [`/audit-db`](assets/commands/audit-db.md), [`/audit-api-contracts`](assets/commands/audit-api-contracts.md), [`/audit-security`](assets/commands/audit-security.md), [`/audit-performance`](assets/commands/audit-performance.md), [`/audit-test-coverage`](assets/commands/audit-test-coverage.md).
-  - **Modernization.** [`/assess-modernization`](assets/commands/assess-modernization.md), [`/inventory-paths`](assets/commands/inventory-paths.md), [`/inventory-dependencies`](assets/commands/inventory-dependencies.md), [`/map-dependency-graph`](assets/commands/map-dependency-graph.md), [`/analyze-impedance`](assets/commands/analyze-impedance.md), [`/build-oracle`](assets/commands/build-oracle.md), [`/record-decision`](assets/commands/record-decision.md), [`/document-legacy`](assets/commands/document-legacy.md), [`/trace-path`](assets/commands/trace-path.md), [`/recover-domain`](assets/commands/recover-domain.md), [`/ledger-defects`](assets/commands/ledger-defects.md), [`/plan-migration`](assets/commands/plan-migration.md), [`/plan-path-tests`](assets/commands/plan-path-tests.md), [`/plan-port-story`](assets/commands/plan-port-story.md), [`/verify-parity`](assets/commands/verify-parity.md), [`/complete-port-story`](assets/commands/complete-port-story.md). Compatibility aliases: [`/map-legacy`](assets/commands/map-legacy.md), [`/mine-history`](assets/commands/mine-history.md), [`/catalog-behavior`](assets/commands/catalog-behavior.md), [`/trace-flow`](assets/commands/trace-flow.md), [`/analyze-translation-gap`](assets/commands/analyze-translation-gap.md).
+  - **Modernization.** [`/assess-modernization`](assets/commands/assess-modernization.md), [`/inventory-paths`](assets/commands/inventory-paths.md), [`/inventory-dependencies`](assets/commands/inventory-dependencies.md), [`/map-dependency-graph`](assets/commands/map-dependency-graph.md), [`/analyze-impedance`](assets/commands/analyze-impedance.md), [`/build-oracle`](assets/commands/build-oracle.md), [`/record-decision`](assets/commands/record-decision.md), [`/document-legacy`](assets/commands/document-legacy.md), [`/trace-path`](assets/commands/trace-path.md), [`/recover-domain`](assets/commands/recover-domain.md), [`/ledger-defects`](assets/commands/ledger-defects.md), [`/plan-migration`](assets/commands/plan-migration.md). Compatibility aliases: [`/map-legacy`](assets/commands/map-legacy.md), [`/mine-history`](assets/commands/mine-history.md), [`/catalog-behavior`](assets/commands/catalog-behavior.md), [`/trace-flow`](assets/commands/trace-flow.md), [`/analyze-translation-gap`](assets/commands/analyze-translation-gap.md), [`/plan-path-tests`](assets/commands/plan-path-tests.md), [`/plan-port-story`](assets/commands/plan-port-story.md), [`/verify-parity`](assets/commands/verify-parity.md), [`/complete-port-story`](assets/commands/complete-port-story.md).
 
 Commands are also role-bound. The workflow profile maps each command to an agent definition, and a command must load that configured role contract before it runs. If the command and agent definition conflict, the workflow stops and reports the conflict instead of silently choosing one.
 
@@ -72,14 +72,13 @@ A template is a contract for what an artifact must contain.
   - **[README / design hub template](assets/templates/readme-template.md)** — architecture, stack, key decisions, API contract, environment, setup, backlog; on the modernization-port lane, optional `## Modernization` (what this is, lane status, artifact index). Greenfield omits that section. Design headings stay out until `/design-application`.
   - **[Purpose template](assets/templates/purpose-template.md)** — thesis, job, north-star outcome, trade-off rule, anti-thesis, success signals.
   - **[Domain model template](assets/templates/domain-model-template.md)** — ubiquitous language, data dictionary, entities, relationships, invariants, lifecycles, and consistency boundaries.
-  - **[Requirements template](assets/templates/requirements-template.md)** — goals, non-goals, personas, constraints, resolved and open questions, Gherkin scenarios.
+  - **[Requirements template](assets/templates/requirements-template.md)** — goals, non-goals, personas, constraints, resolved and open questions, Gherkin scenarios; optional section 4b when refined from path details.
   - **[architecture decision record template](assets/templates/adr-template.md)** — context, decision, alternatives considered, consequences.
   - **[Walking-skeleton template](assets/templates/walking-skeleton-template.md)** — one thin running end-to-end slice through the composition root and boundaries, with a reflection checkpoint.
-  - **[User story template](assets/templates/user-story-template.md)** — linked architecture decision records, Definition of Ready, binding constraints, ports and adapters table (Section 4b), file touchpoints, acceptance criteria (including Phase Y binding and Phase Z quality gates), test plan with **Covers AC** and **Covers Sn** columns and test levels (`unit`, `contract`, `integration`, `e2e` / `ui`), implementation order, completion metadata, post-complete follow-up ledger with **Change ref** and **Review ref** columns.
-  - **[Port-story template](assets/templates/port-story-template.md)** — a modernization story shape based on the user-story template, adding `### 1b. Legacy source touchpoints`, slice prerequisites, `Phase P`, `## 8b. Parity Plan`, a **Covers XP** test-plan column, and the `Z8` parity gate.
+  - **[User story template](assets/templates/user-story-template.md)** — linked architecture decision records, Definition of Ready, binding constraints, ports and adapters table (Section 4b), file touchpoints, acceptance criteria (including Phase Y binding and Phase Z quality gates), test plan with **Covers AC** and **Covers Sn** columns and test levels (`unit`, `contract`, `integration`, `parity`, `e2e` / `ui`), implementation order, completion metadata, post-complete follow-up ledger with **Change ref** and **Review ref** columns. When a linked REQ has section 4b, the story also copies legacy provenance, slice prerequisites, and `parity` rows.
   - **[Story-review template](assets/templates/story-review-template.md)** — required actions, severity, machine-readable `REVIEW SUMMARY:` line.
   - **[Audit template](assets/templates/audit-template.md)** — findings by category with evidence citations.
-  - **Modernization templates.** [Modernization assessment](assets/templates/modernization-assessment-template.md), [execution path inventory](assets/templates/execution-path-inventory-template.md), [dependency inventory](assets/templates/dependency-inventory-template.md), [dependency graph](assets/templates/dependency-graph-template.md), [technology and impedance analysis](assets/templates/impedance-analysis-template.md), [execution path detail](assets/templates/execution-path-detail-template.md), [path test plan](assets/templates/path-test-plan-template.md), [decision register](assets/templates/decision-register-template.md), [oracle strategy](assets/templates/oracle-template.md), [defect ledger](assets/templates/defect-ledger-template.md), [migration plan](assets/templates/migration-plan-template.md), and [parity report](assets/templates/parity-report-template.md).
+  - **Modernization templates.** [Modernization assessment](assets/templates/modernization-assessment-template.md), [execution path inventory](assets/templates/execution-path-inventory-template.md), [dependency inventory](assets/templates/dependency-inventory-template.md), [dependency graph](assets/templates/dependency-graph-template.md), [technology and impedance analysis](assets/templates/impedance-analysis-template.md), [execution path detail](assets/templates/execution-path-detail-template.md), [decision register](assets/templates/decision-register-template.md), [oracle strategy](assets/templates/oracle-template.md), [defect ledger](assets/templates/defect-ledger-template.md), and [migration plan](assets/templates/migration-plan-template.md).
 
 A template is what prevents an artifact from drifting into a different shape every time it is produced.
 
@@ -99,7 +98,7 @@ An artifact is a durable, reviewable output of the workflow. It is defined by **
 |---|---|---|
 | Purpose | Product thesis, job, north-star outcome, trade-off rule, anti-thesis, success signals | `/define-purpose` |
 | Domain model | Ubiquitous language, data dictionary, entities, relationships, invariants, lifecycles, consistency boundaries | `/model-domain` |
-| Refined requirements | Clarified intent, goals, non-goals, constraints, Gherkin scenarios | `/refine-feature` |
+| Refined requirements | Clarified intent, goals, non-goals, constraints, Gherkin scenarios; for recovered paths, section 4b provenance | `/refine-feature` |
 | Application design | Architecture, stack, API contract, environment, setup, UI structure | `/design-application` |
 | architecture decision record | One binding technical decision, recorded durably | `/design-application` when a decision needs to be durable |
 | Walking skeleton | A thin running slice proving purpose, domain model, architecture, composition root, and boundaries | `/plan-skeleton`, then the normal implementation/review/QA tail |
@@ -123,8 +122,6 @@ An artifact is a durable, reviewable output of the workflow. It is defined by **
 | Decision register | Port, retire, rewrite, substitute, and comparison-policy decisions as `DEC-NNN` | `/record-decision` |
 | Defect ledger | `DEF-NNN` path-scoped decisions to reproduce faithfully, fix now, or fix later | `/ledger-defects` |
 | Migration plan | Staging strategy, slice plan, per-slice prerequisites, cutover, forecast | `/plan-migration` |
-| Path test plan | Per-path scenarios, oracle strategy, and comparison rules | `/plan-path-tests` |
-| Parity report | Per-port-story comparison of legacy expectation to new behavior, including `PAR-#` and `PROV-#` blockers | `/verify-parity` |
 | Modernization hub | What this repo is, where the lane is, and links to artifacts that exist — navigation, not a second analysis copy | `/assess-modernization` creates; each producing command updates only its index row |
 
 ### Implementation note: artifacts and files
@@ -171,7 +168,7 @@ A gate is where work stops until someone — human or agent — decides whether 
 - **Examples.**
   - **Agent gates.** Review `Pass` or `Block`, including model-fidelity `MODEL-#` findings. QA `PASS`, `FAIL`, or `BLOCKED` per criterion. `validate-story ready`, `validate-story complete`, and `validate-story followups`.
   - **Human gates.** The nine approvals in the [README](README.md) swimlane: purpose, refined requirements, domain model, design and architecture decision records, walking skeleton, backlog, story spec, QA evidence, documentation.
-  - **Modernization gates.** M1 assessment verdict, M2 recovered path documentation for the current slice, M3 defect decisions for that slice, M4 migration plan, and M5 parity evidence. Parity adds `PAR-#` and `PROV-#` review findings, `PASS` / `FAIL` / `BLOCKED` verification rows, and the port-story `Z8` quality gate.
+  - **Modernization gates.** M1 assessment verdict, M2 recovered path documentation for the current slice, M3 defect decisions for that slice, and M4 migration plan. Parity evidence is Gate 8: `PAR-#` and `PROV-#` review findings plus `PASS` / `FAIL` / `BLOCKED` QA rows for `parity` tests.
 
 Gates exist because skipping them has been observed to cost more later. A gate that becomes a formality has stopped doing its job.
 
@@ -185,17 +182,17 @@ The composition matrix shows which command produces or updates which artifact, w
 |---|---|---|---|
 | `/init-project` | Architect or human | Project scaffold | `README.md`, `docs/` layout |
 | `/define-purpose` | Modeler | Purpose | `docs/PURPOSE.md` |
-| `/refine-feature` | Architect | Refined requirements | `docs/requirements/REQ-NNN-*.md` |
+| `/refine-feature` | Architect | Refined requirements; section 4b when recovered from path details | `docs/requirements/REQ-NNN-*.md` |
 | `/model-domain` | Modeler | Domain model and data dictionary | `docs/DOMAIN.md` |
 | `/design-application` | Architect | Application design; architecture decision records (as needed) | Project README design sections; `docs/decisions/ADR-NNN-*.md` |
 | `/plan-skeleton` | Architect | Walking-skeleton story | `docs/features/SK-1-*.md` or configured story path |
 | `/plan-project` | Architect | Backlog | Project README backlog section |
-| `/plan-story` | Architect | Story spec | `docs/features/{STORY-ID}-*.md` |
+| `/plan-story` | Architect | Story spec; provenance and `parity` rows when the linked REQ has section 4b | `docs/features/{STORY-ID}-*.md` |
 | `/validate-story ready` | Architect | Readiness validation | Story Validation Matrix against the story spec; corrects readiness defects only |
 | `/validate-story followups` | Implementer or Auditor | Follow-up ledger validation | Story Validation Matrix; corrects ledger drift only |
 | `/implement-story` | Implementer | Code, tests; story acceptance evidence | Codebase; story spec status field and criteria checkboxes |
 | `/review-story` | Auditor | Story review | `docs/features/{STORY-ID}-review.md` |
-| `/qa-story` | QA | QA evidence matrix | Story spec QA section |
+| `/qa-story` | QA | QA evidence matrix, including `parity` rows | Story spec QA section |
 | `/fix-from-qa` | Implementer | Code, tests; updated story acceptance evidence | Codebase; story spec checkboxes for failed or blocked rows only |
 | `/document-story` | Documenter | Documentation updates; completion metadata | Project README and project documentation surfaces (OpenAPI, runbooks, environment docs); story spec completion metadata |
 | `/validate-story complete` | Documenter | Completion validation | Assertion against story spec; corrects metadata if needed |
@@ -218,10 +215,6 @@ The composition matrix shows which command produces or updates which artifact, w
 | `/ledger-defects` | Archaeologist (records); human (decides) | Defect ledger | `docs/modernization/defect-ledger.md` |
 | `/document-legacy` | Archaeologist and Modeler | Coordinates slice-scoped recovery | Path details, purpose, domain model, defect ledger |
 | `/plan-migration` | Migration Strategist | Migration plan; recommended ADRs | `docs/modernization/migration-plan.md` |
-| `/plan-path-tests` | Architect | Path test plan | `docs/modernization/test-plans/XP-NNN-tests.md` |
-| `/plan-port-story` | Architect | Port story spec | `docs/features/{STORY-ID}-*.md` |
-| `/verify-parity` | QA | Parity report | `docs/modernization/parity/{STORY-ID}-parity.md` |
-| `/complete-port-story` | Implementer, Auditor, QA, Docs-PM | Code, tests, review, parity report, QA evidence, documentation, validation | Codebase; story spec; story review; parity report; project docs |
 
 Each producing modernization command also updates **only its README Artifact index row** when `## Modernization` exists. `/assess-modernization`, `/record-decision`, and `/plan-migration` also update **What this is** / **Lane status**. The hub is navigation; the linked file is canonical.
 

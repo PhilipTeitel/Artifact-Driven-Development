@@ -16,7 +16,7 @@ not per file. An agent may write only the sections listed for its command.
 | Modernization → Artifact index | The agent that owns the linked artifact | Each producing command updates **only its row**. Do not edit another agent's row. Do not copy table contents from the linked file. |
 | Requirements (purpose/domain links + REQ log + ADR log) | Architect for REQ and ADR logs; Modeler may set the purpose/domain link bullets when `/recover-domain` first creates those files | Append-only for REQ and ADR lists. |
 | High-Level Architecture through Environment Variables | Architect | `/design-application` (and gated `/plan-project` patches). Omit until design runs. |
-| Backlog Items | Architect creates rows; Documenter updates Status from story specs | `/plan-project`, `/plan-skeleton`, `/plan-story`, `/plan-port-story`; `/document-story` for status only. |
+| Backlog Items | Architect creates rows; Documenter updates Status from story specs | `/plan-project`, `/plan-skeleton`, `/plan-story`; `/document-story` for status only. |
 | License | Human / init | Leave unless the project already has a license file to cite. |
 
 ## Optional sections
@@ -78,7 +78,7 @@ During `/init-project`, a human may edit only the project title, short descripti
 | First / current slice | `{XP-NNN IDs or migration-plan row, or none yet}` |
 | Next command | `{command}` |
 
-Phase stays `Assessment` or `Planning` here. Recovery and delivery progress show up in the Artifact index (path details, test plans) and in **Backlog Items**. Do not add a third progress narrative.
+Phase stays `Assessment` or `Planning` here. Recovery and delivery progress show up in the Artifact index (path details, requirements) and in **Backlog Items**. Do not add a third progress narrative.
 
 ### Artifact index
 
@@ -98,9 +98,8 @@ Phase stays `Assessment` or `Planning` here. Recovery and delivery progress show
 | Domain model | Modeler | `{missing \| present}` | [`docs/DOMAIN.md`](docs/DOMAIN.md) |
 | Defect ledger | Archaeologist | `{missing \| present}` | [`docs/modernization/defect-ledger.md`](docs/modernization/defect-ledger.md) |
 | Migration plan | Migration Strategist | `{missing \| present}` | [`docs/modernization/migration-plan.md`](docs/modernization/migration-plan.md) |
-| Path test plans | Architect | `{missing \| N files}` | [`docs/modernization/test-plans/`](docs/modernization/test-plans/) |
-| Port stories | Architect | `{missing \| see Backlog}` | [`docs/features/`](docs/features/) |
-| Parity reports | QA | `{missing \| N files}` | [`docs/modernization/parity/`](docs/modernization/parity/) |
+| Requirements | Architect | `{missing \| see Requirements section}` | [`docs/requirements/`](docs/requirements/) |
+| Stories | Architect | `{missing \| see Backlog}` | [`docs/features/`](docs/features/) |
 
 ---
 
@@ -225,7 +224,7 @@ See [`{env example path}`]({env example path}) for all available variables, if o
 | `{VAR_NAME}`        | `{default}`          | `{description}`                      |
 
 ## Backlog Items
-{ Architect creates epic/story rows (`/plan-project`, `/plan-skeleton`, `/plan-story`, `/plan-port-story`). Documenter updates **Status** from the story spec. Do not edit IDs, titles, or links of in-progress or completed rows. }
+{ Architect creates epic/story rows (`/plan-project`, `/plan-skeleton`, `/plan-story`). Documenter updates **Status** from the story spec. Do not edit IDs, titles, or links of in-progress or completed rows. }
 
 ### Epic 1: {Epic Name}
 

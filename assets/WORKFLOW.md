@@ -36,19 +36,16 @@ flowchart TD
 
 - **`/init-project`** is optional: scaffolds `README` + `docs/features` from [templates/readme-template.md](templates/readme-template.md). Omit `## Modernization` on greenfield. For a brownfield port, prefer `/assess-modernization` to create the README hub. You can skip straight to `/design-application` with requirements for existing greenfield projects.
 - **`/define-purpose`** captures the product thesis, job, north-star outcome, trade-off rule, anti-thesis, and success signals via [templates/purpose-template.md](templates/purpose-template.md).
-- **`/refine-feature`** turns raw notes into clarified requirements with Gherkin scenarios (`S1`, `S2`, …) via [templates/requirements-template.md](templates/requirements-template.md).
+- **`/refine-feature`** turns raw notes or recovered path details into clarified requirements with Gherkin scenarios (`S1`, `S2`, …) via [templates/requirements-template.md](templates/requirements-template.md). Path details become section 4b provenance on the REQ.
 - **`/model-domain`** creates the ubiquitous language, data dictionary, entities, relationships, invariants, lifecycles, and consistency boundaries via [templates/domain-model-template.md](templates/domain-model-template.md).
-- **`/design-application`** fills the project `README` with architecture; **`/plan-project`** adds epics/stories to the backlog only.
+- **`/design-application`** fills the project `README` with architecture; **`/plan-project`** adds epics/stories to the backlog only. On a port, `/plan-project` consumes the migration plan as sequencing.
 - **`/plan-skeleton`** produces a walking-skeleton story via [templates/walking-skeleton-template.md](templates/walking-skeleton-template.md), then the normal implement/review/QA tail proves one running path before feature planning.
-- **`/plan-story`** produces a full story doc using [templates/user-story-template.md](templates/user-story-template.md) (ports/adapters, test plan, binding criteria).
+- **`/plan-story`** produces a full story doc using [templates/user-story-template.md](templates/user-story-template.md) (ports/adapters, test plan, binding criteria). When the linked REQ has section 4b, the same template copies provenance, slice prerequisites, and `parity` test rows.
 - **`/assess-modernization`** starts the brownfield lane: path inventory, dependency inventory, dependency graph, impedance analysis, and oracle probing. The assessment is the five-minute picture; inventories are reference. This command also creates `README.md` from the README template if it is missing, including `## Modernization` (what this is, lane status, artifact index) and omitting design sections until `/design-application`.
 - **`/document-legacy`** recovers evidence-graded path details, purpose/domain language, and defect decisions **for the current slice**, not the whole catalog.
-- **`/plan-path-tests`** records per-path comparison rules and oracle strategy before `/plan-port-story`.
-- **`/plan-port-story`** produces a port story using [templates/port-story-template.md](templates/port-story-template.md), including slice prerequisites, `Phase P`, `8b. Parity Plan`, and `Z8`.
-- **`/complete-port-story`** runs the normal story tail with `/verify-parity` inserted between review and QA.
-- **`/implement-story`** drives red-first implementation per [agents/implementer.md](agents/implementer.md).
+- **`/implement-story`** drives red-first implementation per [agents/implementer.md](agents/implementer.md). When the story has `parity` rows, those characterization tests go red first.
 - **`/review-story`** is a soft gate (changed-surface audit) before QA; output gates Phase Z criterion **Z6**.
-- **`/qa-story`** validates acceptance criteria with evidence; failures loop through **`/fix-from-qa`**.
+- **`/qa-story`** validates acceptance criteria with evidence, including `parity` rows; failures loop through **`/fix-from-qa`**.
 - **`/document-story`** syncs docs/README when the story is done.
 - **`/audit-all`** is for periodic or scoped full-repo health ([templates/audit-template.md](templates/audit-template.md)); use **`/review-diff`** for PR-style review without a story file.
 
@@ -87,10 +84,6 @@ flowchart TD
 | [ledger-defects](commands/ledger-defects.md) | Archaeologist: path-scoped defect decisions |
 | [document-legacy](commands/document-legacy.md) | Orchestrator: slice-scoped path, domain, and defect recovery |
 | [plan-migration](commands/plan-migration.md) | Migration Strategist: staging, slice prerequisites, cutover |
-| [plan-path-tests](commands/plan-path-tests.md) | Architect: per-path test plan and comparison rules |
-| [plan-port-story](commands/plan-port-story.md) | Architect: modernization port story |
-| [verify-parity](commands/verify-parity.md) | QA: parity report for a port story |
-| [complete-port-story](commands/complete-port-story.md) | Orchestrator: implement/review/parity/QA/document/validate |
 
 Category audits: [audit-tooling](commands/audit-tooling.md), [audit-reliability](commands/audit-reliability.md), [audit-db](commands/audit-db.md), [audit-api-contracts](commands/audit-api-contracts.md), [audit-security](commands/audit-security.md), [audit-performance](commands/audit-performance.md), [audit-test-coverage](commands/audit-test-coverage.md).
 
@@ -122,7 +115,6 @@ Category audits: [audit-tooling](commands/audit-tooling.md), [audit-reliability]
 | ADR | [templates/adr-template.md](templates/adr-template.md) |
 | Refined requirements | [templates/requirements-template.md](templates/requirements-template.md) |
 | User story | [templates/user-story-template.md](templates/user-story-template.md) |
-| Port story | [templates/port-story-template.md](templates/port-story-template.md) |
 | Full-repo audit report | [templates/audit-template.md](templates/audit-template.md) |
 | Per-story review | [templates/story-review-template.md](templates/story-review-template.md) |
 | Modernization assessment | [templates/modernization-assessment-template.md](templates/modernization-assessment-template.md) |
@@ -131,12 +123,10 @@ Category audits: [audit-tooling](commands/audit-tooling.md), [audit-reliability]
 | Dependency graph | [templates/dependency-graph-template.md](templates/dependency-graph-template.md) |
 | Impedance analysis | [templates/impedance-analysis-template.md](templates/impedance-analysis-template.md) |
 | Execution path detail | [templates/execution-path-detail-template.md](templates/execution-path-detail-template.md) |
-| Path test plan | [templates/path-test-plan-template.md](templates/path-test-plan-template.md) |
 | Decision register | [templates/decision-register-template.md](templates/decision-register-template.md) |
 | Oracle strategy | [templates/oracle-template.md](templates/oracle-template.md) |
 | Defect ledger | [templates/defect-ledger-template.md](templates/defect-ledger-template.md) |
 | Migration plan | [templates/migration-plan-template.md](templates/migration-plan-template.md) |
-| Parity report | [templates/parity-report-template.md](templates/parity-report-template.md) |
 
 ---
 
@@ -162,12 +152,11 @@ Category audits: [audit-tooling](commands/audit-tooling.md), [audit-reliability]
 3. `/plan-migration` → slice order and per-slice prerequisite tables. Later slices may still be inventory IDs only.
 4. For the next slice: `/document-legacy XP-…` → path details, recovered purpose/domain as needed, defect ledger rows for those paths.
 5. Human accepts recovered documentation for **that slice** (M2) and records defect decisions that bind it (M3).
-6. `/refine-feature @docs/modernization/paths/XP-NNN-short-slug.md` → requirements with `Sn` scenario trace points.
-7. `/plan-path-tests XP-NNN` → comparison rules and oracle strategy for the path.
-8. `/design-application` and `/plan-project` when design is still open.
-9. `/plan-port-story STORY-ID XP-NNN` → port story with slice prerequisites, `Phase P`, `8b. Parity Plan`, and `Z8`.
-10. `/complete-port-story STORY-ID` → implement, review, verify parity, QA, document, validate.
+6. `/refine-feature @docs/modernization/paths/XP-NNN-short-slug.md` → requirements with `Sn` scenario trace points and section 4b provenance (comparison rules, `XP`/`DEC`/`DEF`, oracle source).
+7. `/design-application` over the accumulating REQ set, then `/plan-project` using the migration plan as sequencing.
+8. `/plan-story STORY-ID` → ordinary story spec; copies provenance, slice prerequisites, and `parity` rows when the REQ has section 4b.
+9. `/complete-story STORY-ID` → implement, review, QA (including `parity` rows), document, validate.
 
-An agent working on slice N should need the migration-plan row, in-scope path details, path test plans, and cited `DEC-NNN` / `DEF-NNN` rows — not a re-read of every other slice.
+An agent working on slice N should need the migration-plan row, in-scope path details, the covering `REQ-NNN`, and cited `DEC-NNN` / `DEF-NNN` rows — not a re-read of every other slice.
 
 Project files live in the **application repo**; this file documents commands that live under **`~/.cursor`**.

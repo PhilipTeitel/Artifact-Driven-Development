@@ -25,18 +25,25 @@ When raw requirements go straight into design, the architect often has to guess.
 6. Identify terms, entities, fields, invariants, lifecycles, or boundaries that should be modeled in the configured domain artifact and call them out for `/model-domain`.
 7. Identify constraints that imply long-lived binding decisions and list them under **Suggested ADR triggers** so `/design-application` or `/plan-project` knows to create the ADRs.
 8. Write the result using the configured requirements directory and naming pattern (default `docs/requirements/REQ-NNN-short-slug.md`) using the next sequential `NNN`. Do not renumber existing REQ files.
+9. **Modernization handoff.** When any source is a path detail (`docs/modernization/paths/XP-NNN-*.md`), also fill **4b. Legacy provenance**:
+   - One row per `Sn`, naming the `XP-NNN`, exactly one evidence grade, any binding `DEC-NNN` / `DEF-NNN`, the comparison rule, and the oracle source (`FIX-NNN`, acceptance data, or `none`).
+   - Restate each comparison rule under **Constraints**. Do not use a workflow-profile numeric hint as the rule.
+   - Leave unresolved `E4` / `E5` claims in **Open questions** unless a `DEC-NNN` accepts them. Do not mark the REQ ready for design while those questions remain.
+   - Cite the path detail, decision register, defect ledger, and oracle in **Links**. Do not copy inventory tables.
+   - If a cited `DEC-NNN` chooses a named target dependency, persistence, process boundary, integration model, or cutover mechanism, list it under **Suggested ADR triggers**. Binding target design still needs an ADR.
 
 ## Hard rules
 
 - **Do not invent answers.** If the user does not answer a clarifying question, the question stays in **Open questions**. Open questions block downstream design for the affected scope.
 - **Do not produce design.** This command produces requirements only. Architecture, technical stack, and stories come from `/design-application` and `/plan-story`.
 - **Source provenance.** Every goal, non-goal, persona, constraint, and scenario must be traceable to a piece of the source material or to an answered clarifying question (logged under **Resolved questions**).
+- **Do not write path test plans, port stories, or parity reports.** Recovered behavior becomes `Sn` scenarios. Comparison rules live in this REQ. Delivery uses `/plan-story` and `/complete-story`.
 - Status starts at the configured draft requirements status if one is present; otherwise use `Draft`. The user marks it `Ready for Design` after a final review.
 
 ## Outputs
 
 - A new requirements file at the configured requirements path
-- A short summary in chat listing: REQ ID, count of scenarios, count of resolved questions, count of open questions, and any suggested ADR triggers.
+- A short summary in chat listing: REQ ID, count of scenarios, count of resolved questions, count of open questions, suggested ADR triggers, and when section 4b is present the covered `XP-NNN` IDs plus any unresolved `E4` / `E5` blockers. Suggested next command is `/design-application` or `/plan-project`, not a port-story command.
 
 ## Examples
 

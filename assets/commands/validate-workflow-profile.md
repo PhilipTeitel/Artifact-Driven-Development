@@ -55,22 +55,16 @@ Validate that a copied or customized Cursor workflow profile is complete enough 
    - `paths.oracleDoc`
    - `paths.pathGlob`
    - `paths.pathsDir`
-   - `paths.pathTestPlanGlob`
-   - `paths.pathTestPlansDir`
-   - `paths.parityReportPattern`
    - `templates.executionPathInventory`
    - `templates.executionPathDetail`
    - `templates.dependencyInventory`
    - `templates.dependencyGraph`
    - `templates.impedanceAnalysis`
-   - `templates.pathTestPlan`
    - `templates.decisionRegister`
    - `templates.defectLedger`
    - `templates.migrationPlan`
    - `templates.modernizationAssessment`
    - `templates.oracle`
-   - `templates.parityReport`
-   - `templates.portStory`
    - `templates.readme`
    - `templates.purpose`
    - `templates.domain`
@@ -90,11 +84,11 @@ Validate that a copied or customized Cursor workflow profile is complete enough 
    - `agents.modeler`
    - `agents.qa`
 5. Verify workflow wiring:
-   - every command named in `workflow.lanes`, `workflow.completeStorySequence`, `workflow.auditSequence`, `workflow.modernizationAssessSequence`, `workflow.legacyRecoverySequence`, and `workflow.completePortStorySequence` has a corresponding command spec in the configured commands directory
+   - every command named in `workflow.lanes`, `workflow.completeStorySequence`, `workflow.auditSequence`, `workflow.modernizationAssessSequence`, and `workflow.legacyRecoverySequence` has a corresponding command spec in the configured commands directory
    - every configured template path exists
    - every configured agent path exists
    - every role-based command spec contains a `Command-agent binding:` line naming a configured `agents.<role>` key
-   - orchestrator commands that sequence role work (for example `complete-story`, `audit-all`, `assess-modernization`, `document-legacy`, and `complete-port-story`) document subagent delegation and loaded-agent fallback behavior
+   - orchestrator commands that sequence role work (for example `complete-story`, `audit-all`, `assess-modernization`, and `document-legacy`) document subagent delegation and loaded-agent fallback behavior
 6. Verify status and gate compatibility:
    - story statuses include open, active, and complete values
    - backlog statuses include open, active, and complete values
@@ -107,8 +101,8 @@ Validate that a copied or customized Cursor workflow profile is complete enough 
    - if `methodology.hexagonalPortsAdapters` is `required`, `methodology.portTestTypes` includes both configured contract and integration concepts
    - if `methodology.gherkinScenarioTraceability` is `required`, `naming.scenarioIdPattern` is set
    - if `methodology.modelFidelity` is `required`, `review.perStoryCategories` includes `Model Fidelity` and configured finding prefixes include `MODEL`
-   - if `methodology.provenanceTraceability` is `required`, `review.perStoryCategories` includes `Provenance` and configured finding prefixes include `PROV`
-   - if `methodology.parityEvidence` is `required`, `review.perStoryCategories` includes `Parity`, configured finding prefixes include `PAR`, and `templates.parityReport` is wired
+   - if `methodology.parityEvidence` is `required`, `review.perStoryCategories` includes `Parity`, configured finding prefixes include `PAR`, and `templates.story` includes a `parity` test level
+   - if `methodology.provenanceTraceability` is `required`, `review.perStoryCategories` includes `Provenance`, configured finding prefixes include `PROV`, and `templates.requirements` includes a Legacy provenance section
    - if `methodology.walkingSkeleton` is `required`, `templates.skeleton` and `plan-skeleton` are wired
    - if `methodology.redFirstTesting` is `required`, `qa.evidenceReferenceExamples` is non-empty
 8. Verify modernization defaults:
@@ -120,8 +114,8 @@ Validate that a copied or customized Cursor workflow profile is complete enough 
    - `modernization.defectPolicy` is set
    - `modernization.dependencyDispositions` includes `available`, `reimplementable`, `undecided`, and `no-route`
    - `modernization.parity.comparisonRules` is `per-path`
-   - `templates.portStory` contains Phase P, Z8, and a slice prerequisites section
-   - `templates.parityReport` starts with `PARITY SUMMARY:`
+   - `templates.requirements` includes section 4b Legacy provenance
+   - `templates.story` includes a `parity` test level and optional section 1b
    - `templates.executionPathInventory` requires a one-paragraph summary
    - `naming.executionPathPattern` is set
 9. Verify stack defaults:
